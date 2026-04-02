@@ -104,9 +104,9 @@
           <h1 class="text-xl font-bold tracking-tight flex items-center gap-2" id="nav-title-text">
             CosmosCatalog 
             <span id="site-status-badge" class="px-2 py-0.5 rounded-full text-[10px] uppercase tracking-widest font-bold border border-green-500/50 text-green-400 bg-green-500/10">Active</span>
-            <span id="live-mode-badge" class="hidden px-2 py-0.5 rounded-full text-[10px] uppercase tracking-widest font-bold border border-theme-500/50 text-theme-400 bg-theme-500/10 animate-pulse"><i class="fa-solid fa-satellite mr-1"></i>Live</span>
-            <!-- NEW: Active Theme Indicator -->
-            <span id="active-theme-badge" class="ml-2 px-2 py-0.5 rounded-full text-[9px] uppercase tracking-widest font-bold border border-slate-700 text-slate-400 bg-slate-900/50 transition-all"><i class="fa-solid fa-swatchbook mr-1"></i><span id="active-theme-name">Deep Space Blue</span></span>
+            <span id="active-theme-badge" class="ml-2 px-2 py-0.5 rounded-full text-[9px] uppercase tracking-widest font-bold border border-slate-700 text-slate-400 bg-slate-900/50 transition-all shadow-sm"><i class="fa-solid fa-swatchbook mr-1"></i><span id="active-theme-name">Deep Space Blue</span></span>
+            <!-- NEW: Weather Badge -->
+            <span id="weather-badge" class="ml-2 px-2 py-0.5 rounded-full text-[9px] uppercase tracking-widest font-bold border border-cyan-700/50 text-cyan-400 bg-cyan-900/30 transition-all shadow-sm"><i id="weather-icon" class="fa-solid fa-cloud-moon mr-1"></i><span id="weather-text">Syncing...</span></span>
           </h1>
           <p class="text-[10px] text-theme-400 font-mono uppercase tracking-widest transition-colors">Database v3.0 Pro</p>
         </div>
@@ -293,11 +293,32 @@
               
               <div class="mb-6 p-5 bg-gradient-to-r from-theme-900/30 to-slate-900 border border-theme-500/30 rounded-2xl relative overflow-hidden">
                 <i class="fa-solid fa-sparkles absolute -right-4 -top-4 text-6xl text-theme-500/10"></i>
-                <div class="flex items-center justify-between relative z-10">
+                <div class="flex items-center justify-between relative z-10 mb-4">
                   <div>
                     <h4 class="font-bold text-white flex items-center gap-2"><i class="fa-solid fa-satellite text-theme-400"></i> Live Universe Mode</h4>
                     <p class="text-xs text-slate-400 mt-1 max-w-md">Automatically overrides manual theme selection based on real-world space events and seasons.</p>
                   </div>
+                  <label class="relative inline-flex items-center cursor-pointer">
+                    <input type="checkbox" id="live-mode-toggle" class="sr-only peer">
+                    <div class="w-11 h-6 bg-slate-700 peer-focus:outline-none rounded-full peer peer-checked:after:translate-x-full peer-checked:after:border-white after:content-[''] after:absolute after:top-[2px] after:left-[2px] after:bg-white after:border-gray-300 after:border after:rounded-full after:h-5 after:w-5 after:transition-all peer-checked:bg-theme-500"></div>
+                  </label>
+                </div>
+                
+                <div class="flex items-center justify-between relative z-10 pt-4 border-t border-slate-800">
+                  <div>
+                    <h4 class="font-bold text-white flex items-center gap-2"><i class="fa-solid fa-shuffle text-purple-400"></i> Theme Randomizer</h4>
+                    <div class="flex items-center gap-3 mt-2">
+                        <label class="text-[10px] text-slate-400 uppercase tracking-widest font-bold">Base Duration (Sec):</label>
+                        <input type="number" id="randomizer-time" value="30" min="5" max="600" class="bg-slate-900 border border-slate-700 rounded-lg px-2 py-1 text-xs focus:border-theme-500 outline-none w-20 text-slate-200">
+                    </div>
+                  </div>
+                  <label class="relative inline-flex items-center cursor-pointer">
+                    <input type="checkbox" id="randomizer-toggle" class="sr-only peer">
+                    <div class="w-11 h-6 bg-slate-700 peer-focus:outline-none rounded-full peer peer-checked:after:translate-x-full peer-checked:after:border-white after:content-[''] after:absolute after:top-[2px] after:left-[2px] after:bg-white after:border-gray-300 after:border after:rounded-full after:h-5 after:w-5 after:transition-all peer-checked:bg-purple-500"></div>
+                  </label>
+                </div>
+                <p class="text-[9px] text-slate-500 mt-2 italic relative z-10">Note: Advanced themes use the Base Duration. Simple themes ignore it (always 10s), Boss themes ignore it (always 120s).</p>
+              </div>
                   <label class="relative inline-flex items-center cursor-pointer">
                     <input type="checkbox" id="live-mode-toggle" class="sr-only peer">
                     <div class="w-11 h-6 bg-slate-700 peer-focus:outline-none rounded-full peer peer-checked:after:translate-x-full peer-checked:after:border-white after:content-[''] after:absolute after:top-[2px] after:left-[2px] after:bg-white after:border-gray-300 after:border after:rounded-full after:h-5 after:w-5 after:transition-all peer-checked:bg-theme-500"></div>
@@ -483,72 +504,75 @@
     let currentUser = null, isAdmin = false, currentImageBase64 = null, editingId = null, allCatalogItems = [], allAuditLogs = [];
     let viewState = 'catalog', activeCategoryFilter = 'all';
     
-    let globalSettings = { theme: 'blue', starsOn: true, fabricOn: false, liveMode: false, lockdownActive: false, customThemes: {} };
+    let globalSettings = { theme: 'blue', starsOn: true, fabricOn: false, liveMode: false, lockdownActive: false, customThemes: {}, randomizerOn: false, randomizerBaseTime: 30 };
     let previewOriginalTheme = null;
+    let currentRandomTheme = null;
+    let randomizerTimeout = null;
 
     // Multi-Verse Theme Registry
     let THEMES = { 
-      'blue': {name: 'Deep Space Blue', '400':'#60a5fa','500':'#3b82f6','600':'#2563eb', particle: 'default'}, 
-      'emerald': {name: 'Aurora Emerald', '400':'#34d399','500':'#10b981','600':'#059669', particle: 'default'}, 
-      'cosmic-ocean': {name: 'Cosmic Ocean', '400':'#3b82f6','500':'#2563eb','600':'#1d4ed8', particle: 'snow', cssClass: 'theme-cosmic-ocean'},
-      'grav-lens': {name: 'Gravitational Lens', '400':'#818cf8','500':'#6366f1','600':'#4f46e5', particle: 'orbit', bg: '#020617', cssClass: 'theme-grav-lens'},
-      'orbital-command': {name: 'Orbital Command', '400':'#60a5fa','500':'#3b82f6','600':'#2563eb', particle: 'orbit', bg: '#020617', cssClass: 'theme-orbital'},
-      'interstellar-dust': {name: 'Interstellar Dust', '400':'#c084fc','500':'#a855f7','600':'#9333ea', particle: 'default', bg: '#020617', cssClass: 'theme-dust'},
-      'pulsar-core': {name: 'Pulsar Core', '400':'#fb7185','500':'#f43f5e','600':'#e11d48', particle: 'pulse', bg: '#0f0505', cssClass: 'theme-pulsar'},
-      'deep-ice': {name: 'Deep Space Ice', '400':'#67e8f9','500':'#06b6d4','600':'#0891b2', particle: 'snow', bg: '#081c22', cssClass: 'theme-cryo'},
-      'observatory': {name: 'Observatory', '400':'#94a3b8','500':'#64748b','600':'#475569', particle: 'default', bg: '#0f172a', cssClass: 'theme-observatory'},
-      'ai-deep-space': {name: 'AI Deep Space', '400':'#34d399','500':'#10b981','600':'#059669', particle: 'none', bg: '#020617', cssClass: 'theme-ai'},
-      'volcanic-planet': {name: 'Volcanic Planet', '400':'#f87171','500':'#ef4444','600':'#dc2626', particle: 'meteor', bg: '#2a0800', cssClass: 'theme-volcanic'},
-      'mirror-universe': {name: 'Mirror Universe', '400':'#ffffff','500':'#e2e8f0','600':'#cbd5e1', particle: 'default', bg: '#fff', cssClass: 'theme-mirror'},
-      'quantum-flux': {name: 'Quantum Flux', '400':'#e879f9','500':'#d946ef','600':'#c026d3', particle: 'pulse', bg: '#1e1b4b', cssClass: 'theme-quantum'},
-      'infinite-depth': {name: 'Infinite Depth', '400':'#818cf8','500':'#4f46e5','600':'#3730a3', particle: 'warp', bg: '#020617', cssClass: 'theme-infinite'},
-      'signal-lost': {name: 'Signal Lost', '400':'#fca5a5','500':'#ef4444','600':'#b91c1c', particle: 'none', bg: '#020617', cssClass: 'theme-transmission'},
-      'gas-giant': {name: 'Gas Giant', '400':'#fbbf24','500':'#f59e0b','600':'#d97706', particle: 'none', bg: '#451a03', cssClass: 'theme-gas-giant'},
-      'time-warp': {name: 'Time Warp', '400':'#2dd4bf','500':'#14b8a6','600':'#0d9488', particle: 'warp', bg: '#020617', cssClass: 'theme-time-warp'},
-      'black-hole': {name: 'Black Hole', '400':'#a855f7','500':'#9333ea','600':'#7e22ce', particle: 'pulse', bg: '#000000', cssClass: 'theme-black-hole'},
-      'nebula-dream': {name: 'Nebula Dream', '400':'#f472b6','500':'#c084fc','600':'#818cf8', particle: 'default', bg: '#0f172a', cssClass: 'theme-nebula'},
-      'supernova': {name: 'Supernova', '400':'#fef08a','500':'#f97316','600':'#dc2626', particle: 'firework', bg: '#2a0800', cssClass: 'theme-supernova'},
-      'satellite-hud': {name: 'Satellite HUD', '400':'#86efac','500':'#22c55e','600':'#16a34a', particle: 'none', bg: '#011104', cssClass: 'theme-hud'},
-      'dark-matter': {name: 'Dark Matter', '400':'#94a3b8','500':'#475569','600':'#1e293b', particle: 'pulse', bg: '#050505', cssClass: 'theme-dark-matter'},
-      'warp-speed': {name: 'Warp Speed', '400':'#93c5fd','500':'#3b82f6','600':'#1d4ed8', particle: 'warp', bg: '#020617', cssClass: 'theme-warp'},
-      'alien-signal': {name: 'Alien Signal', '400':'#d9f99d','500':'#84cc16','600':'#4d7c0f', particle: 'pulse', bg: '#051201', cssClass: 'theme-alien'},
-      'planetary-orbit': {name: 'Planetary Orbit', '400':'#fdba74','500':'#f97316','600':'#c2410c', particle: 'orbit', bg: '#1e1b4b'},
-      'cosmic-archive': {name: 'Cosmic Archive', '400':'#fde047','500':'#eab308','600':'#ca8a04', particle: 'default', bg: '#020617', cssClass: 'theme-archive'},
-      'cosmic-winter': {name: 'Cosmic Winter', '400':'#ef4444','500':'#22c55e','600':'#16a34a', particle: 'snow', bg: '#020617'}, 
-      'dark-void': {name: 'Dark Void', '400':'#fb923c','500':'#f97316','600':'#ea580c', particle: 'pulse', cssClass: 'theme-flicker', bg: '#000000'}, 
-      'fragile-blue-dot': {name: 'Blue Dot', '400':'#38bdf8','500':'#0ea5e9','600':'#0284c7', particle: 'default', bg: '#082f49'}, 
-      'meteor-storm': {name: 'Meteor Storm', '400':'#94a3b8','500':'#64748b','600':'#475569', particle: 'meteor'},
-      'cosmic-love': {name: 'Cosmic Love', '400':'#f472b6','500':'#ec4899','600':'#db2777', particle: 'binary'},
+      'blue': {name: 'Deep Space Blue', '400':'#60a5fa','500':'#3b82f6','600':'#2563eb', particle: 'default', complexity: 1}, 
+      'emerald': {name: 'Aurora Emerald', '400':'#34d399','500':'#10b981','600':'#059669', particle: 'default', complexity: 1}, 
+      'cosmic-ocean': {name: 'Cosmic Ocean', '400':'#3b82f6','500':'#2563eb','600':'#1d4ed8', particle: 'snow', cssClass: 'theme-cosmic-ocean', complexity: 2},
+      'grav-lens': {name: 'Gravitational Lens', '400':'#818cf8','500':'#6366f1','600':'#4f46e5', particle: 'orbit', bg: '#020617', cssClass: 'theme-grav-lens', complexity: 2},
+      'orbital-command': {name: 'Orbital Command', '400':'#60a5fa','500':'#3b82f6','600':'#2563eb', particle: 'orbit', bg: '#020617', cssClass: 'theme-orbital', complexity: 2},
+      'interstellar-dust': {name: 'Interstellar Dust', '400':'#c084fc','500':'#a855f7','600':'#9333ea', particle: 'default', bg: '#020617', cssClass: 'theme-dust', complexity: 2},
+      'pulsar-core': {name: 'Pulsar Core', '400':'#fb7185','500':'#f43f5e','600':'#e11d48', particle: 'pulse', bg: '#0f0505', cssClass: 'theme-pulsar', complexity: 2},
+      'deep-ice': {name: 'Deep Space Ice', '400':'#67e8f9','500':'#06b6d4','600':'#0891b2', particle: 'snow', bg: '#081c22', cssClass: 'theme-cryo', complexity: 1},
+      'observatory': {name: 'Observatory', '400':'#94a3b8','500':'#64748b','600':'#475569', particle: 'default', bg: '#0f172a', cssClass: 'theme-observatory', complexity: 2},
+      'ai-deep-space': {name: 'AI Deep Space', '400':'#34d399','500':'#10b981','600':'#059669', particle: 'none', bg: '#020617', cssClass: 'theme-ai', complexity: 2},
+      'volcanic-planet': {name: 'Volcanic Planet', '400':'#f87171','500':'#ef4444','600':'#dc2626', particle: 'meteor', bg: '#2a0800', cssClass: 'theme-volcanic', complexity: 2},
+      'mirror-universe': {name: 'Mirror Universe', '400':'#ffffff','500':'#e2e8f0','600':'#cbd5e1', particle: 'default', bg: '#fff', cssClass: 'theme-mirror', complexity: 1},
+      'quantum-flux': {name: 'Quantum Flux', '400':'#e879f9','500':'#d946ef','600':'#c026d3', particle: 'pulse', bg: '#1e1b4b', cssClass: 'theme-quantum', complexity: 2},
+      'infinite-depth': {name: 'Infinite Depth', '400':'#818cf8','500':'#4f46e5','600':'#3730a3', particle: 'warp', bg: '#020617', cssClass: 'theme-infinite', complexity: 2},
+      'signal-lost': {name: 'Signal Lost', '400':'#fca5a5','500':'#ef4444','600':'#b91c1c', particle: 'none', bg: '#020617', cssClass: 'theme-transmission', complexity: 2},
+      'gas-giant': {name: 'Gas Giant', '400':'#fbbf24','500':'#f59e0b','600':'#d97706', particle: 'none', bg: '#451a03', cssClass: 'theme-gas-giant', complexity: 2},
+      'time-warp': {name: 'Time Warp', '400':'#2dd4bf','500':'#14b8a6','600':'#0d9488', particle: 'warp', bg: '#020617', cssClass: 'theme-time-warp', complexity: 2},
+      'black-hole': {name: 'Black Hole', '400':'#a855f7','500':'#9333ea','600':'#7e22ce', particle: 'pulse', bg: '#000000', cssClass: 'theme-black-hole', complexity: 2},
+      'nebula-dream': {name: 'Nebula Dream', '400':'#f472b6','500':'#c084fc','600':'#818cf8', particle: 'default', bg: '#0f172a', cssClass: 'theme-nebula', complexity: 2},
+      'supernova': {name: 'Supernova', '400':'#fef08a','500':'#f97316','600':'#dc2626', particle: 'firework', bg: '#2a0800', cssClass: 'theme-supernova', complexity: 2},
+      'satellite-hud': {name: 'Satellite HUD', '400':'#86efac','500':'#22c55e','600':'#16a34a', particle: 'none', bg: '#011104', cssClass: 'theme-hud', complexity: 2},
+      'dark-matter': {name: 'Dark Matter', '400':'#94a3b8','500':'#475569','600':'#1e293b', particle: 'pulse', bg: '#050505', cssClass: 'theme-dark-matter', complexity: 2},
+      'warp-speed': {name: 'Warp Speed', '400':'#93c5fd','500':'#3b82f6','600':'#1d4ed8', particle: 'warp', bg: '#020617', cssClass: 'theme-warp', complexity: 2},
+      'alien-signal': {name: 'Alien Signal', '400':'#d9f99d','500':'#84cc16','600':'#4d7c0f', particle: 'pulse', bg: '#051201', cssClass: 'theme-alien', complexity: 2},
+      'planetary-orbit': {name: 'Planetary Orbit', '400':'#fdba74','500':'#f97316','600':'#c2410c', particle: 'orbit', bg: '#1e1b4b', complexity: 2},
+      'cosmic-archive': {name: 'Cosmic Archive', '400':'#fde047','500':'#eab308','600':'#ca8a04', particle: 'default', bg: '#020617', cssClass: 'theme-archive', complexity: 1},
+      'cosmic-winter': {name: 'Cosmic Winter', '400':'#ef4444','500':'#22c55e','600':'#16a34a', particle: 'snow', bg: '#020617', complexity: 2}, 
+      'dark-void': {name: 'Dark Void', '400':'#fb923c','500':'#f97316','600':'#ea580c', particle: 'pulse', cssClass: 'theme-flicker', bg: '#000000', complexity: 2}, 
+      'fragile-blue-dot': {name: 'Blue Dot', '400':'#38bdf8','500':'#0ea5e9','600':'#0284c7', particle: 'default', bg: '#082f49', complexity: 1}, 
+      'meteor-storm': {name: 'Meteor Storm', '400':'#94a3b8','500':'#64748b','600':'#475569', particle: 'meteor', complexity: 2},
+      'cosmic-love': {name: 'Cosmic Love', '400':'#f472b6','500':'#ec4899','600':'#db2777', particle: 'binary', complexity: 2},
 
       // New Unsettling Themes
-      'time-collapse': {name: 'Time Collapse', '400':'#ffffff','500':'#e2e8f0','600':'#94a3b8', particle: 'default', bg: '#000', cssClass: 'theme-time-collapse'},
-      'cosmic-awareness': {name: 'Cosmic Awareness', '400':'#60a5fa','500':'#3b82f6','600':'#2563eb', particle: 'repel', bg: '#020617', cssClass: 'theme-awareness'},
-      'event-horizon': {name: 'Event Horizon', '400':'#a855f7','500':'#9333ea','600':'#7e22ce', particle: 'pulse', bg: '#000', cssClass: 'theme-event'},
-      'living-universe': {name: 'Living Universe', '400':'#34d399','500':'#10b981','600':'#059669', particle: 'pulse', bg: '#020617', cssClass: 'theme-living'},
-      'recursive-universe': {name: 'Recursive', '400':'#818cf8','500':'#6366f1','600':'#4f46e5', particle: 'default', bg: '#020617', cssClass: 'theme-recursive'},
-      'null-space': {name: 'Null Space', '400':'#334155','500':'#1e293b','600':'#0f172a', particle: 'none', bg: '#000', cssClass: 'theme-null'},
-      'cosmic-judgment': {name: 'Cosmic Judgment', '400':'#facc15','500':'#eab308','600':'#ca8a04', particle: 'none', bg: '#020617', cssClass: 'theme-judgment'},
-      'frozen-time': {name: 'Frozen Time', '400':'#a5f3fc','500':'#22d3ee','600':'#0891b2', particle: 'freeze', bg: '#081c22', cssClass: 'theme-frozen'},
-      'entropy': {name: 'Entropy', '400':'#f87171','500':'#ef4444','600':'#dc2626', particle: 'none', bg: '#1c0505', cssClass: 'theme-entropy'},
-      'singular-focus': {name: 'Singular Focus', '400':'#fbbf24','500':'#f59e0b','600':'#d97706', particle: 'orbit', bg: '#020617', cssClass: 'theme-singular'},
-      'first-contact': {name: 'First Contact', '400':'#4ade80','500':'#22c55e','600':'#16a34a', particle: 'default', bg: '#011104', cssClass: 'theme-contact'},
-      'cosmic-silence': {name: 'Cosmic Silence', '400':'#94a3b8','500':'#64748b','600':'#475569', particle: 'none', bg: '#020617', cssClass: 'theme-silence'},
-      'simulation-break': {name: 'Simulation Break', '400':'#c084fc','500':'#a855f7','600':'#9333ea', particle: 'warp', bg: '#020617', cssClass: 'theme-simulation'},
-      'reality-desync': {name: 'Reality Desync', '400':'#e879f9','500':'#d946ef','600':'#c026d3', particle: 'pulse', bg: '#020617', cssClass: 'theme-desync'},
-      'time-echo': {name: 'Time Echo', '400':'#2dd4bf','500':'#14b8a6','600':'#0d9488', particle: 'default', bg: '#020617', cssClass: 'theme-echo'},
-      'pattern-recognition': {name: 'Pattern Rec', '400':'#fdba74','500':'#f97316','600':'#ea580c', particle: 'orbit', bg: '#020617', cssClass: 'theme-pattern'},
+      'time-collapse': {name: 'Time Collapse', '400':'#ffffff','500':'#e2e8f0','600':'#94a3b8', particle: 'default', bg: '#000', cssClass: 'theme-time-collapse', complexity: 3},
+      'cosmic-awareness': {name: 'Cosmic Awareness', '400':'#60a5fa','500':'#3b82f6','600':'#2563eb', particle: 'repel', bg: '#020617', cssClass: 'theme-awareness', complexity: 3},
+      'event-horizon': {name: 'Event Horizon', '400':'#a855f7','500':'#9333ea','600':'#7e22ce', particle: 'pulse', bg: '#000', cssClass: 'theme-event', complexity: 3},
+      'living-universe': {name: 'Living Universe', '400':'#34d399','500':'#10b981','600':'#059669', particle: 'pulse', bg: '#020617', cssClass: 'theme-living', complexity: 3},
+      'recursive-universe': {name: 'Recursive', '400':'#818cf8','500':'#6366f1','600':'#4f46e5', particle: 'default', bg: '#020617', cssClass: 'theme-recursive', complexity: 3},
+      'null-space': {name: 'Null Space', '400':'#334155','500':'#1e293b','600':'#0f172a', particle: 'none', bg: '#000', cssClass: 'theme-null', complexity: 3},
+      'cosmic-judgment': {name: 'Cosmic Judgment', '400':'#facc15','500':'#eab308','600':'#ca8a04', particle: 'none', bg: '#020617', cssClass: 'theme-judgment', complexity: 3},
+      'frozen-time': {name: 'Frozen Time', '400':'#a5f3fc','500':'#22d3ee','600':'#0891b2', particle: 'freeze', bg: '#081c22', cssClass: 'theme-frozen', complexity: 3},
+      'entropy': {name: 'Entropy', '400':'#f87171','500':'#ef4444','600':'#dc2626', particle: 'none', bg: '#1c0505', cssClass: 'theme-entropy', complexity: 3},
+      'singular-focus': {name: 'Singular Focus', '400':'#fbbf24','500':'#f59e0b','600':'#d97706', particle: 'orbit', bg: '#020617', cssClass: 'theme-singular', complexity: 3},
+      'first-contact': {name: 'First Contact', '400':'#4ade80','500':'#22c55e','600':'#16a34a', particle: 'default', bg: '#011104', cssClass: 'theme-contact', complexity: 3},
+      'cosmic-silence': {name: 'Cosmic Silence', '400':'#94a3b8','500':'#64748b','600':'#475569', particle: 'none', bg: '#020617', cssClass: 'theme-silence', complexity: 3},
+      'simulation-break': {name: 'Simulation Break', '400':'#c084fc','500':'#a855f7','600':'#9333ea', particle: 'warp', bg: '#020617', cssClass: 'theme-simulation', complexity: 3},
+      'reality-desync': {name: 'Reality Desync', '400':'#e879f9','500':'#d946ef','600':'#c026d3', particle: 'pulse', bg: '#020617', cssClass: 'theme-desync', complexity: 3},
+      'time-echo': {name: 'Time Echo', '400':'#2dd4bf','500':'#14b8a6','600':'#0d9488', particle: 'default', bg: '#020617', cssClass: 'theme-echo', complexity: 3},
+      'pattern-recognition': {name: 'Pattern Rec', '400':'#fdba74','500':'#f97316','600':'#ea580c', particle: 'orbit', bg: '#020617', cssClass: 'theme-pattern', complexity: 3},
       
       // The Final Bosses
-      'unknown-limit': {name: 'Unknown Limit (Boss)', '400':'#ef4444','500':'#dc2626','600':'#b91c1c', particle: 'warp', bg: '#000', cssClass: 'theme-unknown'},
-      'runaway-energy': {name: 'Runaway Energy', '400':'#f97316','500':'#ea580c','600':'#c2410c', particle: 'pulse', bg: '#1c0505', cssClass: 'theme-runaway'},
-      'light-devoured': {name: 'Light Devoured', '400':'#475569','500':'#334155','600':'#1e293b', particle: 'default', bg: '#000', cssClass: 'theme-devour'},
-      'point-of-no-return': {name: 'Point of No Return', '400':'#7e22ce','500':'#6b21a8','600':'#581c87', particle: 'repel', bg: '#000', cssClass: 'theme-no-return'},
-      'chaos-order': {name: 'Chaos to Order', '400':'#6366f1','500':'#4f46e5','600':'#4338ca', particle: 'default', bg: '#020617', cssClass: 'theme-chaos-order'}
+      'unknown-limit': {name: 'Unknown Limit (Boss)', '400':'#ef4444','500':'#dc2626','600':'#b91c1c', particle: 'warp', bg: '#000', cssClass: 'theme-unknown', complexity: 3},
+      'runaway-energy': {name: 'Runaway Energy', '400':'#f97316','500':'#ea580c','600':'#c2410c', particle: 'pulse', bg: '#1c0505', cssClass: 'theme-runaway', complexity: 3},
+      'light-devoured': {name: 'Light Devoured', '400':'#475569','500':'#334155','600':'#1e293b', particle: 'default', bg: '#000', cssClass: 'theme-devour', complexity: 3},
+      'point-of-no-return': {name: 'Point of No Return', '400':'#7e22ce','500':'#6b21a8','600':'#581c87', particle: 'repel', bg: '#000', cssClass: 'theme-no-return', complexity: 3},
+      'chaos-order': {name: 'Chaos to Order', '400':'#6366f1','500':'#4f46e5','600':'#4338ca', particle: 'default', bg: '#020617', cssClass: 'theme-chaos-order', complexity: 3}
     };
 
     const UI = {
       mainNav: document.getElementById('main-nav'), navBtn: document.getElementById('nav-btn'), navIcon: document.getElementById('nav-icon'), navText: document.getElementById('nav-text'), navLogo: document.getElementById('nav-logo'), navTitleText: document.getElementById('nav-title-text'), statusBadge: document.getElementById('site-status-badge'), liveModeBadge: document.getElementById('live-mode-badge'),
       activeThemeName: document.getElementById('active-theme-name'), activeThemeBadge: document.getElementById('active-theme-badge'),
+      weatherText: document.getElementById('weather-text'), weatherIcon: document.getElementById('weather-icon'),
       viewCatalog: document.getElementById('view-catalog'), viewArchive: document.getElementById('view-archive'), viewAdminLogin: document.getElementById('view-admin-login'), viewAdminPanel: document.getElementById('view-admin-panel'), viewLockdown: document.getElementById('view-lockdown'),
       catalogLoading: document.getElementById('catalog-loading'), catalogEmpty: document.getElementById('catalog-empty'), catalogGrid: document.getElementById('catalog-grid'), archiveEmpty: document.getElementById('archive-empty'), archiveGrid: document.getElementById('archive-grid'),
       heroBannerContainer: document.getElementById('hero-banner-container'), publicSort: document.getElementById('public-sort'), globalSearch: document.getElementById('global-search'), categoryFilters: document.querySelectorAll('.cat-filter'),
@@ -556,6 +580,7 @@
       uploadForm: document.getElementById('upload-form'), formHeader: document.getElementById('form-header'), titleInput: document.getElementById('upload-title'), uploadCategory: document.getElementById('upload-category'), uploadDistance: document.getElementById('upload-distance'), uploadClassification: document.getElementById('upload-classification'), uploadRadec: document.getElementById('upload-radec'), uploadEquipment: document.getElementById('upload-equipment'), uploadCredit: document.getElementById('upload-credit'), descInput: document.getElementById('upload-desc'), imageInput: document.getElementById('image-input'), submitBtn: document.getElementById('submit-btn'), cancelEditBtn: document.getElementById('cancel-edit-btn'), imgUploadLabel: document.getElementById('image-upload-label'), imgPreviewContainer: document.getElementById('image-preview-container'), imgPreview: document.getElementById('image-preview'), removeImgBtn: document.getElementById('remove-image-btn'),
       singleAiStatus: document.getElementById('single-ai-status'),
       starsToggle: document.getElementById('stars-toggle'), fabricToggle: document.getElementById('fabric-toggle'), liveModeToggle: document.getElementById('live-mode-toggle'), saveVisualsBtn: document.getElementById('save-visuals-btn'),
+      randomizerToggle: document.getElementById('randomizer-toggle'), randomizerTime: document.getElementById('randomizer-time'),
       starsCanvas: document.getElementById('stars-canvas'), fabricEffect: document.getElementById('fabric-effect'), mainBody: document.getElementById('main-body'),
       postModal: document.getElementById('post-modal'), modalContentScale: document.getElementById('modal-content-scale'), closeModalBtn: document.getElementById('close-modal-btn'), modalImg: document.getElementById('modal-img'), modalTitle: document.getElementById('modal-title'), modalDesc: document.getElementById('modal-desc'), modalDate: document.getElementById('modal-date'), modalBadges: document.getElementById('modal-badges'), modalDistance: document.getElementById('modal-distance'), modalRadec: document.getElementById('modal-radec'), modalEquipment: document.getElementById('modal-equipment'), modalCredit: document.getElementById('modal-credit'), modalViews: document.getElementById('modal-views'), modalDownloadBtn: document.getElementById('modal-download-btn'),
       statActive: document.getElementById('stat-active'), statArchived: document.getElementById('stat-archived'), statStatus: document.getElementById('stat-status'), statViews: document.getElementById('stat-views'), statStorage: document.getElementById('stat-storage'),
@@ -905,6 +930,31 @@
     async function initAuth() {
       try { if (typeof __initial_auth_token !== 'undefined' && __initial_auth_token) await signInWithCustomToken(auth, __initial_auth_token); else await signInAnonymously(auth); } catch (err) { showToast("Connection failed", "error"); }
       onAuthStateChanged(auth, (user) => { currentUser = user; if (user) { loadCatalogData(); loadGlobalSettings(); } });
+      fetchWeather();
+    }
+
+    async function fetchWeather() {
+        try {
+            const res = await fetch('https://api.open-meteo.com/v1/forecast?latitude=41.0082&longitude=28.9784&current=temperature_2m,weather_code');
+            const data = await res.json();
+            if(data.current) {
+                const temp = data.current.temperature_2m;
+                const code = data.current.weather_code;
+                let icon = 'fa-cloud';
+                if(code <= 1) icon = 'fa-sun';
+                else if(code <= 3) icon = 'fa-cloud-sun';
+                else if(code <= 48) icon = 'fa-smog';
+                else if(code <= 67) icon = 'fa-cloud-rain';
+                else if(code <= 79) icon = 'fa-snowflake';
+                else if(code <= 99) icon = 'fa-cloud-bolt';
+                
+                if(UI.weatherText) UI.weatherText.innerText = `${Math.round(temp)}°C`;
+                if(UI.weatherIcon) UI.weatherIcon.className = `fa-solid ${icon} mr-1`;
+            }
+        } catch(e) {
+            console.error('Weather error:', e);
+            if(UI.weatherText) UI.weatherText.innerText = 'Offline';
+        }
     }
 
     function loadCatalogData() {
@@ -960,15 +1010,49 @@
       onSnapshot(doc(db, 'artifacts', appId, 'public', 'data', 'site_settings', 'global'), (docSnap) => {
         if (docSnap.exists()) {
             const data = docSnap.data();
+            const prevRandomizer = globalSettings.randomizerOn;
+            const prevRandTime = globalSettings.randomizerBaseTime;
+            
             globalSettings = { ...globalSettings, ...data };
             if(data.customThemes) {
                 globalSettings.customThemes = data.customThemes;
                 Object.assign(THEMES, data.customThemes);
                 renderCustomThemes();
             }
+            
+            if (globalSettings.randomizerOn !== prevRandomizer || globalSettings.randomizerBaseTime !== prevRandTime) {
+                startThemeRandomizer();
+            }
         }
-        if(!previewOriginalTheme) applySettingsToUI();
+        if(!previewOriginalTheme && !globalSettings.randomizerOn) applySettingsToUI();
       });
+    }
+    
+    function startThemeRandomizer() {
+      clearTimeout(randomizerTimeout);
+      if(!globalSettings.randomizerOn) {
+         if(currentRandomTheme) {
+             currentRandomTheme = null;
+             applySettingsToUI();
+         }
+         return;
+      }
+      
+      const themeKeys = Object.keys(THEMES);
+      currentRandomTheme = themeKeys[Math.floor(Math.random() * themeKeys.length)];
+      applySettingsToUI();
+      
+      const comp = THEMES[currentRandomTheme]?.complexity || 2;
+      let baseTime = parseInt(globalSettings.randomizerBaseTime) || 30;
+      let duration = baseTime;
+      
+      if (comp === 1) {
+         duration = 10; 
+      } else if (comp === 3) {
+         duration = 120;
+      }
+      
+      randomizerTimeout = setTimeout(startThemeRandomizer, duration * 1000);
     }
 
     async function updateSettings(updates) {
@@ -976,8 +1060,8 @@
     }
 
     function applySettingsToUI(forceTheme = null) {
-      let activeThemeKey = forceTheme || globalSettings.theme || 'blue';
-      if (globalSettings.liveMode && !forceTheme) { 
+      let activeThemeKey = forceTheme || currentRandomTheme || globalSettings.theme || 'blue';
+      if (globalSettings.liveMode && !forceTheme && !currentRandomTheme) { 
         const d = new Date(); const m = d.getMonth() + 1; const day = d.getDate();
         if (m === 10 && day > 20) activeThemeKey = 'dark-void'; 
         else if (m === 12) activeThemeKey = 'cosmic-winter';
@@ -1004,12 +1088,14 @@
       const radios = document.getElementsByName('theme');
       if(radios) Array.from(radios).forEach(r => { 
           r.checked = (r.value === activeThemeKey); 
-          r.disabled = (globalSettings.liveMode || activeThemeKey === 'point-of-no-return'); 
+          r.disabled = (globalSettings.liveMode || globalSettings.randomizerOn || activeThemeKey === 'point-of-no-return'); 
       });
       
       if(UI.starsToggle) UI.starsToggle.checked = globalSettings.starsOn; 
       if(UI.fabricToggle) UI.fabricToggle.checked = globalSettings.fabricOn; 
       if(UI.liveModeToggle) UI.liveModeToggle.checked = globalSettings.liveMode;
+      if(UI.randomizerToggle) UI.randomizerToggle.checked = globalSettings.randomizerOn || false;
+      if(UI.randomizerTime) UI.randomizerTime.value = globalSettings.randomizerBaseTime || 30;
 
       if (globalSettings.lockdownActive && !isAdmin) { 
           switchView('lockdown'); 
@@ -1212,7 +1298,14 @@
       let selTheme = 'blue'; 
       const radios = document.getElementsByName('theme');
       if(radios) Array.from(radios).forEach(r => { if(r.checked) selTheme = r.value; });
-      updateSettings({ theme: selTheme, starsOn: UI.starsToggle?.checked || false, fabricOn: UI.fabricToggle?.checked || false, liveMode: UI.liveModeToggle?.checked || false });
+      updateSettings({ 
+          theme: selTheme, 
+          starsOn: UI.starsToggle?.checked || false, 
+          fabricOn: UI.fabricToggle?.checked || false, 
+          liveMode: UI.liveModeToggle?.checked || false,
+          randomizerOn: UI.randomizerToggle?.checked || false,
+          randomizerBaseTime: parseInt(UI.randomizerTime?.value) || 30
+      });
       logSystemAction('THEME_UPDATE', selTheme);
     });
     UI.liveModeToggle?.addEventListener('change', () => { const radios = document.getElementsByName('theme'); if(radios) Array.from(radios).forEach(r => r.disabled = UI.liveModeToggle.checked); });
