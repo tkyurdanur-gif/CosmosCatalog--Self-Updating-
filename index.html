@@ -20,98 +20,93 @@
     ::-webkit-scrollbar-thumb { background: var(--theme-600, #334155); border-radius: 4px; }
     ::-webkit-scrollbar-thumb:hover { background: var(--theme-500, #475569); }
 
-    body { transition: background-color 1s ease, color 0.5s ease; overflow-x: hidden; }
+    body { transition: background-color 1s ease, color 0.5s ease, filter 0.5s ease; overflow-x: hidden; }
 
     /* --- THE MULTIVERSE CSS ENGINE --- */
     
-    /* 1. Classic & Immersive Base */
+    /* Classics & Base Immersion */
     .theme-black-hole { background: radial-gradient(circle at 50% 50%, #000000 0%, #020617 100%); box-shadow: inset 0 0 150px #000; }
     .theme-nebula { background: radial-gradient(circle at 20% 30%, #2e1065 0%, #0f172a 60%, #082f49 100%); backdrop-filter: blur(10px); }
     .theme-ice * { font-weight: 300; letter-spacing: 0.05em; }
     .theme-supernova { background: radial-gradient(circle at 50% -20%, #450a0a 0%, #000000 80%); }
-    
-    /* 2. New Additions */
     .theme-cosmic-ocean { background: radial-gradient(circle at center, #0f172a, #020617); }
-    .theme-cosmic-ocean canvas { transition: transform 0.1s ease-out; } /* Parallax handled in JS */
-    
-    .theme-grav-lens .group:hover { transform: scale(1.02); filter: drop-shadow(0 0 25px rgba(255,255,255,0.15)); backdrop-filter: blur(8px); z-index: 10; transition: all 0.4s ease; }
-    
-    .theme-orbital { font-family: monospace; }
-    .theme-orbital .rounded-3xl, .theme-orbital .rounded-2xl { border-radius: 50% !important; border: 1px solid var(--theme-500); padding: 10px;}
-    .theme-orbital #catalog-grid { gap: 40px; }
-    
-    .theme-dust { background-image: radial-gradient(circle at 20% 30%, rgba(139, 92, 246, 0.1) 0%, transparent 50%), radial-gradient(circle at 80% 70%, rgba(14, 165, 233, 0.1) 0%, transparent 50%); animation: dustFloat 20s infinite alternate; }
-    
-    .theme-pulsar { animation: heartbeatPulse 2s infinite; }
-    
-    .theme-cryo .bg-slate-900, .theme-cryo .bg-slate-950, .theme-cryo .bg-slate-900\/50 { background: rgba(8, 28, 34, 0.6) !important; backdrop-filter: blur(12px) !important; border: 1px solid rgba(6, 182, 212, 0.3) !important; box-shadow: inset 0 0 20px rgba(255,255,255,0.05); }
-    
-    .theme-observatory::after { content: ''; position: fixed; top: 0; left: 0; width: 100vw; height: 100vh; box-shadow: inset 0 0 300px 150px #000; pointer-events: none; z-index: 100; }
-    
+    .theme-grav-lens .group:hover { transform: scale(1.05); filter: drop-shadow(0 0 35px rgba(255,255,255,0.2)); z-index: 10; transition: all 0.4s cubic-bezier(0.25, 0.46, 0.45, 0.94); }
+    .theme-orbital { font-family: monospace; } .theme-orbital .rounded-3xl, .theme-orbital .rounded-2xl { border-radius: 50% !important; border: 1px solid var(--theme-500); padding: 10px;}
+    .theme-dust { background-image: radial-gradient(circle at 20% 30%, rgba(139, 92, 246, 0.15) 0%, transparent 60%), radial-gradient(circle at 80% 70%, rgba(14, 165, 233, 0.15) 0%, transparent 60%); animation: dustFloat 25s infinite alternate ease-in-out; }
+    .theme-pulsar { animation: heartbeatPulse 2.5s infinite; }
+    .theme-cryo .bg-slate-900, .theme-cryo .bg-slate-950 { background: rgba(8, 28, 34, 0.6) !important; backdrop-filter: blur(12px) !important; border: 1px solid rgba(6, 182, 212, 0.3) !important; box-shadow: inset 0 0 20px rgba(255,255,255,0.05); }
     .theme-ai { background-image: linear-gradient(rgba(16, 185, 129, 0.05) 1px, transparent 1px), linear-gradient(90deg, rgba(16, 185, 129, 0.05) 1px, transparent 1px); background-size: 40px 40px; }
-    
     .theme-volcanic { background: #2a0800; animation: heatShimmer 4s infinite alternate; }
+    .theme-mirror { filter: invert(0.9) hue-rotate(180deg); background: #fff; } .theme-mirror img, .theme-mirror canvas { filter: invert(1) hue-rotate(-180deg); }
+    .theme-quantum { animation: microShift 0.15s infinite; }
+    .theme-transmission { animation: glitch 5s infinite; }
+    .theme-gas-giant { background: linear-gradient(135deg, #78350f, #fef3c7, #d97706, #451a03); background-size: 400% 400%; animation: gradientFlow 20s ease infinite; }
     
-    .theme-mirror { filter: invert(0.9) hue-rotate(180deg); background: #fff; }
-    .theme-mirror img { filter: invert(1) hue-rotate(-180deg); } /* Fix images so they look normal */
-    
-    .theme-quantum { animation: microShift 0.2s infinite; }
-    
-    .theme-infinite { perspective: 1000px; transform-style: preserve-3d; }
-    
-    .theme-transmission { animation: glitch 4s infinite; }
-    
-    .theme-gas-giant { background: linear-gradient(135deg, #78350f, #fef3c7, #d97706, #451a03); background-size: 400% 400%; animation: gradientFlow 15s ease infinite; }
-    
-    .theme-time-warp { animation: timeWarpHue 10s infinite linear; }
+    /* Level 3: Unsettling & Mind-Bending */
+    .theme-time-collapse { animation: collapseTime 45s forwards ease-in; }
+    .theme-living { animation: livingBreath 12s infinite alternate ease-in-out; }
+    .theme-recursive .group { box-shadow: 0 0 0 1px var(--theme-600), 0 0 0 4px #000, 0 0 0 5px var(--theme-500), 0 0 0 8px #000, 0 0 0 9px var(--theme-400); }
+    .theme-null { background: #000 !important; } .theme-null main { opacity: 0.05; transition: opacity 2s ease; } .theme-null main:hover { opacity: 1; transition: opacity 0.5s ease; }
+    .theme-judgment .judgment-focus { filter: brightness(1.5) drop-shadow(0 0 30px var(--theme-400)); transform: scale(1.05); z-index: 20; transition: all 1s ease; } .theme-judgment .group:not(.judgment-focus) { filter: brightness(0.3) grayscale(0.8); transition: all 1s ease; }
+    .theme-silence * { transition-delay: 0.3s !important; }
+    .theme-frozen * { animation-play-state: paused !important; transition: none !important; }
+    .theme-desync * { animation: desyncShift 0.5s infinite steps(2); }
+    .theme-echo * { transition: all 0.5s ease !important; box-shadow: -10px 0 20px rgba(255,255,255,0.05); }
+    .theme-absolute-zero * { transition: all 3s ease-out !important; cursor: crosshair; }
+    .theme-pattern .group { animation: patternAlign 10s forwards ease-in-out; }
+    .theme-fade-nothing { animation: heatDeath 60s forwards; }
+    .theme-chaos-order { animation: chaosToOrder 20s forwards ease-out; }
 
-    /* Terminals & Anomalies */
-    .theme-hud { font-family: 'Courier New', Courier, monospace !important; background-image: linear-gradient(rgba(34, 197, 94, 0.03) 1px, transparent 1px), linear-gradient(90deg, rgba(34, 197, 94, 0.03) 1px, transparent 1px); background-size: 30px 30px; text-transform: uppercase; }
-    .theme-hud .rounded-3xl, .theme-hud .rounded-2xl, .theme-hud .rounded-xl { border-radius: 0 !important; border: 1px solid var(--theme-500); }
-    .theme-dark-matter { opacity: 0.8; filter: contrast(1.1); } .theme-dark-matter:hover { opacity: 1; }
-    .theme-alien { filter: hue-rotate(45deg) contrast(1.2); }
-    .theme-signal-lost { animation: signalGlitch 3s infinite; }
-    .theme-archive { background: #020617; } .theme-archive .border-slate-800 { border-color: rgba(202, 138, 4, 0.3) !important; }
-
-    /* Core Animations */
+    /* Core Keyframes */
     @keyframes dustFloat { 0% { background-position: 0% 0%; } 100% { background-position: 100% 100%; } }
     @keyframes heartbeatPulse { 0%, 100% { box-shadow: inset 0 0 0px var(--theme-500); } 50% { box-shadow: inset 0 0 80px var(--theme-600); } }
-    @keyframes heatShimmer { 0% { filter: contrast(1) sepia(0.2); } 100% { filter: contrast(1.2) sepia(0.4); } }
+    @keyframes heatShimmer { 0% { filter: contrast(1) sepia(0.2) blur(0px); } 100% { filter: contrast(1.2) sepia(0.4) blur(1px); } }
     @keyframes microShift { 0% { transform: translate(0,0); } 25% { transform: translate(1px, -1px); } 50% { transform: translate(-1px, 1px); } 75% { transform: translate(1px, 1px); } 100% { transform: translate(0,0); } }
+    @keyframes desyncShift { 0% { transform: translate(0,0); } 50% { transform: translate(1px, -2px); } 100% { transform: translate(-1px, 1px); } }
     @keyframes glitch { 0%, 96%, 98%, 100% { opacity: 1; filter: none; } 97% { opacity: 0.8; filter: hue-rotate(90deg) contrast(2); transform: translate(2px, -2px); } 99% { opacity: 0.9; transform: translate(-2px, 2px); } }
     @keyframes gradientFlow { 0% { background-position: 0% 50%; } 50% { background-position: 100% 50%; } 100% { background-position: 0% 50%; } }
-    @keyframes timeWarpHue { 0% { filter: hue-rotate(0deg); } 100% { filter: hue-rotate(360deg); } }
     @keyframes eerieFlicker { 0%, 100% { opacity: 1; } 50% { opacity: 0.8; } 52% { opacity: 0.4; } 54% { opacity: 0.9; } }
-    @keyframes signalGlitch { 0%, 100% { transform: translate(0); } 10% { transform: translate(-2px, 2px); opacity: 0.8; } 20% { transform: translate(2px, -2px); filter: hue-rotate(90deg); } 30% { transform: translate(0); opacity: 1; filter: none; } }
+    @keyframes collapseTime { 0% { filter: brightness(0.1) grayscale(1); } 50% { filter: brightness(1) grayscale(0.5); } 100% { filter: brightness(1.2) grayscale(0) contrast(1.1); } }
+    @keyframes livingBreath { 0% { transform: scale(1); } 100% { transform: scale(1.02); } }
+    @keyframes heatDeath { 0% { filter: saturate(1) brightness(1); opacity: 1; } 100% { filter: saturate(0) brightness(0.1); opacity: 0.2; } }
+    @keyframes chaosToOrder { 0% { filter: hue-rotate(180deg) blur(10px); transform: rotate(10deg) scale(1.1); } 100% { filter: hue-rotate(0deg) blur(0px); transform: rotate(0deg) scale(1); } }
+    @keyframes patternAlign { 0% { transform: rotate(-5deg) translateY(20px); } 100% { transform: rotate(0deg) translateY(0); } }
+    
+    .simulation-break-active { clip-path: polygon(0 0, 100% 0, 100% 35%, 0 45%, 0 55%, 100% 65%, 100% 100%, 0 100%); filter: hue-rotate(90deg) invert(0.2); transform: translateX(-10px); }
 
-    /* Space-Time Fabric Background */
+    /* Utilities */
     .spacetime-fabric { position: fixed; top: 0; left: 0; width: 100vw; height: 100vh; z-index: -2; background-image: linear-gradient(rgba(255,255,255,0.03) 1px, transparent 1px), linear-gradient(90deg, rgba(255,255,255,0.03) 1px, transparent 1px); background-size: 50px 50px; perspective: 1000px; transform: rotateX(60deg) scale(2.5) translateY(-20%); animation: spaceWarp 30s linear infinite; }
     @keyframes spaceWarp { 0% { background-position: 0 0; } 100% { background-position: 0 500px; } }
-    .black-hole { position: absolute; border-radius: 50%; background: #000; box-shadow: 0 0 20px 5px var(--theme-600), 0 0 40px 15px var(--theme-500), 0 0 60px 20px var(--theme-400), inset 0 0 20px 10px #000; animation: pulseHole 4s ease-in-out infinite alternate; }
-    .black-hole::after { content: ''; position: absolute; top: -10px; left: -10px; right: -10px; bottom: -10px; border-radius: 50%; border: 2px solid transparent; border-top-color: var(--theme-400); border-bottom-color: var(--theme-500); animation: spinHole 2s linear infinite; }
-    @keyframes pulseHole { 0% { transform: scale(1); } 100% { transform: scale(1.05); } }
-    @keyframes spinHole { 100% { transform: rotate(360deg); } }
-
     .img-zoom-container { overflow: hidden; }
     .img-zoom { transition: transform 0.8s cubic-bezier(0.25, 0.46, 0.45, 0.94); }
     .group:hover .img-zoom { transform: scale(1.15); }
     .no-scrollbar::-webkit-scrollbar { display: none; }
     .no-scrollbar { -ms-overflow-style: none; scrollbar-width: none; }
   </style>
+  <style id="custom-theme-styles"></style>
 </head>
 <body id="main-body" class="bg-slate-950 text-slate-100 font-sans min-h-screen flex flex-col relative">
 
   <canvas id="stars-canvas" class="fixed inset-0 z-[-3] hidden w-full h-full pointer-events-none"></canvas>
   <div id="fabric-effect" class="spacetime-fabric hidden pointer-events-none"></div>
 
-  <nav id="main-nav" class="border-b border-slate-800 bg-slate-900/50 backdrop-blur-md sticky top-0 z-50 transition-colors duration-500">
+  <!-- Preview Banner -->
+  <div id="preview-banner" class="hidden fixed top-0 left-0 w-full bg-gradient-to-r from-theme-600 to-purple-600 text-white text-center py-2 text-xs font-bold tracking-widest uppercase z-[100] shadow-lg flex justify-center items-center gap-4">
+    <span><i class="fa-solid fa-eye mr-2 animate-pulse"></i> Theme Preview Active</span>
+    <button id="cancel-preview-btn" class="bg-black/40 hover:bg-black/60 px-3 py-1 rounded-lg transition-colors">Revert</button>
+  </div>
+
+  <nav id="main-nav" class="border-b border-slate-800 bg-slate-900/50 backdrop-blur-md sticky top-0 z-50 transition-colors duration-500 mt-0">
     <div class="max-w-7xl mx-auto px-6 h-20 flex items-center justify-between">
       <div class="flex items-center gap-3 cursor-pointer" id="nav-logo">
         <div class="p-2 bg-theme-600 rounded-xl shadow-lg shadow-theme-500/20 transition-colors"><i class="fa-solid fa-satellite-dish text-white text-xl"></i></div>
         <div>
-          <h1 class="text-xl font-bold tracking-tight flex items-center gap-2">CosmosCatalog 
+          <h1 class="text-xl font-bold tracking-tight flex items-center gap-2" id="nav-title-text">
+            CosmosCatalog 
             <span id="site-status-badge" class="px-2 py-0.5 rounded-full text-[10px] uppercase tracking-widest font-bold border border-green-500/50 text-green-400 bg-green-500/10">Active</span>
             <span id="live-mode-badge" class="hidden px-2 py-0.5 rounded-full text-[10px] uppercase tracking-widest font-bold border border-theme-500/50 text-theme-400 bg-theme-500/10 animate-pulse"><i class="fa-solid fa-satellite mr-1"></i>Live</span>
+            <!-- NEW: Active Theme Indicator -->
+            <span id="active-theme-badge" class="ml-2 px-2 py-0.5 rounded-full text-[9px] uppercase tracking-widest font-bold border border-slate-700 text-slate-400 bg-slate-900/50 transition-all"><i class="fa-solid fa-swatchbook mr-1"></i><span id="active-theme-name">Deep Space Blue</span></span>
           </h1>
           <p class="text-[10px] text-theme-400 font-mono uppercase tracking-widest transition-colors">Database v3.0 Pro</p>
         </div>
@@ -195,19 +190,16 @@
       </div>
 
       <div class="grid grid-cols-1 lg:grid-cols-12 gap-8">
-        
         <div class="lg:col-span-3 flex overflow-x-auto lg:flex-col gap-2 lg:gap-0 lg:space-y-2 lg:sticky top-24 h-fit z-20 no-scrollbar pb-2 lg:pb-0">
           <button class="admin-tab-btn active flex-shrink-0 lg:w-full text-left px-4 py-3 rounded-xl text-sm font-medium bg-theme-600 text-white transition-all flex justify-between items-center gap-3" data-target="admin-tab-entry"><span class="whitespace-nowrap"><i class="fa-solid fa-plus w-5"></i> Data Entry</span></button>
           <button class="admin-tab-btn flex-shrink-0 lg:w-full text-left px-4 py-3 rounded-xl text-sm font-medium bg-slate-900 text-slate-400 hover:text-white hover:bg-slate-800 transition-all flex justify-between items-center gap-3" data-target="admin-tab-directory"><span class="whitespace-nowrap"><i class="fa-solid fa-folder-tree w-5"></i> Directory</span></button>
           <button class="admin-tab-btn flex-shrink-0 lg:w-full text-left px-4 py-3 rounded-xl text-sm font-medium bg-slate-900 text-slate-400 hover:text-white hover:bg-slate-800 transition-all flex justify-between items-center gap-3" data-target="admin-tab-mass"><span class="whitespace-nowrap"><i class="fa-solid fa-layer-group w-5"></i> Mass Upload</span></button>
           <button class="admin-tab-btn flex-shrink-0 lg:w-full text-left px-4 py-3 rounded-xl text-sm font-medium bg-slate-900 text-slate-400 hover:text-white hover:bg-slate-800 transition-all flex justify-between items-center gap-3" data-target="admin-tab-audit"><span class="whitespace-nowrap"><i class="fa-solid fa-clipboard-list w-5"></i> Audit Logs</span></button>
           <div class="hidden lg:block h-px bg-slate-800 my-4"></div>
-          <button class="admin-tab-btn flex-shrink-0 lg:w-full text-left px-4 py-3 rounded-xl text-sm font-medium bg-slate-900 text-slate-400 hover:text-white hover:bg-slate-800 transition-all flex justify-between items-center gap-3" data-target="admin-tab-settings"><span class="whitespace-nowrap"><i class="fa-solid fa-sliders w-5"></i> Config</span></button>
+          <button class="admin-tab-btn flex-shrink-0 lg:w-full text-left px-4 py-3 rounded-xl text-sm font-medium bg-slate-900 text-slate-400 hover:text-white hover:bg-slate-800 transition-all flex justify-between items-center gap-3" data-target="admin-tab-settings"><span class="whitespace-nowrap"><i class="fa-solid fa-sliders w-5"></i> Config & Forge</span></button>
         </div>
 
         <div class="lg:col-span-9">
-          
-          <!-- Tab 1: Data Entry -->
           <div id="admin-tab-entry" class="admin-panel-section animate-in fade-in bg-slate-900 border border-slate-800 p-8 rounded-3xl">
             <h3 id="form-header" class="text-xl font-bold mb-6 flex items-center gap-2"><i class="fa-solid fa-satellite text-theme-500"></i> Single Entry Terminal</h3>
             <form id="upload-form" class="space-y-6">
@@ -257,7 +249,6 @@
             </form>
           </div>
 
-          <!-- Tab 2: Directory -->
           <div id="admin-tab-directory" class="admin-panel-section hidden animate-in fade-in bg-slate-900 border border-slate-800 p-8 rounded-3xl">
             <div class="flex flex-col sm:flex-row justify-between items-start sm:items-center mb-6 gap-4">
               <h3 class="text-xl font-bold">Record Directory</h3>
@@ -266,7 +257,6 @@
             <div id="admin-list" class="space-y-3 max-h-[600px] overflow-y-auto pr-2 custom-scrollbar"></div>
           </div>
 
-          <!-- Tab 3: Mass Upload -->
           <div id="admin-tab-mass" class="admin-panel-section hidden animate-in fade-in bg-slate-900 border border-slate-800 p-8 rounded-3xl">
             <h3 class="text-xl font-bold mb-2 flex items-center gap-2">Mass Ingestion Queue <i class="fa-solid fa-sparkles text-theme-500 text-sm" title="AI Powered"></i></h3>
             <p class="text-slate-400 text-sm mb-6">Upload multiple assets simultaneously. AI Vision will automatically categorize each image.</p>
@@ -282,7 +272,6 @@
             </div>
           </div>
 
-          <!-- Tab 4: Audit Logs (Now Fully Functional) -->
           <div id="admin-tab-audit" class="admin-panel-section hidden animate-in fade-in bg-slate-900 border border-slate-800 p-8 rounded-3xl">
             <div class="flex justify-between items-center mb-6">
               <h3 class="text-xl font-bold">System Audit Logs</h3>
@@ -291,17 +280,16 @@
               <table class="w-full text-left text-sm">
                 <thead class="bg-slate-900/50 text-xs uppercase tracking-widest text-slate-500"><tr><th class="px-4 py-3">Timestamp</th><th class="px-4 py-3">Action</th><th class="px-4 py-3">User</th><th class="px-4 py-3">Target ID</th></tr></thead>
                 <tbody id="audit-log-body" class="divide-y divide-slate-800/50 text-slate-300">
-                  <!-- Dynamically populated -->
                   <tr><td colspan="4" class="px-4 py-8 text-center text-slate-500"><i class="fa-solid fa-circle-notch fa-spin mr-2"></i>Fetching secure logs...</td></tr>
                 </tbody>
               </table>
             </div>
           </div>
 
-          <!-- Tab 5: Settings -->
+          <!-- Tab 5: Settings & Theme Forge -->
           <div id="admin-tab-settings" class="admin-panel-section hidden animate-in fade-in space-y-6">
             <div class="bg-slate-900 border border-slate-800 p-8 rounded-3xl">
-              <h3 class="text-xl font-bold flex items-center gap-2 mb-6"><i class="fa-solid fa-palette text-theme-500"></i> Theme Engine Multiverse</h3>
+              <h3 class="text-xl font-bold flex items-center gap-2 mb-6"><i class="fa-solid fa-layer-group text-theme-500"></i> The Multiverse Engine</h3>
               
               <div class="mb-6 p-5 bg-gradient-to-r from-theme-900/30 to-slate-900 border border-theme-500/30 rounded-2xl relative overflow-hidden">
                 <i class="fa-solid fa-sparkles absolute -right-4 -top-4 text-6xl text-theme-500/10"></i>
@@ -320,12 +308,36 @@
               <div class="grid grid-cols-1 md:grid-cols-2 gap-8">
                 <div>
                   <label class="block text-sm text-slate-300 font-bold mb-3">Atmospheres & Modes</label>
-                  <div class="space-y-2 max-h-[500px] overflow-y-auto pr-2 custom-scrollbar">
+                  <div class="space-y-2 max-h-[500px] overflow-y-auto pr-2 custom-scrollbar" id="theme-radio-container">
                     
                     <p class="text-[10px] uppercase tracking-widest text-slate-500 font-bold mb-2">Classics</p>
                     <label class="flex items-center gap-3 p-3 bg-slate-950 border border-slate-800 rounded-xl cursor-pointer hover:border-blue-500"><input type="radio" name="theme" value="blue" class="text-blue-500"><span class="flex-grow text-sm">Deep Space Blue</span><div class="w-4 h-4 rounded-full bg-blue-500"></div></label>
                     <label class="flex items-center gap-3 p-3 bg-slate-950 border border-slate-800 rounded-xl cursor-pointer hover:border-emerald-500"><input type="radio" name="theme" value="emerald" class="text-emerald-500"><span class="flex-grow text-sm">Aurora Emerald</span><div class="w-4 h-4 rounded-full bg-emerald-500"></div></label>
                     
+                    <p class="text-[10px] uppercase tracking-widest text-slate-500 font-bold mt-4 mb-2">Final Boss / Scaling Entites (Special x ∞)</p>
+                    <label class="flex items-center gap-3 p-3 bg-slate-950 border border-red-800 rounded-xl cursor-pointer hover:border-red-500 shadow-[0_0_15px_rgba(220,38,38,0.2)]"><input type="radio" name="theme" value="unknown-limit" class="text-red-500"><span class="flex-grow text-sm font-bold text-red-400 tracking-widest uppercase">Unknown Limit</span><i class="fa-solid fa-infinity text-red-500 animate-pulse"></i></label>
+                    <label class="flex items-center gap-3 p-3 bg-slate-950 border border-slate-800 rounded-xl cursor-pointer hover:border-orange-500"><input type="radio" name="theme" value="runaway-energy" class="text-orange-500"><span class="flex-grow text-sm">Runaway Energy</span><i class="fa-solid fa-bolt text-orange-500"></i></label>
+                    <label class="flex items-center gap-3 p-3 bg-slate-950 border border-slate-800 rounded-xl cursor-pointer hover:border-slate-600"><input type="radio" name="theme" value="light-devoured" class="text-slate-600"><span class="flex-grow text-sm">Light Devoured</span><i class="fa-solid fa-moon text-slate-600"></i></label>
+                    <label class="flex items-center gap-3 p-3 bg-slate-950 border border-slate-800 rounded-xl cursor-pointer hover:border-purple-500"><input type="radio" name="theme" value="point-of-no-return" class="text-purple-500"><span class="flex-grow text-sm">Point of No Return</span><i class="fa-solid fa-door-closed text-purple-500"></i></label>
+                    <label class="flex items-center gap-3 p-3 bg-slate-950 border border-slate-800 rounded-xl cursor-pointer hover:border-indigo-400"><input type="radio" name="theme" value="chaos-order" class="text-indigo-400"><span class="flex-grow text-sm">Chaos to Order</span><i class="fa-solid fa-hurricane text-indigo-400"></i></label>
+
+                    <p class="text-[10px] uppercase tracking-widest text-slate-500 font-bold mt-4 mb-2">Unsettling & Mind-Bending</p>
+                    <label class="flex items-center gap-3 p-3 bg-slate-950 border border-slate-800 rounded-xl cursor-pointer hover:border-white"><input type="radio" name="theme" value="time-collapse" class="text-white"><span class="flex-grow text-sm">Cosmic Time Collapse</span><i class="fa-solid fa-clock-rotate-left text-white"></i></label>
+                    <label class="flex items-center gap-3 p-3 bg-slate-950 border border-slate-800 rounded-xl cursor-pointer hover:border-blue-400"><input type="radio" name="theme" value="cosmic-awareness" class="text-blue-400"><span class="flex-grow text-sm">Cosmic Awareness</span><i class="fa-regular fa-eye text-blue-400"></i></label>
+                    <label class="flex items-center gap-3 p-3 bg-slate-950 border border-slate-800 rounded-xl cursor-pointer hover:border-green-400"><input type="radio" name="theme" value="living-universe" class="text-green-400"><span class="flex-grow text-sm">Living Universe</span><i class="fa-solid fa-lungs text-green-400"></i></label>
+                    <label class="flex items-center gap-3 p-3 bg-slate-950 border border-slate-800 rounded-xl cursor-pointer hover:border-indigo-500"><input type="radio" name="theme" value="recursive-universe" class="text-indigo-500"><span class="flex-grow text-sm">Recursive Universe</span><i class="fa-solid fa-infinity text-indigo-500"></i></label>
+                    <label class="flex items-center gap-3 p-3 bg-slate-950 border border-slate-800 rounded-xl cursor-pointer hover:border-slate-800"><input type="radio" name="theme" value="null-space" class="text-slate-800"><span class="flex-grow text-sm">Null Space</span><i class="fa-solid fa-power-off text-slate-800"></i></label>
+                    <label class="flex items-center gap-3 p-3 bg-slate-950 border border-slate-800 rounded-xl cursor-pointer hover:border-yellow-400"><input type="radio" name="theme" value="cosmic-judgment" class="text-yellow-400"><span class="flex-grow text-sm">Cosmic Judgment</span><i class="fa-solid fa-gavel text-yellow-400"></i></label>
+                    <label class="flex items-center gap-3 p-3 bg-slate-950 border border-slate-800 rounded-xl cursor-pointer hover:border-cyan-200"><input type="radio" name="theme" value="frozen-time" class="text-cyan-200"><span class="flex-grow text-sm">Frozen Time</span><i class="fa-solid fa-pause text-cyan-200"></i></label>
+                    <label class="flex items-center gap-3 p-3 bg-slate-950 border border-slate-800 rounded-xl cursor-pointer hover:border-red-900"><input type="radio" name="theme" value="entropy" class="text-red-900"><span class="flex-grow text-sm">Entropy Mode</span><i class="fa-solid fa-burst text-red-900"></i></label>
+                    <label class="flex items-center gap-3 p-3 bg-slate-950 border border-slate-800 rounded-xl cursor-pointer hover:border-fuchsia-400"><input type="radio" name="theme" value="reality-desync" class="text-fuchsia-400"><span class="flex-grow text-sm">Reality Desync</span><i class="fa-solid fa-arrows-split-up-and-left text-fuchsia-400"></i></label>
+                    <label class="flex items-center gap-3 p-3 bg-slate-950 border border-slate-800 rounded-xl cursor-pointer hover:border-teal-400"><input type="radio" name="theme" value="time-echo" class="text-teal-400"><span class="flex-grow text-sm">Time Echo</span><i class="fa-solid fa-clock text-teal-400"></i></label>
+                    <label class="flex items-center gap-3 p-3 bg-slate-950 border border-slate-800 rounded-xl cursor-pointer hover:border-yellow-600"><input type="radio" name="theme" value="singular-focus" class="text-yellow-600"><span class="flex-grow text-sm">Singular Focus</span><i class="fa-solid fa-crosshairs text-yellow-600"></i></label>
+                    <label class="flex items-center gap-3 p-3 bg-slate-950 border border-slate-800 rounded-xl cursor-pointer hover:border-green-600"><input type="radio" name="theme" value="first-contact" class="text-green-600"><span class="flex-grow text-sm">First Contact</span><i class="fa-solid fa-satellite-dish text-green-600"></i></label>
+                    <label class="flex items-center gap-3 p-3 bg-slate-950 border border-slate-800 rounded-xl cursor-pointer hover:border-slate-400"><input type="radio" name="theme" value="cosmic-silence" class="text-slate-400"><span class="flex-grow text-sm">Cosmic Silence</span><i class="fa-solid fa-volume-xmark text-slate-400"></i></label>
+                    <label class="flex items-center gap-3 p-3 bg-slate-950 border border-slate-800 rounded-xl cursor-pointer hover:border-purple-500"><input type="radio" name="theme" value="simulation-break" class="text-purple-500"><span class="flex-grow text-sm">Simulation Break</span><i class="fa-solid fa-bug text-purple-500"></i></label>
+                    <label class="flex items-center gap-3 p-3 bg-slate-950 border border-slate-800 rounded-xl cursor-pointer hover:border-orange-300"><input type="radio" name="theme" value="pattern-recognition" class="text-orange-300"><span class="flex-grow text-sm">Pattern Recognition</span><i class="fa-solid fa-shapes text-orange-300"></i></label>
+
                     <p class="text-[10px] uppercase tracking-widest text-slate-500 font-bold mt-4 mb-2">Advanced Immersion</p>
                     <label class="flex items-center gap-3 p-3 bg-slate-950 border border-slate-800 rounded-xl cursor-pointer hover:border-blue-800"><input type="radio" name="theme" value="cosmic-ocean" class="text-blue-800"><span class="flex-grow text-sm">Cosmic Ocean (Parallax)</span><i class="fa-solid fa-water text-blue-800"></i></label>
                     <label class="flex items-center gap-3 p-3 bg-slate-950 border border-slate-800 rounded-xl cursor-pointer hover:border-purple-600"><input type="radio" name="theme" value="black-hole" class="text-purple-600"><span class="flex-grow text-sm">Black Hole Mode</span><i class="fa-solid fa-compact-disc text-purple-600"></i></label>
@@ -346,20 +358,11 @@
                     <label class="flex items-center gap-3 p-3 bg-slate-950 border border-slate-800 rounded-xl cursor-pointer hover:border-amber-700"><input type="radio" name="theme" value="gas-giant" class="text-amber-700"><span class="flex-grow text-sm">Gas Giant Atmosphere</span><i class="fa-solid fa-wind text-amber-700"></i></label>
                     <label class="flex items-center gap-3 p-3 bg-slate-950 border border-slate-800 rounded-xl cursor-pointer hover:border-teal-400"><input type="radio" name="theme" value="time-warp" class="text-teal-400"><span class="flex-grow text-sm">Time Warp Archive</span><i class="fa-solid fa-hourglass-half text-teal-400"></i></label>
 
-                    <p class="text-[10px] uppercase tracking-widest text-slate-500 font-bold mt-4 mb-2">Systems & Terminals</p>
-                    <label class="flex items-center gap-3 p-3 bg-slate-950 border border-slate-800 rounded-xl cursor-pointer hover:border-blue-400"><input type="radio" name="theme" value="orbital-command" class="text-blue-400"><span class="flex-grow text-sm font-mono">Orbital Command</span><i class="fa-solid fa-satellite-dish text-blue-400"></i></label>
-                    <label class="flex items-center gap-3 p-3 bg-slate-950 border border-slate-800 rounded-xl cursor-pointer hover:border-emerald-400"><input type="radio" name="theme" value="ai-deep-space" class="text-emerald-400"><span class="flex-grow text-sm font-mono">AI Deep Space</span><i class="fa-solid fa-microchip text-emerald-400"></i></label>
-                    <label class="flex items-center gap-3 p-3 bg-slate-950 border border-slate-800 rounded-xl cursor-pointer hover:border-green-500"><input type="radio" name="theme" value="satellite-hud" class="text-green-500"><span class="flex-grow text-sm font-mono">Satellite HUD</span><i class="fa-solid fa-crosshairs text-green-500"></i></label>
-                    <label class="flex items-center gap-3 p-3 bg-slate-950 border border-slate-800 rounded-xl cursor-pointer hover:border-lime-500"><input type="radio" name="theme" value="alien-signal" class="text-lime-500"><span class="flex-grow text-sm font-mono">Alien Signal</span><i class="fa-brands fa-space-awesome text-lime-500"></i></label>
-                    <label class="flex items-center gap-3 p-3 bg-slate-950 border border-slate-800 rounded-xl cursor-pointer hover:border-red-600"><input type="radio" name="theme" value="signal-lost" class="text-red-600"><span class="flex-grow text-sm font-mono">Deep Space Transmission</span><i class="fa-solid fa-plug-circle-xmark text-red-600"></i></label>
-                    <label class="flex items-center gap-3 p-3 bg-slate-950 border border-slate-800 rounded-xl cursor-pointer hover:border-yellow-600"><input type="radio" name="theme" value="cosmic-archive" class="text-yellow-600"><span class="flex-grow text-sm">Cosmic Archive</span><i class="fa-solid fa-book-journal-whills text-yellow-600"></i></label>
-                    
-                    <p class="text-[10px] uppercase tracking-widest text-slate-500 font-bold mt-4 mb-2">Seasonal / Events</p>
-                    <label class="flex items-center gap-3 p-3 bg-slate-950 border border-slate-800 rounded-xl cursor-pointer hover:border-red-500"><input type="radio" name="theme" value="cosmic-winter"><span class="flex-grow text-sm">Cosmic Winter</span><div class="flex gap-1"><div class="w-2 h-4 rounded-l-full bg-red-500"></div><div class="w-2 h-4 rounded-r-full bg-green-500"></div></div></label>
-                    <label class="flex items-center gap-3 p-3 bg-slate-950 border border-slate-800 rounded-xl cursor-pointer hover:border-orange-600"><input type="radio" name="theme" value="dark-void"><span class="flex-grow text-sm">Dark Void</span><div class="w-4 h-4 rounded-full bg-orange-600"></div></label>
-                    <label class="flex items-center gap-3 p-3 bg-slate-950 border border-slate-800 rounded-xl cursor-pointer hover:border-cyan-500"><input type="radio" name="theme" value="fragile-blue-dot"><span class="flex-grow text-sm">Fragile Blue Dot</span><div class="w-4 h-4 rounded-full bg-cyan-600"></div></label>
-                    <label class="flex items-center gap-3 p-3 bg-slate-950 border border-slate-800 rounded-xl cursor-pointer hover:border-pink-500"><input type="radio" name="theme" value="cosmic-love"><span class="flex-grow text-sm">Cosmic Love</span><div class="w-4 h-4 rounded-full bg-pink-500"></div></label>
-                    <label class="flex items-center gap-3 p-3 bg-slate-950 border border-slate-800 rounded-xl cursor-pointer hover:border-slate-300"><input type="radio" name="theme" value="meteor-storm"><span class="flex-grow text-sm">Meteor Storm</span><div class="w-4 h-4 rounded-full bg-slate-400"></div></label>
+                    <!-- Dynamic Custom Themes Container -->
+                    <div id="custom-themes-block" class="hidden">
+                        <p class="text-[10px] uppercase tracking-widest text-theme-400 font-bold mt-4 mb-2">Developer Custom Themes</p>
+                        <div id="custom-themes-list" class="space-y-2"></div>
+                    </div>
                   </div>
                 </div>
                 <div>
@@ -373,12 +376,56 @@
                       <span class="text-sm"><i class="fa-solid fa-dharmachakra mr-2 text-slate-400"></i> Space-Time Distortion</span>
                       <input type="checkbox" id="fabric-toggle" class="w-4 h-4 rounded bg-slate-900 text-theme-500">
                     </label>
-                    <p class="text-[10px] text-slate-500 mt-2 italic">Note: Particle configurations (e.g., Warp Speed streaks, Orbiting Binaries) adapt automatically based on the chosen theme.</p>
+                    <p class="text-[10px] text-slate-500 mt-2 italic">Note: Particle configurations adapt automatically based on the chosen theme. The Final Boss theme will ignore these toggles.</p>
                   </div>
                 </div>
               </div>
               <button id="save-visuals-btn" class="mt-6 bg-theme-600 hover:bg-theme-500 w-full py-3 rounded-xl font-bold shadow-lg transition-colors">Deploy Configuration</button>
             </div>
+
+            <!-- Custom Theme Forge (Developer) -->
+            <div class="bg-slate-900 border border-slate-800 p-8 rounded-3xl mt-6">
+              <h3 class="text-xl font-bold flex items-center gap-2 mb-2"><i class="fa-solid fa-code text-theme-400"></i> Theme Forge</h3>
+              <p class="text-sm text-slate-400 mb-6">Inject custom CSS and settings to build permanent new themes.</p>
+              
+              <div class="grid grid-cols-1 md:grid-cols-2 gap-6 mb-4">
+                <div>
+                    <label class="block text-[10px] text-slate-500 uppercase tracking-widest mb-1">Theme ID (No spaces)</label>
+                    <input type="text" id="dev-theme-id" placeholder="e.g. cyber-punk" class="w-full bg-slate-950 border border-slate-800 rounded-lg px-3 py-2 text-sm focus:border-theme-500 outline-none">
+                </div>
+                <div>
+                    <label class="block text-[10px] text-slate-500 uppercase tracking-widest mb-1">Display Name</label>
+                    <input type="text" id="dev-theme-name" placeholder="e.g. Cyber Punk 2077" class="w-full bg-slate-950 border border-slate-800 rounded-lg px-3 py-2 text-sm focus:border-theme-500 outline-none">
+                </div>
+                <div>
+                    <label class="block text-[10px] text-slate-500 uppercase tracking-widest mb-1">Primary Color (Hex)</label>
+                    <input type="text" id="dev-theme-color" placeholder="#ff00ff" class="w-full bg-slate-950 border border-slate-800 rounded-lg px-3 py-2 text-sm focus:border-theme-500 outline-none font-mono">
+                </div>
+                <div>
+                    <label class="block text-[10px] text-slate-500 uppercase tracking-widest mb-1">Particle Behavior</label>
+                    <select id="dev-theme-particle" class="w-full bg-slate-950 border border-slate-800 rounded-lg px-3 py-2 text-sm focus:border-theme-500 outline-none">
+                        <option value="default">Default Stars</option>
+                        <option value="none">None</option>
+                        <option value="pulse">Pulse</option>
+                        <option value="snow">Snow / Drift</option>
+                        <option value="meteor">Meteor</option>
+                        <option value="warp">Warp Lines</option>
+                        <option value="orbit">Orbiting Rings</option>
+                        <option value="binary">Binary Pairs</option>
+                        <option value="repel">Awareness (Repel)</option>
+                    </select>
+                </div>
+              </div>
+              <div class="mb-4">
+                  <label class="block text-[10px] text-slate-500 uppercase tracking-widest mb-1">CSS Injection (.theme-{id})</label>
+                  <textarea id="dev-theme-css" rows="4" class="w-full bg-slate-950 border border-slate-800 rounded-xl px-4 py-3 font-mono text-xs text-theme-300 custom-scrollbar outline-none focus:border-theme-500" placeholder="/* Use .theme-your-id selector. Ex: */&#10;.theme-cyber-punk { background: #000; filter: hue-rotate(90deg); }"></textarea>
+              </div>
+              <div class="flex gap-3">
+                  <button id="preview-theme-btn" class="flex-grow bg-slate-800 hover:bg-slate-700 text-white font-bold py-2.5 rounded-xl transition-colors shadow-lg"><i class="fa-solid fa-eye mr-2"></i>Live Preview</button>
+                  <button id="save-custom-theme-btn" class="flex-grow bg-theme-600 hover:bg-theme-500 text-white font-bold py-2.5 rounded-xl transition-colors shadow-lg"><i class="fa-solid fa-floppy-disk mr-2"></i>Save to Database</button>
+              </div>
+            </div>
+
           </div>
 
         </div>
@@ -393,17 +440,19 @@
     </div>
   </main>
 
-  <!-- ADVANCED MODAL -->
+  <!-- ADVANCED MODAL (Fixed Image Constraints) -->
   <div id="post-modal" class="fixed inset-0 z-[110] bg-slate-950/95 backdrop-blur-md flex items-center justify-center p-4 sm:p-8 opacity-0 pointer-events-none transition-opacity duration-300">
     <button id="close-modal-btn" class="absolute top-6 right-6 text-slate-400 hover:text-white bg-slate-800/50 hover:bg-slate-700/80 rounded-full w-12 h-12 flex items-center justify-center text-xl z-20 transition-all"><i class="fa-solid fa-xmark"></i></button>
-    <div class="max-w-6xl w-full bg-slate-900 border border-slate-800 rounded-3xl overflow-hidden flex flex-col md:flex-row max-h-[90vh] scale-95 transform transition-transform shadow-2xl shadow-theme-900/20 relative" id="modal-content-scale">
-      <div class="md:w-3/5 bg-black relative flex items-center justify-center border-r border-slate-800 group">
-        <img id="modal-img" src="" class="max-w-full max-h-[50vh] md:max-h-full object-contain">
+    <div class="max-w-6xl w-full bg-slate-900 border border-slate-800 rounded-3xl overflow-hidden flex flex-col md:flex-row h-auto max-h-[90vh] md:h-[85vh] scale-95 transform transition-transform shadow-2xl shadow-theme-900/20 relative" id="modal-content-scale">
+      <div class="md:w-3/5 bg-black relative flex items-center justify-center border-r border-slate-800 group h-64 md:h-full overflow-hidden">
+        <div class="w-full h-full flex items-center justify-center p-4">
+            <img id="modal-img" src="" class="max-w-full max-h-full object-contain drop-shadow-2xl">
+        </div>
         <div class="absolute bottom-4 right-4 flex gap-2 opacity-0 group-hover:opacity-100 transition-opacity">
           <button id="modal-download-btn" class="bg-black/60 hover:bg-theme-600 text-white p-3 rounded-xl backdrop-blur-md transition-colors shadow-lg border border-white/10" title="Download Asset"><i class="fa-solid fa-download"></i></button>
         </div>
       </div>
-      <div class="md:w-2/5 p-8 flex flex-col overflow-y-auto bg-gradient-to-b from-slate-900 to-slate-950 custom-scrollbar">
+      <div class="md:w-2/5 p-8 flex flex-col overflow-y-auto bg-gradient-to-b from-slate-900 to-slate-950 custom-scrollbar h-full">
         <div class="flex gap-2 flex-wrap mb-4" id="modal-badges"></div>
         <h2 id="modal-title" class="text-3xl font-bold text-white mb-1">Title</h2>
         <div class="grid grid-cols-2 gap-4 mb-6 bg-slate-950/80 p-5 rounded-2xl border border-slate-800/50 shadow-inner mt-4">
@@ -423,7 +472,7 @@
   <script type="module">
     import { initializeApp } from "https://www.gstatic.com/firebasejs/11.6.1/firebase-app.js";
     import { getAuth, signInAnonymously, signInWithCustomToken, onAuthStateChanged } from "https://www.gstatic.com/firebasejs/11.6.1/firebase-auth.js";
-    import { getFirestore, collection, onSnapshot, doc, setDoc, deleteDoc, serverTimestamp, query, orderBy, limit } from "https://www.gstatic.com/firebasejs/11.6.1/firebase-firestore.js";
+    import { getFirestore, collection, onSnapshot, doc, setDoc, deleteDoc, serverTimestamp } from "https://www.gstatic.com/firebasejs/11.6.1/firebase-firestore.js";
 
     let firebaseConfig = { apiKey: "AIzaSyA2VwS1hQGroNlkXi2E-vVFz4t3k-JAd6I", authDomain: "cosmos-catalog-v1.firebaseapp.com", projectId: "cosmos-catalog-v1" };
     if (typeof __firebase_config !== 'undefined') { try { firebaseConfig = typeof __firebase_config === 'string' ? JSON.parse(__firebase_config) : __firebase_config; } catch (e) {} }
@@ -434,61 +483,108 @@
     let currentUser = null, isAdmin = false, currentImageBase64 = null, editingId = null, allCatalogItems = [], allAuditLogs = [];
     let viewState = 'catalog', activeCategoryFilter = 'all';
     
-    let globalSettings = { theme: 'blue', starsOn: true, fabricOn: false, liveMode: false, lockdownActive: false };
+    let globalSettings = { theme: 'blue', starsOn: true, fabricOn: false, liveMode: false, lockdownActive: false, customThemes: {} };
+    let previewOriginalTheme = null;
 
     // Multi-Verse Theme Registry
-    const THEMES = { 
-      'blue': {'400':'#60a5fa','500':'#3b82f6','600':'#2563eb', particle: 'default'}, 
-      'emerald': {'400':'#34d399','500':'#10b981','600':'#059669', particle: 'default'}, 
-      'cosmic-ocean': {'400':'#3b82f6','500':'#2563eb','600':'#1d4ed8', particle: 'snow', cssClass: 'theme-cosmic-ocean'},
-      'grav-lens': {'400':'#818cf8','500':'#6366f1','600':'#4f46e5', particle: 'orbit', bg: '#020617', cssClass: 'theme-grav-lens'},
-      'orbital-command': {'400':'#60a5fa','500':'#3b82f6','600':'#2563eb', particle: 'orbit', bg: '#020617', cssClass: 'theme-orbital'},
-      'interstellar-dust': {'400':'#c084fc','500':'#a855f7','600':'#9333ea', particle: 'default', bg: '#020617', cssClass: 'theme-dust'},
-      'pulsar-core': {'400':'#fb7185','500':'#f43f5e','600':'#e11d48', particle: 'pulse', bg: '#0f0505', cssClass: 'theme-pulsar'},
-      'deep-ice': {'400':'#67e8f9','500':'#06b6d4','600':'#0891b2', particle: 'snow', bg: '#081c22', cssClass: 'theme-cryo'},
-      'observatory': {'400':'#94a3b8','500':'#64748b','600':'#475569', particle: 'default', bg: '#0f172a', cssClass: 'theme-observatory'},
-      'ai-deep-space': {'400':'#34d399','500':'#10b981','600':'#059669', particle: 'none', bg: '#020617', cssClass: 'theme-ai'},
-      'volcanic-planet': {'400':'#f87171','500':'#ef4444','600':'#dc2626', particle: 'meteor', bg: '#2a0800', cssClass: 'theme-volcanic'},
-      'mirror-universe': {'400':'#ffffff','500':'#e2e8f0','600':'#cbd5e1', particle: 'default', bg: '#fff', cssClass: 'theme-mirror'},
-      'quantum-flux': {'400':'#e879f9','500':'#d946ef','600':'#c026d3', particle: 'pulse', bg: '#1e1b4b', cssClass: 'theme-quantum'},
-      'infinite-depth': {'400':'#818cf8','500':'#4f46e5','600':'#3730a3', particle: 'warp', bg: '#020617', cssClass: 'theme-infinite'},
-      'signal-lost': {'400':'#fca5a5','500':'#ef4444','600':'#b91c1c', particle: 'none', bg: '#020617', cssClass: 'theme-transmission'},
-      'gas-giant': {'400':'#fbbf24','500':'#f59e0b','600':'#d97706', particle: 'none', bg: '#451a03', cssClass: 'theme-gas-giant'},
-      'time-warp': {'400':'#2dd4bf','500':'#14b8a6','600':'#0d9488', particle: 'warp', bg: '#020617', cssClass: 'theme-time-warp'},
-      'black-hole': {'400':'#a855f7','500':'#9333ea','600':'#7e22ce', particle: 'pulse', bg: '#000000', cssClass: 'theme-black-hole'},
-      'nebula-dream': {'400':'#f472b6','500':'#c084fc','600':'#818cf8', particle: 'default', bg: '#0f172a', cssClass: 'theme-nebula'},
-      'supernova': {'400':'#fef08a','500':'#f97316','600':'#dc2626', particle: 'firework', bg: '#2a0800', cssClass: 'theme-supernova'},
-      'satellite-hud': {'400':'#86efac','500':'#22c55e','600':'#16a34a', particle: 'none', bg: '#011104', cssClass: 'theme-hud'},
-      'dark-matter': {'400':'#94a3b8','500':'#475569','600':'#1e293b', particle: 'pulse', bg: '#050505', cssClass: 'theme-dark-matter'},
-      'warp-speed': {'400':'#93c5fd','500':'#3b82f6','600':'#1d4ed8', particle: 'warp', bg: '#020617', cssClass: 'theme-warp'},
-      'alien-signal': {'400':'#d9f99d','500':'#84cc16','600':'#4d7c0f', particle: 'pulse', bg: '#051201', cssClass: 'theme-alien'},
-      'planetary-orbit': {'400':'#fdba74','500':'#f97316','600':'#c2410c', particle: 'orbit', bg: '#1e1b4b'},
-      'cosmic-archive': {'400':'#fde047','500':'#eab308','600':'#ca8a04', particle: 'default', bg: '#020617', cssClass: 'theme-archive'},
-      'cosmic-winter': {'400':'#ef4444','500':'#22c55e','600':'#16a34a', particle: 'snow', bg: '#020617'}, 
-      'dark-void': {'400':'#fb923c','500':'#f97316','600':'#ea580c', particle: 'pulse', cssClass: 'theme-flicker', bg: '#000000'}, 
-      'fragile-blue-dot': {'400':'#38bdf8','500':'#0ea5e9','600':'#0284c7', particle: 'default', bg: '#082f49'}, 
-      'meteor-storm': {'400':'#94a3b8','500':'#64748b','600':'#475569', particle: 'meteor'},
-      'cosmic-love': {'400':'#f472b6','500':'#ec4899','600':'#db2777', particle: 'binary'}
+    let THEMES = { 
+      'blue': {name: 'Deep Space Blue', '400':'#60a5fa','500':'#3b82f6','600':'#2563eb', particle: 'default'}, 
+      'emerald': {name: 'Aurora Emerald', '400':'#34d399','500':'#10b981','600':'#059669', particle: 'default'}, 
+      'cosmic-ocean': {name: 'Cosmic Ocean', '400':'#3b82f6','500':'#2563eb','600':'#1d4ed8', particle: 'snow', cssClass: 'theme-cosmic-ocean'},
+      'grav-lens': {name: 'Gravitational Lens', '400':'#818cf8','500':'#6366f1','600':'#4f46e5', particle: 'orbit', bg: '#020617', cssClass: 'theme-grav-lens'},
+      'orbital-command': {name: 'Orbital Command', '400':'#60a5fa','500':'#3b82f6','600':'#2563eb', particle: 'orbit', bg: '#020617', cssClass: 'theme-orbital'},
+      'interstellar-dust': {name: 'Interstellar Dust', '400':'#c084fc','500':'#a855f7','600':'#9333ea', particle: 'default', bg: '#020617', cssClass: 'theme-dust'},
+      'pulsar-core': {name: 'Pulsar Core', '400':'#fb7185','500':'#f43f5e','600':'#e11d48', particle: 'pulse', bg: '#0f0505', cssClass: 'theme-pulsar'},
+      'deep-ice': {name: 'Deep Space Ice', '400':'#67e8f9','500':'#06b6d4','600':'#0891b2', particle: 'snow', bg: '#081c22', cssClass: 'theme-cryo'},
+      'observatory': {name: 'Observatory', '400':'#94a3b8','500':'#64748b','600':'#475569', particle: 'default', bg: '#0f172a', cssClass: 'theme-observatory'},
+      'ai-deep-space': {name: 'AI Deep Space', '400':'#34d399','500':'#10b981','600':'#059669', particle: 'none', bg: '#020617', cssClass: 'theme-ai'},
+      'volcanic-planet': {name: 'Volcanic Planet', '400':'#f87171','500':'#ef4444','600':'#dc2626', particle: 'meteor', bg: '#2a0800', cssClass: 'theme-volcanic'},
+      'mirror-universe': {name: 'Mirror Universe', '400':'#ffffff','500':'#e2e8f0','600':'#cbd5e1', particle: 'default', bg: '#fff', cssClass: 'theme-mirror'},
+      'quantum-flux': {name: 'Quantum Flux', '400':'#e879f9','500':'#d946ef','600':'#c026d3', particle: 'pulse', bg: '#1e1b4b', cssClass: 'theme-quantum'},
+      'infinite-depth': {name: 'Infinite Depth', '400':'#818cf8','500':'#4f46e5','600':'#3730a3', particle: 'warp', bg: '#020617', cssClass: 'theme-infinite'},
+      'signal-lost': {name: 'Signal Lost', '400':'#fca5a5','500':'#ef4444','600':'#b91c1c', particle: 'none', bg: '#020617', cssClass: 'theme-transmission'},
+      'gas-giant': {name: 'Gas Giant', '400':'#fbbf24','500':'#f59e0b','600':'#d97706', particle: 'none', bg: '#451a03', cssClass: 'theme-gas-giant'},
+      'time-warp': {name: 'Time Warp', '400':'#2dd4bf','500':'#14b8a6','600':'#0d9488', particle: 'warp', bg: '#020617', cssClass: 'theme-time-warp'},
+      'black-hole': {name: 'Black Hole', '400':'#a855f7','500':'#9333ea','600':'#7e22ce', particle: 'pulse', bg: '#000000', cssClass: 'theme-black-hole'},
+      'nebula-dream': {name: 'Nebula Dream', '400':'#f472b6','500':'#c084fc','600':'#818cf8', particle: 'default', bg: '#0f172a', cssClass: 'theme-nebula'},
+      'supernova': {name: 'Supernova', '400':'#fef08a','500':'#f97316','600':'#dc2626', particle: 'firework', bg: '#2a0800', cssClass: 'theme-supernova'},
+      'satellite-hud': {name: 'Satellite HUD', '400':'#86efac','500':'#22c55e','600':'#16a34a', particle: 'none', bg: '#011104', cssClass: 'theme-hud'},
+      'dark-matter': {name: 'Dark Matter', '400':'#94a3b8','500':'#475569','600':'#1e293b', particle: 'pulse', bg: '#050505', cssClass: 'theme-dark-matter'},
+      'warp-speed': {name: 'Warp Speed', '400':'#93c5fd','500':'#3b82f6','600':'#1d4ed8', particle: 'warp', bg: '#020617', cssClass: 'theme-warp'},
+      'alien-signal': {name: 'Alien Signal', '400':'#d9f99d','500':'#84cc16','600':'#4d7c0f', particle: 'pulse', bg: '#051201', cssClass: 'theme-alien'},
+      'planetary-orbit': {name: 'Planetary Orbit', '400':'#fdba74','500':'#f97316','600':'#c2410c', particle: 'orbit', bg: '#1e1b4b'},
+      'cosmic-archive': {name: 'Cosmic Archive', '400':'#fde047','500':'#eab308','600':'#ca8a04', particle: 'default', bg: '#020617', cssClass: 'theme-archive'},
+      'cosmic-winter': {name: 'Cosmic Winter', '400':'#ef4444','500':'#22c55e','600':'#16a34a', particle: 'snow', bg: '#020617'}, 
+      'dark-void': {name: 'Dark Void', '400':'#fb923c','500':'#f97316','600':'#ea580c', particle: 'pulse', cssClass: 'theme-flicker', bg: '#000000'}, 
+      'fragile-blue-dot': {name: 'Blue Dot', '400':'#38bdf8','500':'#0ea5e9','600':'#0284c7', particle: 'default', bg: '#082f49'}, 
+      'meteor-storm': {name: 'Meteor Storm', '400':'#94a3b8','500':'#64748b','600':'#475569', particle: 'meteor'},
+      'cosmic-love': {name: 'Cosmic Love', '400':'#f472b6','500':'#ec4899','600':'#db2777', particle: 'binary'},
+
+      // New Unsettling Themes
+      'time-collapse': {name: 'Time Collapse', '400':'#ffffff','500':'#e2e8f0','600':'#94a3b8', particle: 'default', bg: '#000', cssClass: 'theme-time-collapse'},
+      'cosmic-awareness': {name: 'Cosmic Awareness', '400':'#60a5fa','500':'#3b82f6','600':'#2563eb', particle: 'repel', bg: '#020617', cssClass: 'theme-awareness'},
+      'event-horizon': {name: 'Event Horizon', '400':'#a855f7','500':'#9333ea','600':'#7e22ce', particle: 'pulse', bg: '#000', cssClass: 'theme-event'},
+      'living-universe': {name: 'Living Universe', '400':'#34d399','500':'#10b981','600':'#059669', particle: 'pulse', bg: '#020617', cssClass: 'theme-living'},
+      'recursive-universe': {name: 'Recursive', '400':'#818cf8','500':'#6366f1','600':'#4f46e5', particle: 'default', bg: '#020617', cssClass: 'theme-recursive'},
+      'null-space': {name: 'Null Space', '400':'#334155','500':'#1e293b','600':'#0f172a', particle: 'none', bg: '#000', cssClass: 'theme-null'},
+      'cosmic-judgment': {name: 'Cosmic Judgment', '400':'#facc15','500':'#eab308','600':'#ca8a04', particle: 'none', bg: '#020617', cssClass: 'theme-judgment'},
+      'frozen-time': {name: 'Frozen Time', '400':'#a5f3fc','500':'#22d3ee','600':'#0891b2', particle: 'freeze', bg: '#081c22', cssClass: 'theme-frozen'},
+      'entropy': {name: 'Entropy', '400':'#f87171','500':'#ef4444','600':'#dc2626', particle: 'none', bg: '#1c0505', cssClass: 'theme-entropy'},
+      'singular-focus': {name: 'Singular Focus', '400':'#fbbf24','500':'#f59e0b','600':'#d97706', particle: 'orbit', bg: '#020617', cssClass: 'theme-singular'},
+      'first-contact': {name: 'First Contact', '400':'#4ade80','500':'#22c55e','600':'#16a34a', particle: 'default', bg: '#011104', cssClass: 'theme-contact'},
+      'cosmic-silence': {name: 'Cosmic Silence', '400':'#94a3b8','500':'#64748b','600':'#475569', particle: 'none', bg: '#020617', cssClass: 'theme-silence'},
+      'simulation-break': {name: 'Simulation Break', '400':'#c084fc','500':'#a855f7','600':'#9333ea', particle: 'warp', bg: '#020617', cssClass: 'theme-simulation'},
+      'reality-desync': {name: 'Reality Desync', '400':'#e879f9','500':'#d946ef','600':'#c026d3', particle: 'pulse', bg: '#020617', cssClass: 'theme-desync'},
+      'time-echo': {name: 'Time Echo', '400':'#2dd4bf','500':'#14b8a6','600':'#0d9488', particle: 'default', bg: '#020617', cssClass: 'theme-echo'},
+      'pattern-recognition': {name: 'Pattern Rec', '400':'#fdba74','500':'#f97316','600':'#ea580c', particle: 'orbit', bg: '#020617', cssClass: 'theme-pattern'},
+      
+      // The Final Bosses
+      'unknown-limit': {name: 'Unknown Limit (Boss)', '400':'#ef4444','500':'#dc2626','600':'#b91c1c', particle: 'warp', bg: '#000', cssClass: 'theme-unknown'},
+      'runaway-energy': {name: 'Runaway Energy', '400':'#f97316','500':'#ea580c','600':'#c2410c', particle: 'pulse', bg: '#1c0505', cssClass: 'theme-runaway'},
+      'light-devoured': {name: 'Light Devoured', '400':'#475569','500':'#334155','600':'#1e293b', particle: 'default', bg: '#000', cssClass: 'theme-devour'},
+      'point-of-no-return': {name: 'Point of No Return', '400':'#7e22ce','500':'#6b21a8','600':'#581c87', particle: 'repel', bg: '#000', cssClass: 'theme-no-return'},
+      'chaos-order': {name: 'Chaos to Order', '400':'#6366f1','500':'#4f46e5','600':'#4338ca', particle: 'default', bg: '#020617', cssClass: 'theme-chaos-order'}
     };
 
     const UI = {
-      mainNav: document.getElementById('main-nav'), navBtn: document.getElementById('nav-btn'), navIcon: document.getElementById('nav-icon'), navText: document.getElementById('nav-text'), navLogo: document.getElementById('nav-logo'), statusBadge: document.getElementById('site-status-badge'), liveModeBadge: document.getElementById('live-mode-badge'),
+      mainNav: document.getElementById('main-nav'), navBtn: document.getElementById('nav-btn'), navIcon: document.getElementById('nav-icon'), navText: document.getElementById('nav-text'), navLogo: document.getElementById('nav-logo'), navTitleText: document.getElementById('nav-title-text'), statusBadge: document.getElementById('site-status-badge'), liveModeBadge: document.getElementById('live-mode-badge'),
+      activeThemeName: document.getElementById('active-theme-name'), activeThemeBadge: document.getElementById('active-theme-badge'),
       viewCatalog: document.getElementById('view-catalog'), viewArchive: document.getElementById('view-archive'), viewAdminLogin: document.getElementById('view-admin-login'), viewAdminPanel: document.getElementById('view-admin-panel'), viewLockdown: document.getElementById('view-lockdown'),
       catalogLoading: document.getElementById('catalog-loading'), catalogEmpty: document.getElementById('catalog-empty'), catalogGrid: document.getElementById('catalog-grid'), archiveEmpty: document.getElementById('archive-empty'), archiveGrid: document.getElementById('archive-grid'),
       heroBannerContainer: document.getElementById('hero-banner-container'), publicSort: document.getElementById('public-sort'), globalSearch: document.getElementById('global-search'), categoryFilters: document.querySelectorAll('.cat-filter'),
       adminList: document.getElementById('admin-list'), adminSearch: document.getElementById('admin-search'), loginForm: document.getElementById('login-form'), pinInput: document.getElementById('pin-input'), loginError: document.getElementById('login-error'),
       uploadForm: document.getElementById('upload-form'), formHeader: document.getElementById('form-header'), titleInput: document.getElementById('upload-title'), uploadCategory: document.getElementById('upload-category'), uploadDistance: document.getElementById('upload-distance'), uploadClassification: document.getElementById('upload-classification'), uploadRadec: document.getElementById('upload-radec'), uploadEquipment: document.getElementById('upload-equipment'), uploadCredit: document.getElementById('upload-credit'), descInput: document.getElementById('upload-desc'), imageInput: document.getElementById('image-input'), submitBtn: document.getElementById('submit-btn'), cancelEditBtn: document.getElementById('cancel-edit-btn'), imgUploadLabel: document.getElementById('image-upload-label'), imgPreviewContainer: document.getElementById('image-preview-container'), imgPreview: document.getElementById('image-preview'), removeImgBtn: document.getElementById('remove-image-btn'),
       singleAiStatus: document.getElementById('single-ai-status'),
-      themeRadios: document.getElementsByName('theme'), starsToggle: document.getElementById('stars-toggle'), fabricToggle: document.getElementById('fabric-toggle'), liveModeToggle: document.getElementById('live-mode-toggle'), saveVisualsBtn: document.getElementById('save-visuals-btn'),
+      starsToggle: document.getElementById('stars-toggle'), fabricToggle: document.getElementById('fabric-toggle'), liveModeToggle: document.getElementById('live-mode-toggle'), saveVisualsBtn: document.getElementById('save-visuals-btn'),
       starsCanvas: document.getElementById('stars-canvas'), fabricEffect: document.getElementById('fabric-effect'), mainBody: document.getElementById('main-body'),
       postModal: document.getElementById('post-modal'), modalContentScale: document.getElementById('modal-content-scale'), closeModalBtn: document.getElementById('close-modal-btn'), modalImg: document.getElementById('modal-img'), modalTitle: document.getElementById('modal-title'), modalDesc: document.getElementById('modal-desc'), modalDate: document.getElementById('modal-date'), modalBadges: document.getElementById('modal-badges'), modalDistance: document.getElementById('modal-distance'), modalRadec: document.getElementById('modal-radec'), modalEquipment: document.getElementById('modal-equipment'), modalCredit: document.getElementById('modal-credit'), modalViews: document.getElementById('modal-views'), modalDownloadBtn: document.getElementById('modal-download-btn'),
       statActive: document.getElementById('stat-active'), statArchived: document.getElementById('stat-archived'), statStatus: document.getElementById('stat-status'), statViews: document.getElementById('stat-views'), statStorage: document.getElementById('stat-storage'),
       auditLogBody: document.getElementById('audit-log-body'),
-      lockdownDisplayMsg: document.getElementById('lockdown-display-msg'), secretAdminTrigger: document.getElementById('secret-admin-trigger')
+      lockdownDisplayMsg: document.getElementById('lockdown-display-msg'), secretAdminTrigger: document.getElementById('secret-admin-trigger'),
+      
+      // Theme Forge Elements
+      customThemeStyles: document.getElementById('custom-theme-styles'), themeRadioContainer: document.getElementById('theme-radio-container'), customThemesBlock: document.getElementById('custom-themes-block'), customThemesList: document.getElementById('custom-themes-list'),
+      devThemeId: document.getElementById('dev-theme-id'), devThemeName: document.getElementById('dev-theme-name'), devThemeColor: document.getElementById('dev-theme-color'), devThemeParticle: document.getElementById('dev-theme-particle'), devThemeCss: document.getElementById('dev-theme-css'),
+      previewThemeBtn: document.getElementById('preview-theme-btn'), saveCustomThemeBtn: document.getElementById('save-custom-theme-btn'), previewBanner: document.getElementById('preview-banner'), cancelPreviewBtn: document.getElementById('cancel-preview-btn')
     };
 
-    // Parallax Shift for "Cosmic Ocean"
+    let globalMouseX = 0, globalMouseY = 0;
+    let isFrozen = true;
+    
+    let themeIntervals = [];
+    let themeCleanups = [];
+    let originalNavText = null;
+    let devourTimer = null;
+    let starsInitialized = false, animationId = null;
+
     window.addEventListener('mousemove', (e) => {
+      globalMouseX = e.clientX; globalMouseY = e.clientY;
+      
+      // Interactions for advanced themes
+      if (globalSettings.theme === 'light-devoured') devourTimer = 0; // Reset light decay
+      if (globalSettings.theme === 'absolute-zero' && isFrozen) isFrozen = false; // Break freeze
+
+      // Parallax Shift for "Cosmic Ocean"
       if (globalSettings.theme === 'cosmic-ocean' && UI.starsCanvas) {
         const x = (e.clientX / window.innerWidth - 0.5) * 40;
         const y = (e.clientY / window.innerHeight - 0.5) * 40;
@@ -498,14 +594,198 @@
       }
     });
 
+    window.addEventListener('scroll', () => {
+      if (globalSettings.theme === 'event-horizon' || globalSettings.theme === 'point-of-no-return') {
+        if(!UI.mainBody) return;
+        const blurAmt = Math.min(window.scrollY / 100, 10);
+        UI.mainBody.style.filter = `blur(${blurAmt}px) contrast(${1 + blurAmt/5})`;
+      }
+    });
+
+    function clearThemeEffects() {
+      themeIntervals.forEach(clearInterval); themeIntervals = [];
+      themeCleanups.forEach(fn => fn()); themeCleanups = [];
+      clearTimeout(devourTimer);
+      
+      if(UI.mainBody) {
+         UI.mainBody.style.filter = '';
+         UI.mainBody.style.transform = '';
+         UI.mainBody.style.transition = 'background-color 1s ease, color 0.5s ease, filter 0.5s ease, transform 0.5s ease';
+         UI.mainBody.classList.remove('simulation-break-active', 'theme-frozen');
+      }
+      if(UI.starsCanvas) UI.starsCanvas.style.transform = '';
+      
+      if(UI.navTitleText && originalNavText) {
+         UI.navTitleText.innerHTML = originalNavText;
+      }
+      
+      document.querySelectorAll('.judgment-focus').forEach(el => el.classList.remove('judgment-focus'));
+    }
+
+    function initThemeBehaviors(theme) {
+      if(!originalNavText && UI.navTitleText) originalNavText = UI.navTitleText.innerHTML;
+      clearThemeEffects();
+      
+      // Interaction & Physics Setup
+      if (theme === 'cosmic-ocean') {
+         const oceanMouseHandler = (e) => {
+             if (UI.starsCanvas) {
+                 const x = (e.clientX / window.innerWidth - 0.5) * 40;
+                 const y = (e.clientY / window.innerHeight - 0.5) * 40;
+                 UI.starsCanvas.style.transform = `translate(${x}px, ${y}px)`;
+             }
+         };
+         window.addEventListener('mousemove', oceanMouseHandler);
+         themeCleanups.push(() => window.removeEventListener('mousemove', oceanMouseHandler));
+      }
+
+      if(theme === 'cosmic-judgment') {
+        themeIntervals.push(setInterval(() => {
+          const cards = document.querySelectorAll('#catalog-grid > div');
+          if(cards.length === 0) return;
+          cards.forEach(c => c.classList.remove('judgment-focus'));
+          cards[Math.floor(Math.random() * cards.length)].classList.add('judgment-focus');
+        }, 3000));
+      }
+
+      if(theme === 'first-contact') {
+        themeIntervals.push(setInterval(() => {
+          if(Math.random() > 0.8 && UI.navTitleText) {
+             const oldHTML = UI.navTitleText.innerHTML;
+             UI.navTitleText.innerHTML = `<span class="text-green-500 tracking-[0.5em] font-mono">████ ERROR ████</span>`;
+             setTimeout(() => { if(UI.navTitleText) UI.navTitleText.innerHTML = oldHTML; }, 300);
+          }
+        }, 5000));
+      }
+
+      if(theme === 'simulation-break') {
+        themeIntervals.push(setInterval(() => {
+          if(Math.random() > 0.7 && UI.mainBody) {
+             UI.mainBody.classList.add('simulation-break-active');
+             setTimeout(() => { if(UI.mainBody) UI.mainBody.classList.remove('simulation-break-active'); }, 150);
+          }
+        }, 3000));
+      }
+
+      if(theme === 'entropy') {
+        let entropyLvl = 0;
+        themeIntervals.push(setInterval(() => {
+          entropyLvl += 0.5;
+          if(UI.mainBody) UI.mainBody.style.filter = `hue-rotate(${entropyLvl}deg) blur(${Math.min(entropyLvl/10, 2)}px)`;
+        }, 1000));
+      }
+      
+      if(theme === 'frozen-time') {
+          isFrozen = true;
+          if(UI.mainBody) UI.mainBody.classList.add('theme-frozen');
+          
+          const unfreeze = () => { 
+              isFrozen = false; 
+              if(UI.mainBody) UI.mainBody.classList.remove('theme-frozen'); 
+              window.removeEventListener('click', unfreeze); 
+          };
+          window.addEventListener('click', unfreeze);
+          themeCleanups.push(() => window.removeEventListener('click', unfreeze));
+      }
+
+      if(theme === 'event-horizon') {
+          const scrollHandler = () => {
+              if(!UI.mainBody) return;
+              const scrollY = window.scrollY;
+              const blurAmt = Math.min(scrollY / 80, 15);
+              const stretch = Math.min(scrollY / 300, 1.2);
+              UI.mainBody.style.filter = `blur(${blurAmt}px) contrast(${1 + blurAmt/4})`;
+              UI.mainBody.style.transform = `scale(1) translateY(${stretch * 40}px)`;
+          };
+          window.addEventListener('scroll', scrollHandler);
+          themeCleanups.push(() => window.removeEventListener('scroll', scrollHandler));
+      }
+
+      // -- THE FINAL BOSSES --
+      
+      if(theme === 'light-devoured') {
+          const resetDevour = () => {
+              if(UI.mainBody) {
+                  UI.mainBody.style.transition = 'filter 0.3s ease-out';
+                  UI.mainBody.style.filter = 'brightness(1) contrast(1)';
+              }
+              clearTimeout(devourTimer);
+              devourTimer = setTimeout(() => {
+                  if(UI.mainBody) {
+                      UI.mainBody.style.transition = 'filter 8s ease-in';
+                      UI.mainBody.style.filter = 'brightness(0.02) contrast(1.5) grayscale(0.8)';
+                  }
+              }, 1500); 
+          };
+          window.addEventListener('mousemove', resetDevour);
+          themeCleanups.push(() => window.removeEventListener('mousemove', resetDevour));
+          resetDevour();
+      }
+
+      if(theme === 'runaway-energy') {
+          let energyLvl = 0;
+          if(UI.mainBody) UI.mainBody.style.transition = 'all 0.5s linear';
+          themeIntervals.push(setInterval(() => {
+              energyLvl += 0.05;
+              if(UI.mainBody) {
+                  UI.mainBody.style.filter = `saturate(${1 + energyLvl * 2}) brightness(${1 + energyLvl * 0.5}) contrast(${1 + energyLvl}) hue-rotate(${energyLvl * 15}deg)`;
+                  UI.mainBody.style.transform = `scale(${1 + energyLvl * 0.02})`;
+              }
+          }, 500));
+      }
+
+      if(theme === 'point-of-no-return') {
+          if(UI.mainBody) {
+              UI.mainBody.style.transition = 'transform 45s cubic-bezier(0.4, 0, 1, 1), filter 45s linear';
+              setTimeout(() => {
+                  UI.mainBody.style.transform = 'scale(1.8) perspective(500px) rotateX(8deg)';
+                  UI.mainBody.style.filter = 'blur(6px) brightness(0.1) saturate(0.2)';
+              }, 100);
+          }
+          
+          const radios = document.getElementsByName('theme');
+          if(radios) Array.from(radios).forEach(r => r.disabled = true);
+          if(UI.liveModeToggle) UI.liveModeToggle.disabled = true;
+          if(UI.saveVisualsBtn) UI.saveVisualsBtn.disabled = true;
+          
+          themeIntervals.push(setInterval(() => {
+              showToast("Irreversible Transition. You cannot go back.", "error");
+          }, 8000));
+      }
+      
+      if(theme === 'unknown-limit') {
+          const possibleParticles = ['default', 'pulse', 'snow', 'meteor', 'warp', 'orbit', 'binary', 'repel'];
+          const possibleFilters = ['hue-rotate(90deg)', 'invert(0.8) hue-rotate(180deg)', 'contrast(2) saturate(3)', 'blur(3px) brightness(1.5)', 'sepia(1) contrast(1.5)', 'drop-shadow(0 0 30px red)', 'none'];
+          
+          if(UI.mainBody) UI.mainBody.style.transition = 'all 1.5s ease-in-out';
+          
+          themeIntervals.push(setInterval(() => {
+              if(!UI.mainBody) return;
+              
+              const rParticle = possibleParticles[Math.floor(Math.random() * possibleParticles.length)];
+              initStars(rParticle);
+              
+              const rHex1 = '#' + Math.floor(Math.random()*16777215).toString(16);
+              const rHex2 = '#' + Math.floor(Math.random()*16777215).toString(16);
+              document.documentElement.style.setProperty('--theme-400', rHex1);
+              document.documentElement.style.setProperty('--theme-500', rHex2);
+              document.documentElement.style.setProperty('--theme-600', rHex1);
+              
+              const filter = possibleFilters[Math.floor(Math.random() * possibleFilters.length)];
+              const skew = Math.random() * 4 - 2;
+              const scale = 1 + Math.random() * 0.08;
+              
+              UI.mainBody.style.filter = filter;
+              UI.mainBody.style.transform = `scale(${scale}) skew(${skew}deg)`;
+              
+          }, 3000));
+      }
+    }
+
     // --- SECURE AUDIT LOGGING ---
     async function logSystemAction(actionType, targetId) {
       if (!currentUser) return;
-      try {
-        await setDoc(doc(collection(db, 'artifacts', appId, 'public', 'data', 'audit_logs')), {
-          action: actionType, targetId: targetId, user: currentUser.uid, timestamp: serverTimestamp()
-        });
-      } catch (err) { console.error("Logging Error:", err); }
+      try { await setDoc(doc(collection(db, 'artifacts', appId, 'public', 'data', 'audit_logs')), { action: actionType, targetId: targetId, user: currentUser.uid, timestamp: serverTimestamp() }); } catch (err) { console.error("Logging Error:", err); }
     }
 
     function renderAuditLogs(logs) {
@@ -541,9 +821,8 @@
     }
 
     // --- ADVANCED PARTICLE PHYSICS ---
-    let starsInitialized = false, animationId;
     function initStars(particleMode = 'default') {
-      if(animationId) cancelAnimationFrame(animationId);
+      if(typeof animationId !== 'undefined' && animationId) cancelAnimationFrame(animationId);
       const ctx = UI.starsCanvas?.getContext('2d'); 
       if (!ctx) return;
       let width, height, particles = [];
@@ -575,6 +854,16 @@
         if(particleMode === 'orbit') pColor = 'rgba(96, 165, 250, 0.6)';
         
         particles.forEach(p => { 
+          if(particleMode === 'freeze' && isFrozen) {
+              ctx.beginPath(); ctx.fillStyle = 'rgba(165, 243, 252, 0.8)'; ctx.arc(p.x, p.y, p.size, 0, Math.PI*2); ctx.fill();
+              return;
+          }
+
+          if(particleMode === 'repel') {
+             const dx = p.x - globalMouseX; const dy = p.y - globalMouseY; const dist = Math.sqrt(dx*dx + dy*dy);
+             if(dist < 150) { p.x += dx * 0.02; p.y += dy * 0.02; }
+          }
+
           if(particleMode === 'meteor') {
             ctx.beginPath(); ctx.strokeStyle = 'rgba(255,255,255,0.4)'; ctx.lineWidth = p.size;
             ctx.moveTo(p.x, p.y); ctx.lineTo(p.x - p.tail, p.y - p.tail * (p.speedY/p.speedX)); ctx.stroke();
@@ -604,7 +893,7 @@
             ctx.arc(p.x, p.y, currentSize, 0, Math.PI*2); ctx.fill(); 
             
             if (particleMode === 'snow') { p.x += p.speedX; p.y += p.speedY; if (p.y > height) { p.y = -10; p.x = Math.random() * width; } }
-            else if (particleMode === 'default') { p.y += p.speedY; if(p.y < 0) p.y = height; }
+            else if (particleMode === 'default' || particleMode === 'repel') { p.y += p.speedY; if(p.y < 0) p.y = height; if(p.x < 0 || p.x > width) p.x = Math.random()*width;}
           }
         });
         animationId = requestAnimationFrame(animate);
@@ -636,7 +925,6 @@
         }
       });
 
-      // Secure Audit Log Sync
       onSnapshot(collection(db, 'artifacts', appId, 'public', 'data', 'audit_logs'), (snapshot) => {
         allAuditLogs = snapshot.docs.map(d => d.data());
         allAuditLogs.sort((a, b) => ((b.timestamp && b.timestamp.seconds) || 0) - ((a.timestamp && a.timestamp.seconds) || 0));
@@ -670,8 +958,16 @@
     function loadGlobalSettings() {
       if (!currentUser) return;
       onSnapshot(doc(db, 'artifacts', appId, 'public', 'data', 'site_settings', 'global'), (docSnap) => {
-        if (docSnap.exists()) globalSettings = { ...globalSettings, ...docSnap.data() };
-        applySettingsToUI();
+        if (docSnap.exists()) {
+            const data = docSnap.data();
+            globalSettings = { ...globalSettings, ...data };
+            if(data.customThemes) {
+                globalSettings.customThemes = data.customThemes;
+                Object.assign(THEMES, data.customThemes);
+                renderCustomThemes();
+            }
+        }
+        if(!previewOriginalTheme) applySettingsToUI();
       });
     }
 
@@ -679,9 +975,9 @@
       try { await setDoc(doc(db, 'artifacts', appId, 'public', 'data', 'site_settings', 'global'), updates, { merge: true }); showToast("Configurations updated!"); } catch(err) { showToast("Failed to save", "error"); }
     }
 
-    function applySettingsToUI() {
-      let activeThemeKey = globalSettings.theme || 'blue';
-      if (globalSettings.liveMode) { 
+    function applySettingsToUI(forceTheme = null) {
+      let activeThemeKey = forceTheme || globalSettings.theme || 'blue';
+      if (globalSettings.liveMode && !forceTheme) { 
         const d = new Date(); const m = d.getMonth() + 1; const day = d.getDate();
         if (m === 10 && day > 20) activeThemeKey = 'dark-void'; 
         else if (m === 12) activeThemeKey = 'cosmic-winter';
@@ -690,6 +986,10 @@
       } else UI.liveModeBadge?.classList.add('hidden');
       
       const themeConfig = THEMES[activeThemeKey] || THEMES.blue;
+      
+      // Setup Badge
+      if(UI.activeThemeName) UI.activeThemeName.innerText = themeConfig.name || activeThemeKey;
+
       document.documentElement.style.setProperty('--theme-400', themeConfig['400']); document.documentElement.style.setProperty('--theme-500', themeConfig['500']); document.documentElement.style.setProperty('--theme-600', themeConfig['600']);
       if(UI.mainBody) {
           UI.mainBody.style.backgroundColor = themeConfig.bg || '#020617';
@@ -697,9 +997,16 @@
       }
 
       if (globalSettings.starsOn) { UI.starsCanvas?.classList.remove('hidden'); initStars(themeConfig.particle); } 
-      else { UI.starsCanvas?.classList.add('hidden'); if(animationId) cancelAnimationFrame(animationId); }
+      else { UI.starsCanvas?.classList.add('hidden'); if(typeof animationId !== 'undefined' && animationId) cancelAnimationFrame(animationId); }
       
-      if(UI.themeRadios) Array.from(UI.themeRadios).forEach(r => { r.checked = (r.value === globalSettings.theme); r.disabled = globalSettings.liveMode; });
+      initThemeBehaviors(activeThemeKey);
+
+      const radios = document.getElementsByName('theme');
+      if(radios) Array.from(radios).forEach(r => { 
+          r.checked = (r.value === activeThemeKey); 
+          r.disabled = (globalSettings.liveMode || activeThemeKey === 'point-of-no-return'); 
+      });
+      
       if(UI.starsToggle) UI.starsToggle.checked = globalSettings.starsOn; 
       if(UI.fabricToggle) UI.fabricToggle.checked = globalSettings.fabricOn; 
       if(UI.liveModeToggle) UI.liveModeToggle.checked = globalSettings.liveMode;
@@ -711,6 +1018,116 @@
       else if (viewState === 'lockdown' && !globalSettings.lockdownActive) switchView('catalog');
     }
 
+    // --- THEME FORGE LOGIC ---
+    function renderCustomThemes() {
+        if(!UI.customThemesBlock || !UI.customThemesList || !UI.customThemeStyles) return;
+        
+        let styleContent = "";
+        let listHTML = "";
+        
+        const customKeys = Object.keys(globalSettings.customThemes || {});
+        if(customKeys.length === 0) {
+            UI.customThemesBlock.classList.add('hidden');
+        } else {
+            UI.customThemesBlock.classList.remove('hidden');
+            customKeys.forEach(key => {
+                const t = globalSettings.customThemes[key];
+                if(t.customCSS) styleContent += `\n${t.customCSS}`;
+                listHTML += `
+                <div class="flex items-center gap-3 p-3 bg-slate-950 border border-slate-800 rounded-xl">
+                    <label class="flex items-center gap-3 cursor-pointer hover:text-white flex-grow">
+                        <input type="radio" name="theme" value="${key}" class="text-white">
+                        <span class="text-sm font-bold" style="color: ${t['500']}">${t.name || key}</span>
+                        <div class="w-3 h-3 rounded-full" style="background: ${t['500']}"></div>
+                    </label>
+                    <button type="button" onclick="window.deleteCustomTheme('${key}')" class="text-red-500 hover:text-white hover:bg-red-500/20 p-2 rounded transition-colors"><i class="fa-solid fa-trash text-xs"></i></button>
+                </div>`;
+            });
+        }
+        
+        UI.customThemeStyles.innerHTML = styleContent;
+        UI.customThemesList.innerHTML = listHTML;
+        
+        const radios = document.getElementsByName('theme');
+        Array.from(radios).forEach(r => { r.checked = (r.value === (previewOriginalTheme || globalSettings.theme)); r.disabled = globalSettings.liveMode; });
+    }
+
+    window.deleteCustomTheme = async (themeId) => {
+        if(!confirm(`Permanently delete custom theme '${themeId}'?`)) return;
+        const newThemes = { ...globalSettings.customThemes };
+        delete newThemes[themeId];
+        delete THEMES[themeId];
+        
+        let newActiveTheme = globalSettings.theme;
+        if(newActiveTheme === themeId) newActiveTheme = 'blue';
+
+        try {
+            await setDoc(doc(db, 'artifacts', appId, 'public', 'data', 'site_settings', 'global'), { customThemes: newThemes, theme: newActiveTheme }, { merge: true });
+            logSystemAction('THEME_DELETE', themeId);
+            showToast("Theme deleted.");
+        } catch(e) { showToast("Failed to delete", "error"); }
+    };
+
+    UI.previewThemeBtn?.addEventListener('click', () => {
+        const id = UI.devThemeId.value.trim().toLowerCase().replace(/[^a-z0-9-]/g, '-');
+        if(!id) return showToast("Theme ID required", "error");
+        
+        const colorHex = UI.devThemeColor.value.trim() || '#ffffff';
+        const particle = UI.devThemeParticle.value;
+        const cssContent = UI.devThemeCss.value;
+        
+        const newTheme = {
+            '400': colorHex, '500': colorHex, '600': colorHex,
+            particle: particle, bg: '#020617',
+            cssClass: `theme-${id}`,
+            customCSS: cssContent, name: UI.devThemeName.value.trim() || id
+        };
+
+        if(!previewOriginalTheme) previewOriginalTheme = globalSettings.theme;
+        
+        THEMES[id] = newTheme;
+        UI.customThemeStyles.innerHTML += `\n${cssContent}`;
+        
+        applySettingsToUI(id);
+        UI.previewBanner?.classList.remove('hidden');
+        switchView('catalog');
+    });
+
+    UI.cancelPreviewBtn?.addEventListener('click', () => {
+        if(previewOriginalTheme) {
+            applySettingsToUI(previewOriginalTheme);
+            previewOriginalTheme = null;
+            UI.previewBanner?.classList.add('hidden');
+            renderCustomThemes(); // Reset injected styles
+            switchView('admin-panel');
+        }
+    });
+
+    UI.saveCustomThemeBtn?.addEventListener('click', async () => {
+        const id = UI.devThemeId.value.trim().toLowerCase().replace(/[^a-z0-9-]/g, '-');
+        if(!id) return showToast("Theme ID required", "error");
+        
+        const colorHex = UI.devThemeColor.value.trim() || '#ffffff';
+        
+        const newTheme = {
+            '400': colorHex, '500': colorHex, '600': colorHex,
+            particle: UI.devThemeParticle.value, bg: '#020617',
+            cssClass: `theme-${id}`, customCSS: UI.devThemeCss.value,
+            name: UI.devThemeName.value.trim() || id
+        };
+
+        const updatedThemes = { ...(globalSettings.customThemes || {}), [id]: newTheme };
+        
+        try {
+            await setDoc(doc(db, 'artifacts', appId, 'public', 'data', 'site_settings', 'global'), { customThemes: updatedThemes }, { merge: true });
+            logSystemAction('THEME_CREATED', id);
+            showToast("Theme Saved to DB!");
+            UI.devThemeId.value = ''; UI.devThemeName.value = ''; UI.devThemeColor.value = ''; UI.devThemeCss.value = '';
+            if(previewOriginalTheme) UI.cancelPreviewBtn.click();
+        } catch(e) { showToast("Failed to save", "error"); }
+    });
+
+    // --- NAVIGATION & VIEWS ---
     function switchView(view) {
       viewState = view;
       [UI.viewCatalog, UI.viewArchive, UI.viewAdminLogin, UI.viewAdminPanel, UI.viewLockdown].forEach(el => el?.classList.add('hidden'));
@@ -718,7 +1135,7 @@
       if (view === 'catalog') { UI.viewCatalog?.classList.remove('hidden'); if(UI.navIcon) UI.navIcon.className = isAdmin ? 'fa-solid fa-unlock' : 'fa-solid fa-lock'; if(UI.navText) UI.navText.innerText = isAdmin ? 'Admin' : 'Admin'; if(UI.navBtn) UI.navBtn.className = "flex items-center gap-2 px-4 py-2 rounded-full text-sm font-medium transition-all bg-theme-600/10 text-theme-400 hover:bg-theme-600/20"; }
       else if (view === 'archive') { UI.viewArchive?.classList.remove('hidden'); if(UI.navIcon) UI.navIcon.className = 'fa-solid fa-arrow-left'; if(UI.navText) UI.navText.innerText = 'Back to Catalog'; if(UI.navBtn) UI.navBtn.className = "flex items-center gap-2 px-4 py-2 rounded-full text-sm font-medium transition-all bg-slate-800 text-slate-300"; }
       else if (view === 'admin-login') { UI.viewAdminLogin?.classList.remove('hidden'); if(UI.pinInput) UI.pinInput.value = ''; UI.loginError?.classList.add('hidden'); if(UI.navIcon) UI.navIcon.className = 'fa-solid fa-arrow-left'; if(UI.navText) UI.navText.innerText = 'Back'; if(UI.navBtn) UI.navBtn.className = "flex items-center gap-2 px-4 py-2 rounded-full text-sm font-medium transition-all bg-slate-800 text-slate-300"; UI.pinInput?.focus(); }
-      else if (view === 'admin-panel') { UI.viewAdminPanel?.classList.remove('hidden'); if(UI.navIcon) UI.navIcon.className = 'fa-solid fa-right-from-bracket'; if(UI.navText) UI.navText.innerText = 'Exit Admin'; if(UI.navBtn) UI.navBtn.className = "flex items-center gap-2 px-4 py-2 rounded-full text-sm font-medium transition-all bg-slate-800 text-slate-300"; applySettingsToUI(); renderAuditLogs(allAuditLogs.slice(0,50)); }
+      else if (view === 'admin-panel') { UI.viewAdminPanel?.classList.remove('hidden'); if(UI.navIcon) UI.navIcon.className = 'fa-solid fa-right-from-bracket'; if(UI.navText) UI.navText.innerText = 'Exit Admin'; if(UI.navBtn) UI.navBtn.className = "flex items-center gap-2 px-4 py-2 rounded-full text-sm font-medium transition-all bg-slate-800 text-slate-300"; if(!previewOriginalTheme) applySettingsToUI(); renderAuditLogs(allAuditLogs.slice(0,50)); }
       else if (view === 'lockdown') { UI.viewLockdown?.classList.remove('hidden'); UI.mainNav?.classList.add('hidden'); }
     }
 
@@ -792,11 +1209,13 @@
     UI.loginForm?.addEventListener('submit', (e) => { e.preventDefault(); const pin = UI.pinInput?.value; if (pin === '2013') { isAdmin = true; switchView('admin-panel'); } else if (pin?.toLowerCase() === 'forgotten') switchView('archive'); else UI.loginError?.classList.remove('hidden'); });
 
     UI.saveVisualsBtn?.addEventListener('click', () => {
-      let selTheme = 'blue'; if(UI.themeRadios) Array.from(UI.themeRadios).forEach(r => { if(r.checked) selTheme = r.value; });
+      let selTheme = 'blue'; 
+      const radios = document.getElementsByName('theme');
+      if(radios) Array.from(radios).forEach(r => { if(r.checked) selTheme = r.value; });
       updateSettings({ theme: selTheme, starsOn: UI.starsToggle?.checked || false, fabricOn: UI.fabricToggle?.checked || false, liveMode: UI.liveModeToggle?.checked || false });
       logSystemAction('THEME_UPDATE', selTheme);
     });
-    UI.liveModeToggle?.addEventListener('change', () => { if(UI.themeRadios) Array.from(UI.themeRadios).forEach(r => r.disabled = UI.liveModeToggle.checked); });
+    UI.liveModeToggle?.addEventListener('change', () => { const radios = document.getElementsByName('theme'); if(radios) Array.from(radios).forEach(r => r.disabled = UI.liveModeToggle.checked); });
 
     // Secure Admin Backdoor
     let escapeClicks = 0, escapeTimer;
@@ -804,6 +1223,7 @@
         UI.secretAdminTrigger.addEventListener('click', () => { escapeClicks++; clearTimeout(escapeTimer); if (escapeClicks >= 3) { switchView('admin-login'); escapeClicks = 0; } else escapeTimer = setTimeout(() => { escapeClicks = 0; }, 1000); });
     }
 
+    // --- FORM LOGIC ---
     UI.imageInput?.addEventListener('change', (e) => {
       const file = e.target.files[0]; if (!file) return; const reader = new FileReader();
       reader.onload = (event) => { const img = new Image(); img.onload = async () => {
