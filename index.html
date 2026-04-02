@@ -20,7 +20,7 @@
     ::-webkit-scrollbar-thumb { background: var(--theme-600, #334155); border-radius: 4px; }
     ::-webkit-scrollbar-thumb:hover { background: var(--theme-500, #475569); }
 
-    body { transition: background-color 1s ease, color 0.5s ease, filter 0.5s ease; overflow-x: hidden; }
+    body { transition: background-color 1s ease, color 0.5s ease, filter 0.5s ease, transform 0.5s ease; overflow-x: hidden; }
 
     /* --- THE MULTIVERSE CSS ENGINE --- */
     
@@ -42,8 +42,9 @@
     .theme-transmission { animation: glitch 5s infinite; }
     .theme-gas-giant { background: linear-gradient(135deg, #78350f, #fef3c7, #d97706, #451a03); background-size: 400% 400%; animation: gradientFlow 20s ease infinite; }
     
-    /* Level 3: Unsettling & Mind-Bending */
+    /* Unsettling & Mind-Bending */
     .theme-time-collapse { animation: collapseTime 45s forwards ease-in; }
+    .theme-awareness .group:hover { filter: drop-shadow(0 0 25px var(--theme-500)); transform: scale(1.02); transition: all 0.5s ease; }
     .theme-living { animation: livingBreath 12s infinite alternate ease-in-out; }
     .theme-recursive .group { box-shadow: 0 0 0 1px var(--theme-600), 0 0 0 4px #000, 0 0 0 5px var(--theme-500), 0 0 0 8px #000, 0 0 0 9px var(--theme-400); }
     .theme-null { background: #000 !important; } .theme-null main { opacity: 0.05; transition: opacity 2s ease; } .theme-null main:hover { opacity: 1; transition: opacity 0.5s ease; }
@@ -54,8 +55,8 @@
     .theme-echo * { transition: all 0.5s ease !important; box-shadow: -10px 0 20px rgba(255,255,255,0.05); }
     .theme-absolute-zero * { transition: all 3s ease-out !important; cursor: crosshair; }
     .theme-pattern .group { animation: patternAlign 10s forwards ease-in-out; }
-    .theme-fade-nothing { animation: heatDeath 60s forwards; }
     .theme-chaos-order { animation: chaosToOrder 20s forwards ease-out; }
+    .theme-unknown { transition: all 1.5s ease-in-out !important; }
 
     /* Core Keyframes */
     @keyframes dustFloat { 0% { background-position: 0% 0%; } 100% { background-position: 100% 100%; } }
@@ -68,11 +69,11 @@
     @keyframes eerieFlicker { 0%, 100% { opacity: 1; } 50% { opacity: 0.8; } 52% { opacity: 0.4; } 54% { opacity: 0.9; } }
     @keyframes collapseTime { 0% { filter: brightness(0.1) grayscale(1); } 50% { filter: brightness(1) grayscale(0.5); } 100% { filter: brightness(1.2) grayscale(0) contrast(1.1); } }
     @keyframes livingBreath { 0% { transform: scale(1); } 100% { transform: scale(1.02); } }
-    @keyframes heatDeath { 0% { filter: saturate(1) brightness(1); opacity: 1; } 100% { filter: saturate(0) brightness(0.1); opacity: 0.2; } }
     @keyframes chaosToOrder { 0% { filter: hue-rotate(180deg) blur(10px); transform: rotate(10deg) scale(1.1); } 100% { filter: hue-rotate(0deg) blur(0px); transform: rotate(0deg) scale(1); } }
     @keyframes patternAlign { 0% { transform: rotate(-5deg) translateY(20px); } 100% { transform: rotate(0deg) translateY(0); } }
     
-    .simulation-break-active { clip-path: polygon(0 0, 100% 0, 100% 35%, 0 45%, 0 55%, 100% 65%, 100% 100%, 0 100%); filter: hue-rotate(90deg) invert(0.2); transform: translateX(-10px); }
+    .simulation-break-active { clip-path: polygon(0 0, 100% 0, 100% 35%, 0 45%, 0 55%, 100% 65%, 100% 100%, 0 100%); filter: hue-rotate(90deg) invert(0.2); transform: translateX(-10px) !important; }
+    .group { transition: all 0.5s ease; }
 
     /* Utilities */
     .spacetime-fabric { position: fixed; top: 0; left: 0; width: 100vw; height: 100vh; z-index: -2; background-image: linear-gradient(rgba(255,255,255,0.03) 1px, transparent 1px), linear-gradient(90deg, rgba(255,255,255,0.03) 1px, transparent 1px); background-size: 50px 50px; perspective: 1000px; transform: rotateX(60deg) scale(2.5) translateY(-20%); animation: spaceWarp 30s linear infinite; }
@@ -105,8 +106,8 @@
             CosmosCatalog 
             <span id="site-status-badge" class="px-2 py-0.5 rounded-full text-[10px] uppercase tracking-widest font-bold border border-green-500/50 text-green-400 bg-green-500/10">Active</span>
             <span id="active-theme-badge" class="ml-2 px-2 py-0.5 rounded-full text-[9px] uppercase tracking-widest font-bold border border-slate-700 text-slate-400 bg-slate-900/50 transition-all shadow-sm"><i class="fa-solid fa-swatchbook mr-1"></i><span id="active-theme-name">Deep Space Blue</span></span>
-            <!-- NEW: Weather Badge -->
-            <span id="weather-badge" class="ml-2 px-2 py-0.5 rounded-full text-[9px] uppercase tracking-widest font-bold border border-cyan-700/50 text-cyan-400 bg-cyan-900/30 transition-all shadow-sm"><i id="weather-icon" class="fa-solid fa-cloud-moon mr-1"></i><span id="weather-text">Syncing...</span></span>
+            <!-- NEW: Weather Badge (Condition Only) -->
+            <span id="weather-badge" class="ml-2 px-2 py-0.5 rounded-full text-[9px] uppercase tracking-widest font-bold border border-cyan-700/50 text-cyan-400 bg-cyan-900/30 transition-all shadow-sm"><i id="weather-icon" class="fa-solid fa-cloud-moon mr-1"></i><span id="weather-text">Syncing</span></span>
           </h1>
           <p class="text-[10px] text-theme-400 font-mono uppercase tracking-widest transition-colors">Database v3.0 Pro</p>
         </div>
@@ -319,12 +320,6 @@
                 </div>
                 <p class="text-[9px] text-slate-500 mt-2 italic relative z-10">Note: Advanced themes use the Base Duration. Simple themes ignore it (always 10s), Boss themes ignore it (always 120s).</p>
               </div>
-                  <label class="relative inline-flex items-center cursor-pointer">
-                    <input type="checkbox" id="live-mode-toggle" class="sr-only peer">
-                    <div class="w-11 h-6 bg-slate-700 peer-focus:outline-none rounded-full peer peer-checked:after:translate-x-full peer-checked:after:border-white after:content-[''] after:absolute after:top-[2px] after:left-[2px] after:bg-white after:border-gray-300 after:border after:rounded-full after:h-5 after:w-5 after:transition-all peer-checked:bg-theme-500"></div>
-                  </label>
-                </div>
-              </div>
 
               <div class="grid grid-cols-1 md:grid-cols-2 gap-8">
                 <div>
@@ -464,16 +459,14 @@
   <!-- ADVANCED MODAL (Fixed Image Constraints) -->
   <div id="post-modal" class="fixed inset-0 z-[110] bg-slate-950/95 backdrop-blur-md flex items-center justify-center p-4 sm:p-8 opacity-0 pointer-events-none transition-opacity duration-300">
     <button id="close-modal-btn" class="absolute top-6 right-6 text-slate-400 hover:text-white bg-slate-800/50 hover:bg-slate-700/80 rounded-full w-12 h-12 flex items-center justify-center text-xl z-20 transition-all"><i class="fa-solid fa-xmark"></i></button>
-    <div class="max-w-6xl w-full bg-slate-900 border border-slate-800 rounded-3xl overflow-hidden flex flex-col md:flex-row h-auto max-h-[90vh] md:h-[85vh] scale-95 transform transition-transform shadow-2xl shadow-theme-900/20 relative" id="modal-content-scale">
-      <div class="md:w-3/5 bg-black relative flex items-center justify-center border-r border-slate-800 group h-64 md:h-full overflow-hidden">
-        <div class="w-full h-full flex items-center justify-center p-4">
-            <img id="modal-img" src="" class="max-w-full max-h-full object-contain drop-shadow-2xl">
-        </div>
+    <div class="max-w-6xl w-full bg-slate-900 border border-slate-800 rounded-3xl overflow-hidden flex flex-col md:flex-row h-[85vh] scale-95 transform transition-transform shadow-2xl shadow-theme-900/20 relative" id="modal-content-scale">
+      <div class="md:w-3/5 bg-black relative flex items-center justify-center border-b md:border-b-0 md:border-r border-slate-800 group h-1/2 md:h-full overflow-hidden p-6">
+        <img id="modal-img" src="" class="w-full h-full object-contain drop-shadow-2xl">
         <div class="absolute bottom-4 right-4 flex gap-2 opacity-0 group-hover:opacity-100 transition-opacity">
           <button id="modal-download-btn" class="bg-black/60 hover:bg-theme-600 text-white p-3 rounded-xl backdrop-blur-md transition-colors shadow-lg border border-white/10" title="Download Asset"><i class="fa-solid fa-download"></i></button>
         </div>
       </div>
-      <div class="md:w-2/5 p-8 flex flex-col overflow-y-auto bg-gradient-to-b from-slate-900 to-slate-950 custom-scrollbar h-full">
+      <div class="md:w-2/5 p-8 flex flex-col overflow-y-auto bg-gradient-to-b from-slate-900 to-slate-950 custom-scrollbar h-1/2 md:h-full">
         <div class="flex gap-2 flex-wrap mb-4" id="modal-badges"></div>
         <h2 id="modal-title" class="text-3xl font-bold text-white mb-1">Title</h2>
         <div class="grid grid-cols-2 gap-4 mb-6 bg-slate-950/80 p-5 rounded-2xl border border-slate-800/50 shadow-inner mt-4">
@@ -935,20 +928,20 @@
 
     async function fetchWeather() {
         try {
-            const res = await fetch('https://api.open-meteo.com/v1/forecast?latitude=41.0082&longitude=28.9784&current=temperature_2m,weather_code');
+            const res = await fetch('https://api.open-meteo.com/v1/forecast?latitude=41.0082&longitude=28.9784&current_weather=true');
             const data = await res.json();
-            if(data.current) {
-                const temp = data.current.temperature_2m;
-                const code = data.current.weather_code;
+            if(data.current_weather) {
+                const code = data.current_weather.weathercode;
                 let icon = 'fa-cloud';
-                if(code <= 1) icon = 'fa-sun';
-                else if(code <= 3) icon = 'fa-cloud-sun';
-                else if(code <= 48) icon = 'fa-smog';
-                else if(code <= 67) icon = 'fa-cloud-rain';
-                else if(code <= 79) icon = 'fa-snowflake';
-                else if(code <= 99) icon = 'fa-cloud-bolt';
+                let text = 'Syncing';
+                if(code === 0) { icon = 'fa-sun'; text = 'Clear'; }
+                else if(code <= 3) { icon = 'fa-cloud-sun'; text = 'Cloudy'; }
+                else if(code <= 48) { icon = 'fa-smog'; text = 'Fog'; }
+                else if(code <= 67) { icon = 'fa-cloud-rain'; text = 'Rain'; }
+                else if(code <= 79) { icon = 'fa-snowflake'; text = 'Snow'; }
+                else { icon = 'fa-cloud-bolt'; text = 'Storm'; }
                 
-                if(UI.weatherText) UI.weatherText.innerText = `${Math.round(temp)}°C`;
+                if(UI.weatherText) UI.weatherText.innerText = text;
                 if(UI.weatherIcon) UI.weatherIcon.className = `fa-solid ${icon} mr-1`;
             }
         } catch(e) {
@@ -1221,7 +1214,7 @@
       if (view === 'catalog') { UI.viewCatalog?.classList.remove('hidden'); if(UI.navIcon) UI.navIcon.className = isAdmin ? 'fa-solid fa-unlock' : 'fa-solid fa-lock'; if(UI.navText) UI.navText.innerText = isAdmin ? 'Admin' : 'Admin'; if(UI.navBtn) UI.navBtn.className = "flex items-center gap-2 px-4 py-2 rounded-full text-sm font-medium transition-all bg-theme-600/10 text-theme-400 hover:bg-theme-600/20"; }
       else if (view === 'archive') { UI.viewArchive?.classList.remove('hidden'); if(UI.navIcon) UI.navIcon.className = 'fa-solid fa-arrow-left'; if(UI.navText) UI.navText.innerText = 'Back to Catalog'; if(UI.navBtn) UI.navBtn.className = "flex items-center gap-2 px-4 py-2 rounded-full text-sm font-medium transition-all bg-slate-800 text-slate-300"; }
       else if (view === 'admin-login') { UI.viewAdminLogin?.classList.remove('hidden'); if(UI.pinInput) UI.pinInput.value = ''; UI.loginError?.classList.add('hidden'); if(UI.navIcon) UI.navIcon.className = 'fa-solid fa-arrow-left'; if(UI.navText) UI.navText.innerText = 'Back'; if(UI.navBtn) UI.navBtn.className = "flex items-center gap-2 px-4 py-2 rounded-full text-sm font-medium transition-all bg-slate-800 text-slate-300"; UI.pinInput?.focus(); }
-      else if (view === 'admin-panel') { UI.viewAdminPanel?.classList.remove('hidden'); if(UI.navIcon) UI.navIcon.className = 'fa-solid fa-right-from-bracket'; if(UI.navText) UI.navText.innerText = 'Exit Admin'; if(UI.navBtn) UI.navBtn.className = "flex items-center gap-2 px-4 py-2 rounded-full text-sm font-medium transition-all bg-slate-800 text-slate-300"; if(!previewOriginalTheme) applySettingsToUI(); renderAuditLogs(allAuditLogs.slice(0,50)); }
+      else if (view === 'admin-panel') { UI.viewAdminPanel?.classList.remove('hidden'); if(UI.navIcon) UI.navIcon.className = 'fa-solid fa-right-from-bracket'; if(UI.navText) UI.navText.innerText = 'Exit Admin'; if(UI.navBtn) UI.navBtn.className = "flex items-center gap-2 px-4 py-2 rounded-full text-sm font-medium transition-all bg-slate-800 text-slate-300"; if(!previewOriginalTheme && !globalSettings.randomizerOn) applySettingsToUI(); renderAuditLogs(allAuditLogs.slice(0,50)); }
       else if (view === 'lockdown') { UI.viewLockdown?.classList.remove('hidden'); UI.mainNav?.classList.add('hidden'); }
     }
 
