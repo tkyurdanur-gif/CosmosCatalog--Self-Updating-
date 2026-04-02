@@ -23,6 +23,8 @@
     body { transition: background-color 1s ease, color 0.5s ease, filter 0.5s ease, transform 0.5s ease; overflow-x: hidden; }
 
     /* --- THE MULTIVERSE CSS ENGINE --- */
+    
+    /* Classics & Base Immersion */
     .theme-black-hole { background: radial-gradient(circle at 50% 50%, #000000 0%, #020617 100%); box-shadow: inset 0 0 150px #000; }
     .theme-nebula { background: radial-gradient(circle at 20% 30%, #2e1065 0%, #0f172a 60%, #082f49 100%); backdrop-filter: blur(10px); }
     .theme-ice * { font-weight: 300; letter-spacing: 0.05em; }
@@ -40,11 +42,12 @@
     .theme-transmission { animation: glitch 5s infinite; }
     .theme-gas-giant { background: linear-gradient(135deg, #78350f, #fef3c7, #d97706, #451a03); background-size: 400% 400%; animation: gradientFlow 20s ease infinite; }
     
-    .theme-time-collapse { animation: collapseTime 45s forwards ease-in; }
+    /* Level 3: Unsettling & Mind-Bending */
+    .theme-time-collapse main { animation: collapseTime 45s forwards ease-in; }
     .theme-awareness .group:hover { filter: drop-shadow(0 0 25px var(--theme-500)); transform: scale(1.02); transition: all 0.5s ease; }
-    .theme-living { animation: livingBreath 12s infinite alternate ease-in-out; }
+    .theme-living main { animation: livingBreath 12s infinite alternate ease-in-out; }
     .theme-recursive .group { box-shadow: 0 0 0 1px var(--theme-600), 0 0 0 4px #000, 0 0 0 5px var(--theme-500), 0 0 0 8px #000, 0 0 0 9px var(--theme-400); }
-    .theme-null { background: #000 !important; } .theme-null main { opacity: 0.05; transition: opacity 2s ease; } .theme-null main:hover { opacity: 1; transition: opacity 0.5s ease; }
+    .theme-null { background: #000 !important; } .theme-null main { opacity: 0.05; transition: opacity 2s ease; } .theme-null main:hover, .theme-null main:active { opacity: 1; transition: opacity 0.5s ease; }
     .theme-judgment .judgment-focus { filter: brightness(1.5) drop-shadow(0 0 30px var(--theme-400)); transform: scale(1.05); z-index: 20; transition: all 1s ease; } .theme-judgment .group:not(.judgment-focus) { filter: brightness(0.3) grayscale(0.8); transition: all 1s ease; }
     .theme-silence * { transition-delay: 0.3s !important; }
     .theme-frozen * { animation-play-state: paused !important; transition: none !important; }
@@ -52,9 +55,9 @@
     .theme-echo * { transition: all 0.5s ease !important; box-shadow: -10px 0 20px rgba(255,255,255,0.05); }
     .theme-absolute-zero * { transition: all 3s ease-out !important; cursor: crosshair; }
     .theme-pattern .group { animation: patternAlign 10s forwards ease-in-out; }
-    .theme-chaos-order { animation: chaosToOrder 20s forwards ease-out; }
-    .theme-unknown { transition: all 1.5s ease-in-out !important; }
+    .theme-chaos-order main { animation: chaosToOrder 20s forwards ease-out; }
 
+    /* Core Keyframes */
     @keyframes dustFloat { 0% { background-position: 0% 0%; } 100% { background-position: 100% 100%; } }
     @keyframes heartbeatPulse { 0%, 100% { box-shadow: inset 0 0 0px var(--theme-500); } 50% { box-shadow: inset 0 0 80px var(--theme-600); } }
     @keyframes heatShimmer { 0% { filter: contrast(1) sepia(0.2) blur(0px); } 100% { filter: contrast(1.2) sepia(0.4) blur(1px); } }
@@ -71,6 +74,7 @@
     .simulation-break-active { clip-path: polygon(0 0, 100% 0, 100% 35%, 0 45%, 0 55%, 100% 65%, 100% 100%, 0 100%); filter: hue-rotate(90deg) invert(0.2); transform: translateX(-10px) !important; }
     .group { transition: all 0.5s ease; }
 
+    /* Utilities */
     .spacetime-fabric { position: fixed; top: 0; left: 0; width: 100vw; height: 100vh; z-index: -2; background-image: linear-gradient(rgba(255,255,255,0.03) 1px, transparent 1px), linear-gradient(90deg, rgba(255,255,255,0.03) 1px, transparent 1px); background-size: 50px 50px; perspective: 1000px; transform: rotateX(60deg) scale(2.5) translateY(-20%); animation: spaceWarp 30s linear infinite; }
     @keyframes spaceWarp { 0% { background-position: 0 0; } 100% { background-position: 0 500px; } }
     .img-zoom-container { overflow: hidden; }
@@ -122,7 +126,8 @@
     <i id="toast-icon" class="fa-solid fa-circle-info"></i><span id="toast-msg">Message</span>
   </div>
 
-  <main class="max-w-7xl mx-auto px-6 py-10 flex-grow w-full">
+  <!-- Note: All disruptive theme distortions target <main> to protect fixed Navs and Modals -->
+  <main id="main-content" class="max-w-7xl mx-auto px-6 py-10 flex-grow w-full relative z-10 transition-all duration-700">
     
     <!-- CATALOG VIEW -->
     <div id="view-catalog" class="space-y-12">
@@ -467,7 +472,7 @@
   <!-- ADVANCED MODAL (Fixed Image Constraints) -->
   <div id="post-modal" class="fixed inset-0 z-[110] bg-slate-950/95 backdrop-blur-md flex items-center justify-center p-4 sm:p-8 opacity-0 pointer-events-none transition-opacity duration-300">
     <button id="close-modal-btn" class="absolute top-6 right-6 text-slate-400 hover:text-white bg-slate-800/50 hover:bg-slate-700/80 rounded-full w-12 h-12 flex items-center justify-center text-xl z-20 transition-all"><i class="fa-solid fa-xmark"></i></button>
-    <div class="max-w-6xl w-full bg-slate-900 border border-slate-800 rounded-3xl overflow-hidden flex flex-col md:flex-row h-auto max-h-[90vh] md:h-[85vh] scale-95 transform transition-transform shadow-2xl shadow-theme-900/20 relative" id="modal-content-scale">
+    <div class="max-w-6xl w-full bg-slate-900 border border-slate-800 rounded-3xl overflow-hidden flex flex-col md:flex-row h-[85vh] scale-95 transform transition-transform shadow-2xl shadow-theme-900/20 relative" id="modal-content-scale">
       <div class="w-full md:w-3/5 bg-black relative flex items-center justify-center border-b md:border-b-0 md:border-r border-slate-800 group h-[40vh] md:h-full p-4 overflow-hidden">
         <img id="modal-img" src="" class="max-w-full max-h-full object-contain drop-shadow-2xl">
         <div class="absolute bottom-4 right-4 flex gap-2 opacity-0 group-hover:opacity-100 transition-opacity">
@@ -496,6 +501,7 @@
     import { getAuth, signInAnonymously, signInWithCustomToken, onAuthStateChanged } from "https://www.gstatic.com/firebasejs/11.6.1/firebase-auth.js";
     import { getFirestore, collection, onSnapshot, doc, setDoc, deleteDoc, serverTimestamp } from "https://www.gstatic.com/firebasejs/11.6.1/firebase-firestore.js";
 
+    const apiKey = ""; 
     let animationId = null;
     let starsInitialized = false;
 
@@ -503,7 +509,6 @@
     if (typeof __firebase_config !== 'undefined') { try { firebaseConfig = typeof __firebase_config === 'string' ? JSON.parse(__firebase_config) : __firebase_config; } catch (e) {} }
     const app = initializeApp(firebaseConfig); const auth = getAuth(app); const db = getFirestore(app);
     const appId = typeof __app_id !== 'undefined' ? __app_id : 'astronomy-catalog-v3';
-    const geminiKey = ""; 
     
     let currentUser = null, isAdmin = false, currentImageBase64 = null, editingId = null, allCatalogItems = [], allAuditLogs = [];
     let viewState = 'catalog', activeCategoryFilter = 'all';
@@ -568,14 +573,6 @@
       'chaos-order': {name: 'Chaos to Order', '400':'#6366f1','500':'#4f46e5','600':'#4338ca', particle: 'default', bg: '#020617', cssClass: 'theme-chaos-order', complexity: 3}
     };
 
-    let globalMouseX = 0, globalMouseY = 0;
-    let isFrozen = true;
-    let themeIntervals = [];
-    let themeCleanups = [];
-    let originalNavText = null;
-    let devourTimer = null;
-    let energyTimer = 0;
-
     const UI = {
       mainNav: document.getElementById('main-nav'), navBtn: document.getElementById('nav-btn'), navIcon: document.getElementById('nav-icon'), navText: document.getElementById('nav-text'), navLogo: document.getElementById('nav-logo'), navTitleText: document.getElementById('nav-title-text'), statusBadge: document.getElementById('site-status-badge'), liveModeBadge: document.getElementById('live-mode-badge'),
       activeThemeName: document.getElementById('active-theme-name'), activeThemeBadge: document.getElementById('active-theme-badge'),
@@ -588,17 +585,24 @@
       singleAiStatus: document.getElementById('single-ai-status'),
       starsToggle: document.getElementById('stars-toggle'), fabricToggle: document.getElementById('fabric-toggle'), liveModeToggle: document.getElementById('live-mode-toggle'), saveVisualsBtn: document.getElementById('save-visuals-btn'),
       randomizerToggle: document.getElementById('randomizer-toggle'), randomizerTime: document.getElementById('randomizer-time'),
-      starsCanvas: document.getElementById('stars-canvas'), fabricEffect: document.getElementById('fabric-effect'), mainBody: document.getElementById('main-body'),
+      starsCanvas: document.getElementById('stars-canvas'), fabricEffect: document.getElementById('fabric-effect'), mainBody: document.getElementById('main-body'), mainContent: document.getElementById('main-content'),
       postModal: document.getElementById('post-modal'), modalContentScale: document.getElementById('modal-content-scale'), closeModalBtn: document.getElementById('close-modal-btn'), modalImg: document.getElementById('modal-img'), modalTitle: document.getElementById('modal-title'), modalDesc: document.getElementById('modal-desc'), modalDate: document.getElementById('modal-date'), modalBadges: document.getElementById('modal-badges'), modalDistance: document.getElementById('modal-distance'), modalRadec: document.getElementById('modal-radec'), modalEquipment: document.getElementById('modal-equipment'), modalCredit: document.getElementById('modal-credit'), modalViews: document.getElementById('modal-views'), modalDownloadBtn: document.getElementById('modal-download-btn'),
       statActive: document.getElementById('stat-active'), statArchived: document.getElementById('stat-archived'), statStatus: document.getElementById('stat-status'), statViews: document.getElementById('stat-views'), statStorage: document.getElementById('stat-storage'),
       auditLogBody: document.getElementById('audit-log-body'),
       lockdownDisplayMsg: document.getElementById('lockdown-display-msg'), secretAdminTrigger: document.getElementById('secret-admin-trigger'),
       lockdownPinInput: document.getElementById('lockdown-pin'), lockdownMsgInput: document.getElementById('lockdown-msg'), toggleLockdownBtn: document.getElementById('toggle-lockdown-btn'), toggleMaintenanceBtn: document.getElementById('toggle-maintenance-btn'),
-      
       customThemeStyles: document.getElementById('custom-theme-styles'), themeRadioContainer: document.getElementById('theme-radio-container'), customThemesBlock: document.getElementById('custom-themes-block'), customThemesList: document.getElementById('custom-themes-list'),
       devThemeId: document.getElementById('dev-theme-id'), devThemeName: document.getElementById('dev-theme-name'), devThemeColor: document.getElementById('dev-theme-color'), devThemeParticle: document.getElementById('dev-theme-particle'), devThemeCss: document.getElementById('dev-theme-css'),
       previewThemeBtn: document.getElementById('preview-theme-btn'), saveCustomThemeBtn: document.getElementById('save-custom-theme-btn'), previewBanner: document.getElementById('preview-banner'), cancelPreviewBtn: document.getElementById('cancel-preview-btn')
     };
+
+    let globalMouseX = window.innerWidth / 2, globalMouseY = window.innerHeight / 2;
+    let isFrozen = true;
+    let themeIntervals = [];
+    let themeCleanups = [];
+    let originalNavText = null;
+    let devourTimer = null;
+    let energyTimer = 0;
 
     window.addEventListener('mousemove', (e) => {
       globalMouseX = e.clientX; globalMouseY = e.clientY;
@@ -616,9 +620,9 @@
 
     window.addEventListener('scroll', () => {
       if (globalSettings.theme === 'event-horizon' || globalSettings.theme === 'point-of-no-return') {
-        if(!UI.mainBody) return;
+        if(!UI.mainContent) return;
         const blurAmt = Math.min(window.scrollY / 100, 10);
-        UI.mainBody.style.filter = `blur(${blurAmt}px) contrast(${1 + blurAmt/5})`;
+        UI.mainContent.style.filter = `blur(${blurAmt}px) contrast(${1 + blurAmt/5})`;
       }
     });
 
@@ -627,12 +631,12 @@
       themeCleanups.forEach(fn => fn()); themeCleanups = [];
       clearTimeout(devourTimer);
       
-      if(UI.mainBody) {
-         UI.mainBody.style.filter = '';
-         UI.mainBody.style.transform = '';
-         UI.mainBody.style.transition = 'background-color 1s ease, color 0.5s ease, filter 0.5s ease, transform 0.5s ease';
-         UI.mainBody.classList.remove('simulation-break-active', 'theme-frozen');
+      if(UI.mainContent) {
+         UI.mainContent.style.filter = '';
+         UI.mainContent.style.transform = '';
+         UI.mainContent.style.transition = 'all 0.7s ease';
       }
+      if(UI.mainBody) UI.mainBody.classList.remove('simulation-break-active', 'theme-frozen');
       if(UI.starsCanvas) UI.starsCanvas.style.transform = '';
       if(UI.navTitleText && originalNavText) UI.navTitleText.innerHTML = originalNavText;
       document.querySelectorAll('.judgment-focus').forEach(el => el.classList.remove('judgment-focus'));
@@ -686,14 +690,13 @@
         let entropyLvl = 0;
         themeIntervals.push(setInterval(() => {
           entropyLvl += 0.5;
-          if(UI.mainBody) UI.mainBody.style.filter = `hue-rotate(${entropyLvl}deg) blur(${Math.min(entropyLvl/10, 2)}px)`;
+          if(UI.mainContent) UI.mainContent.style.filter = `hue-rotate(${entropyLvl}deg) blur(${Math.min(entropyLvl/10, 2)}px)`;
         }, 1000));
       }
       
       if(theme === 'frozen-time') {
           isFrozen = true;
           if(UI.mainBody) UI.mainBody.classList.add('theme-frozen');
-          
           const unfreeze = () => { 
               isFrozen = false; 
               if(UI.mainBody) UI.mainBody.classList.remove('theme-frozen'); 
@@ -705,12 +708,12 @@
 
       if(theme === 'event-horizon') {
           const scrollHandler = () => {
-              if(!UI.mainBody) return;
+              if(!UI.mainContent) return;
               const scrollY = window.scrollY;
               const blurAmt = Math.min(scrollY / 80, 15);
               const stretch = Math.min(scrollY / 300, 1.2);
-              UI.mainBody.style.filter = `blur(${blurAmt}px) contrast(${1 + blurAmt/4})`;
-              UI.mainBody.style.transform = `scale(1) translateY(${stretch * 40}px)`;
+              UI.mainContent.style.filter = `blur(${blurAmt}px) contrast(${1 + blurAmt/4})`;
+              UI.mainContent.style.transform = `scale(1) translateY(${stretch * 40}px)`;
           };
           window.addEventListener('scroll', scrollHandler);
           themeCleanups.push(() => window.removeEventListener('scroll', scrollHandler));
@@ -718,15 +721,15 @@
       
       if(theme === 'light-devoured') {
           const resetDevour = () => {
-              if(UI.mainBody) {
-                  UI.mainBody.style.transition = 'filter 0.3s ease-out';
-                  UI.mainBody.style.filter = 'brightness(1) contrast(1)';
+              if(UI.mainContent) {
+                  UI.mainContent.style.transition = 'filter 0.3s ease-out';
+                  UI.mainContent.style.filter = 'brightness(1) contrast(1)';
               }
               clearTimeout(devourTimer);
               devourTimer = setTimeout(() => {
-                  if(UI.mainBody) {
-                      UI.mainBody.style.transition = 'filter 8s ease-in';
-                      UI.mainBody.style.filter = 'brightness(0.02) contrast(1.5) grayscale(0.8)';
+                  if(UI.mainContent) {
+                      UI.mainContent.style.transition = 'filter 8s ease-in';
+                      UI.mainContent.style.filter = 'brightness(0.02) contrast(1.5) grayscale(0.8)';
                   }
               }, 1500); 
           };
@@ -737,43 +740,42 @@
 
       if(theme === 'runaway-energy') {
           let energyLvl = 0;
-          if(UI.mainBody) UI.mainBody.style.transition = 'all 0.5s linear';
+          if(UI.mainContent) UI.mainContent.style.transition = 'all 0.5s linear';
           themeIntervals.push(setInterval(() => {
               energyLvl += 0.05;
-              if(UI.mainBody) {
-                  UI.mainBody.style.filter = `saturate(${1 + energyLvl * 2}) brightness(${1 + energyLvl * 0.5}) contrast(${1 + energyLvl}) hue-rotate(${energyLvl * 15}deg)`;
-                  UI.mainBody.style.transform = `scale(${1 + energyLvl * 0.02})`;
+              if(UI.mainContent) {
+                  UI.mainContent.style.filter = `saturate(${1 + energyLvl * 2}) brightness(${1 + energyLvl * 0.5}) contrast(${1 + energyLvl}) hue-rotate(${energyLvl * 15}deg)`;
+                  UI.mainContent.style.transform = `scale(${1 + energyLvl * 0.02})`;
               }
           }, 500));
       }
 
       if(theme === 'point-of-no-return') {
-          if(UI.mainBody) {
-              UI.mainBody.style.transition = 'transform 45s cubic-bezier(0.4, 0, 1, 1), filter 45s linear';
+          if(UI.mainContent) {
+              UI.mainContent.style.transition = 'transform 45s cubic-bezier(0.4, 0, 1, 1), filter 45s linear';
               setTimeout(() => {
-                  UI.mainBody.style.transform = 'scale(1.8) perspective(500px) rotateX(8deg)';
-                  UI.mainBody.style.filter = 'blur(6px) brightness(0.1) saturate(0.2)';
+                  UI.mainContent.style.transform = 'scale(0.8) perspective(500px) rotateX(10deg)';
+                  UI.mainContent.style.filter = 'blur(5px) brightness(0.15) saturate(0.2)';
               }, 100);
           }
           
           const radios = document.getElementsByName('theme');
           if(radios) Array.from(radios).forEach(r => r.disabled = true);
           if(UI.liveModeToggle) UI.liveModeToggle.disabled = true;
+          if(UI.randomizerToggle) UI.randomizerToggle.disabled = true;
           if(UI.saveVisualsBtn) UI.saveVisualsBtn.disabled = true;
           
-          themeIntervals.push(setInterval(() => {
-              showToast("Irreversible Transition. You cannot go back.", "error");
-          }, 8000));
+          themeIntervals.push(setInterval(() => { showToast("Irreversible Transition. You cannot go back.", "error"); }, 8000));
       }
       
       if(theme === 'unknown-limit') {
           const possibleParticles = ['default', 'pulse', 'snow', 'meteor', 'warp', 'orbit', 'binary', 'repel'];
           const possibleFilters = ['hue-rotate(90deg)', 'invert(0.8) hue-rotate(180deg)', 'contrast(2) saturate(3)', 'blur(3px) brightness(1.5)', 'sepia(1) contrast(1.5)', 'drop-shadow(0 0 30px red)', 'none'];
           
-          if(UI.mainBody) UI.mainBody.style.transition = 'all 1.5s ease-in-out';
+          if(UI.mainContent) UI.mainContent.style.transition = 'all 1.5s ease-in-out';
           
           themeIntervals.push(setInterval(() => {
-              if(!UI.mainBody) return;
+              if(!UI.mainContent) return;
               const rParticle = possibleParticles[Math.floor(Math.random() * possibleParticles.length)];
               initStars(rParticle);
               
@@ -787,9 +789,9 @@
               const skew = Math.random() * 4 - 2;
               const scale = 1 + Math.random() * 0.08;
               
-              UI.mainBody.style.filter = filter;
-              UI.mainBody.style.transform = `scale(${scale}) skew(${skew}deg)`;
-          }, 3000));
+              UI.mainContent.style.filter = filter;
+              UI.mainContent.style.transform = `scale(${scale}) skew(${skew}deg)`;
+          }, 4000));
       }
     }
 
@@ -813,16 +815,35 @@
       }).join('');
     }
 
+    async function fetchWithBackoff(url, options, maxRetries = 5) {
+        const delays = [1000, 2000, 4000, 8000, 16000];
+        for (let i = 0; i < maxRetries; i++) {
+            try {
+                const response = await fetch(url, options);
+                if (!response.ok) throw new Error(`HTTP error! status: ${response.status}`);
+                return await response.json();
+            } catch (error) {
+                if (i === maxRetries - 1) { showToast("AI Vision failed to connect.", "error"); return null; }
+                await new Promise(resolve => setTimeout(resolve, delays[i]));
+            }
+        }
+        return null;
+    }
+
     async function categorizeImageWithAI(base64Url) {
-      if (!geminiKey) return "Other";
+      if (!apiKey) return "Other";
       try {
         const base64Data = base64Url.split(',')[1];
-        const payload = { contents: [{ role: "user", parts: [{ text: "Analyze this astronomical image and classify it into EXACTLY ONE of the following categories: Galaxy, Nebula, Star Cluster, Planet, Black Hole, Other. Reply ONLY with the category name." }, { inlineData: { mimeType: "image/jpeg", data: base64Data } }] }] };
-        const response = await fetch(`https://generativelanguage.googleapis.com/v1beta/models/gemini-2.5-flash-preview-09-2025:generateContent?key=${geminiKey}`, { method: 'POST', headers: { 'Content-Type': 'application/json' }, body: JSON.stringify(payload) });
-        const result = await response.json();
-        let category = result.candidates?.[0]?.content?.parts?.[0]?.text?.trim() || 'Other';
-        const validCats = ["Galaxy", "Nebula", "Star Cluster", "Planet", "Black Hole", "Other"];
-        return validCats.find(c => category.toLowerCase().includes(c.toLowerCase())) || "Other";
+        const payload = { 
+            contents: [{ role: "user", parts: [{ text: "You are an expert astronomer. Classify the provided astronomical image." }, { inlineData: { mimeType: "image/jpeg", data: base64Data } }] }],
+            generationConfig: { responseMimeType: "application/json", responseSchema: { type: "OBJECT", properties: { category: { type: "STRING", enum: ["Galaxy", "Nebula", "Star Cluster", "Planet", "Black Hole", "Other"] } }, required: ["category"] } }
+        };
+        const result = await fetchWithBackoff(`https://generativelanguage.googleapis.com/v1beta/models/gemini-2.5-flash-preview-09-2025:generateContent?key=${apiKey}`, { method: 'POST', headers: { 'Content-Type': 'application/json' }, body: JSON.stringify(payload) });
+        if (result && result.candidates && result.candidates[0].content.parts[0].text) {
+            const parsed = JSON.parse(result.candidates[0].content.parts[0].text);
+            return parsed.category || "Other";
+        }
+        return "Other";
       } catch(e) { return "Other"; }
     }
 
@@ -918,17 +939,15 @@
             const res = await fetch('https://api.open-meteo.com/v1/forecast?latitude=41.0082&longitude=28.9784&current_weather=true');
             const data = await res.json();
             if(data.current_weather) {
+                realEarthWeather.text = 'Clear'; realEarthWeather.icon = 'fa-sun';
                 const code = data.current_weather.weathercode;
-                let icon = 'fa-cloud'; let text = 'Syncing';
-                if(code === 0) { icon = 'fa-sun'; text = 'Clear'; }
-                else if(code <= 3) { icon = 'fa-cloud-sun'; text = 'Cloudy'; }
-                else if(code <= 48) { icon = 'fa-smog'; text = 'Fog'; }
-                else if(code <= 67) { icon = 'fa-cloud-rain'; text = 'Rain'; }
-                else if(code <= 79) { icon = 'fa-snowflake'; text = 'Snow'; }
-                else { icon = 'fa-cloud-bolt'; text = 'Storm'; }
-                if(UI.weatherText) UI.weatherText.innerText = text;
-                if(UI.weatherIcon) UI.weatherIcon.className = `fa-solid ${icon} mr-1`;
+                if(code <= 3) { realEarthWeather.icon = 'fa-cloud-sun'; realEarthWeather.text = 'Cloudy'; }
+                else if(code <= 48) { realEarthWeather.icon = 'fa-smog'; realEarthWeather.text = 'Fog'; }
+                else if(code <= 67) { realEarthWeather.icon = 'fa-cloud-rain'; realEarthWeather.text = 'Rain'; }
+                else if(code <= 79) { realEarthWeather.icon = 'fa-snowflake'; realEarthWeather.text = 'Snow'; }
+                else if(code >= 80) { realEarthWeather.icon = 'fa-cloud-bolt'; realEarthWeather.text = 'Storm'; }
             }
+            if(!globalSettings.randomizerOn) applySettingsToUI(); // Re-trigger UI to apply weather overlay
         } catch(e) { if(UI.weatherText) UI.weatherText.innerText = 'Offline'; }
     }
 
@@ -1017,8 +1036,29 @@
         UI.liveModeBadge?.classList.remove('hidden'); 
       } else UI.liveModeBadge?.classList.add('hidden');
       
-      const themeConfig = THEMES[activeThemeKey] || THEMES.blue;
+      const themeConfig = THEMES[activeThemeKey] || THEMES['blue'];
       if(UI.activeThemeName) UI.activeThemeName.innerText = themeConfig.name || activeThemeKey;
+
+      // Status Badges Engine (Restored!)
+      if (globalSettings.lockdownActive) { 
+          if(UI.statusBadge) { UI.statusBadge.className = "px-2 py-0.5 rounded-full text-[10px] uppercase tracking-widest font-bold border border-red-500/50 text-red-400 bg-red-500/10"; UI.statusBadge.innerText = "Lockdown"; }
+          if(UI.statStatus) { UI.statStatus.className = "text-lg font-bold mt-1 text-red-500"; UI.statStatus.innerText = "Secured"; }
+      } else if (globalSettings.maintenanceActive) { 
+          if(UI.statusBadge) { UI.statusBadge.className = "px-2 py-0.5 rounded-full text-[10px] uppercase tracking-widest font-bold border border-yellow-500/50 text-yellow-400 bg-yellow-500/10"; UI.statusBadge.innerText = "Maintenance"; }
+          if(UI.statStatus) { UI.statStatus.className = "text-lg font-bold mt-1 text-yellow-500"; UI.statStatus.innerText = "Maintenance"; }
+      } else { 
+          if(UI.statusBadge) { UI.statusBadge.className = "px-2 py-0.5 rounded-full text-[10px] uppercase tracking-widest font-bold border border-green-500/50 text-green-400 bg-green-500/10"; UI.statusBadge.innerText = "Active"; }
+          if(UI.statStatus) { UI.statStatus.className = "text-lg font-bold mt-1 text-green-400"; UI.statStatus.innerText = "Optimal"; }
+      }
+
+      // Cosmic Weather Sync! 
+      if(themeToWeather[activeThemeKey]) {
+          if(UI.weatherText) UI.weatherText.innerText = themeToWeather[activeThemeKey].text;
+          if(UI.weatherIcon) UI.weatherIcon.className = `fa-solid ${themeToWeather[activeThemeKey].icon} mr-1`;
+      } else {
+          if(UI.weatherText) UI.weatherText.innerText = realEarthWeather.text;
+          if(UI.weatherIcon) UI.weatherIcon.className = `fa-solid ${realEarthWeather.icon} mr-1`;
+      }
 
       document.documentElement.style.setProperty('--theme-400', themeConfig['400']); document.documentElement.style.setProperty('--theme-500', themeConfig['500']); document.documentElement.style.setProperty('--theme-600', themeConfig['600']);
       if(UI.mainBody) {
@@ -1027,7 +1067,7 @@
       }
 
       if (globalSettings.starsOn) { UI.starsCanvas?.classList.remove('hidden'); initStars(themeConfig.particle); } 
-      else { UI.starsCanvas?.classList.add('hidden'); if(animationId) cancelAnimationFrame(animationId); }
+      else { UI.starsCanvas?.classList.add('hidden'); if(typeof animationId !== 'undefined' && animationId) cancelAnimationFrame(animationId); }
       
       initThemeBehaviors(activeThemeKey);
 
@@ -1073,23 +1113,57 @@
         const id = UI.devThemeId.value.trim().toLowerCase().replace(/[^a-z0-9-]/g, '-');
         if(!id) return showToast("Theme ID required", "error");
         const colorHex = UI.devThemeColor.value.trim() || '#ffffff';
-        const newTheme = { '400': colorHex, '500': colorHex, '600': colorHex, particle: UI.devThemeParticle.value, bg: '#020617', cssClass: `theme-${id}`, customCSS: UI.devThemeCss.value, name: UI.devThemeName.value.trim() || id };
+        const particle = UI.devThemeParticle.value;
+        const cssContent = UI.devThemeCss.value;
+        
+        const newTheme = {
+            '400': colorHex, '500': colorHex, '600': colorHex,
+            particle: particle, bg: '#020617',
+            cssClass: `theme-${id}`,
+            customCSS: cssContent, name: UI.devThemeName.value.trim() || id
+        };
+
         if(!previewOriginalTheme) previewOriginalTheme = globalSettings.theme;
-        THEMES[id] = newTheme; UI.customThemeStyles.innerHTML += `\n${UI.devThemeCss.value}`;
-        applySettingsToUI(id); UI.previewBanner?.classList.remove('hidden'); switchView('catalog');
+        
+        THEMES[id] = newTheme;
+        UI.customThemeStyles.innerHTML += `\n${cssContent}`;
+        
+        applySettingsToUI(id);
+        UI.previewBanner?.classList.remove('hidden');
+        switchView('catalog');
     });
 
     UI.cancelPreviewBtn?.addEventListener('click', () => {
-        if(previewOriginalTheme) { applySettingsToUI(previewOriginalTheme); previewOriginalTheme = null; UI.previewBanner?.classList.add('hidden'); renderCustomThemes(); switchView('admin-panel'); }
+        if(previewOriginalTheme) {
+            applySettingsToUI(previewOriginalTheme);
+            previewOriginalTheme = null;
+            UI.previewBanner?.classList.add('hidden');
+            renderCustomThemes(); // Reset injected styles
+            switchView('admin-panel');
+        }
     });
 
     UI.saveCustomThemeBtn?.addEventListener('click', async () => {
         const id = UI.devThemeId.value.trim().toLowerCase().replace(/[^a-z0-9-]/g, '-');
         if(!id) return showToast("Theme ID required", "error");
         const colorHex = UI.devThemeColor.value.trim() || '#ffffff';
-        const newTheme = { '400': colorHex, '500': colorHex, '600': colorHex, particle: UI.devThemeParticle.value, bg: '#020617', cssClass: `theme-${id}`, customCSS: UI.devThemeCss.value, name: UI.devThemeName.value.trim() || id };
+        
+        const newTheme = {
+            '400': colorHex, '500': colorHex, '600': colorHex,
+            particle: UI.devThemeParticle.value, bg: '#020617',
+            cssClass: `theme-${id}`, customCSS: UI.devThemeCss.value,
+            name: UI.devThemeName.value.trim() || id
+        };
+
         const updatedThemes = { ...(globalSettings.customThemes || {}), [id]: newTheme };
-        try { await setDoc(doc(db, 'artifacts', appId, 'public', 'data', 'site_settings', 'global'), { customThemes: updatedThemes }, { merge: true }); logSystemAction('THEME_CREATED', id); showToast("Theme Saved to DB!"); UI.devThemeId.value = ''; UI.devThemeName.value = ''; UI.devThemeColor.value = ''; UI.devThemeCss.value = ''; if(previewOriginalTheme) UI.cancelPreviewBtn.click(); } catch(e) { showToast("Failed to save", "error"); }
+        
+        try {
+            await setDoc(doc(db, 'artifacts', appId, 'public', 'data', 'site_settings', 'global'), { customThemes: updatedThemes }, { merge: true });
+            logSystemAction('THEME_CREATED', id);
+            showToast("Theme Saved to DB!");
+            UI.devThemeId.value = ''; UI.devThemeName.value = ''; UI.devThemeColor.value = ''; UI.devThemeCss.value = '';
+            if(previewOriginalTheme) UI.cancelPreviewBtn.click();
+        } catch(e) { showToast("Failed to save", "error"); }
     });
 
     function switchView(view) {
