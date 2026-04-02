@@ -23,8 +23,6 @@
     body { transition: background-color 1s ease, color 0.5s ease, filter 0.5s ease, transform 0.5s ease; overflow-x: hidden; }
 
     /* --- THE MULTIVERSE CSS ENGINE --- */
-    
-    /* Classics & Base Immersion */
     .theme-black-hole { background: radial-gradient(circle at 50% 50%, #000000 0%, #020617 100%); box-shadow: inset 0 0 150px #000; }
     .theme-nebula { background: radial-gradient(circle at 20% 30%, #2e1065 0%, #0f172a 60%, #082f49 100%); backdrop-filter: blur(10px); }
     .theme-ice * { font-weight: 300; letter-spacing: 0.05em; }
@@ -42,7 +40,6 @@
     .theme-transmission { animation: glitch 5s infinite; }
     .theme-gas-giant { background: linear-gradient(135deg, #78350f, #fef3c7, #d97706, #451a03); background-size: 400% 400%; animation: gradientFlow 20s ease infinite; }
     
-    /* Unsettling & Mind-Bending */
     .theme-time-collapse { animation: collapseTime 45s forwards ease-in; }
     .theme-awareness .group:hover { filter: drop-shadow(0 0 25px var(--theme-500)); transform: scale(1.02); transition: all 0.5s ease; }
     .theme-living { animation: livingBreath 12s infinite alternate ease-in-out; }
@@ -58,7 +55,6 @@
     .theme-chaos-order { animation: chaosToOrder 20s forwards ease-out; }
     .theme-unknown { transition: all 1.5s ease-in-out !important; }
 
-    /* Core Keyframes */
     @keyframes dustFloat { 0% { background-position: 0% 0%; } 100% { background-position: 100% 100%; } }
     @keyframes heartbeatPulse { 0%, 100% { box-shadow: inset 0 0 0px var(--theme-500); } 50% { box-shadow: inset 0 0 80px var(--theme-600); } }
     @keyframes heatShimmer { 0% { filter: contrast(1) sepia(0.2) blur(0px); } 100% { filter: contrast(1.2) sepia(0.4) blur(1px); } }
@@ -75,7 +71,6 @@
     .simulation-break-active { clip-path: polygon(0 0, 100% 0, 100% 35%, 0 45%, 0 55%, 100% 65%, 100% 100%, 0 100%); filter: hue-rotate(90deg) invert(0.2); transform: translateX(-10px) !important; }
     .group { transition: all 0.5s ease; }
 
-    /* Utilities */
     .spacetime-fabric { position: fixed; top: 0; left: 0; width: 100vw; height: 100vh; z-index: -2; background-image: linear-gradient(rgba(255,255,255,0.03) 1px, transparent 1px), linear-gradient(90deg, rgba(255,255,255,0.03) 1px, transparent 1px); background-size: 50px 50px; perspective: 1000px; transform: rotateX(60deg) scale(2.5) translateY(-20%); animation: spaceWarp 30s linear infinite; }
     @keyframes spaceWarp { 0% { background-position: 0 0; } 100% { background-position: 0 500px; } }
     .img-zoom-container { overflow: hidden; }
@@ -106,7 +101,6 @@
             CosmosCatalog 
             <span id="site-status-badge" class="px-2 py-0.5 rounded-full text-[10px] uppercase tracking-widest font-bold border border-green-500/50 text-green-400 bg-green-500/10">Active</span>
             <span id="active-theme-badge" class="ml-2 px-2 py-0.5 rounded-full text-[9px] uppercase tracking-widest font-bold border border-slate-700 text-slate-400 bg-slate-900/50 transition-all shadow-sm"><i class="fa-solid fa-swatchbook mr-1"></i><span id="active-theme-name">Deep Space Blue</span></span>
-            <!-- NEW: Weather Badge (Condition Only) -->
             <span id="weather-badge" class="ml-2 px-2 py-0.5 rounded-full text-[9px] uppercase tracking-widest font-bold border border-cyan-700/50 text-cyan-400 bg-cyan-900/30 transition-all shadow-sm"><i id="weather-icon" class="fa-solid fa-cloud-moon mr-1"></i><span id="weather-text">Syncing</span></span>
           </h1>
           <p class="text-[10px] text-theme-400 font-mono uppercase tracking-widest transition-colors">Database v3.0 Pro</p>
@@ -201,6 +195,7 @@
         </div>
 
         <div class="lg:col-span-9">
+          <!-- Tab 1: Data Entry -->
           <div id="admin-tab-entry" class="admin-panel-section animate-in fade-in bg-slate-900 border border-slate-800 p-8 rounded-3xl">
             <h3 id="form-header" class="text-xl font-bold mb-6 flex items-center gap-2"><i class="fa-solid fa-satellite text-theme-500"></i> Single Entry Terminal</h3>
             <form id="upload-form" class="space-y-6">
@@ -250,6 +245,7 @@
             </form>
           </div>
 
+          <!-- Tab 2: Directory -->
           <div id="admin-tab-directory" class="admin-panel-section hidden animate-in fade-in bg-slate-900 border border-slate-800 p-8 rounded-3xl">
             <div class="flex flex-col sm:flex-row justify-between items-start sm:items-center mb-6 gap-4">
               <h3 class="text-xl font-bold">Record Directory</h3>
@@ -258,6 +254,7 @@
             <div id="admin-list" class="space-y-3 max-h-[600px] overflow-y-auto pr-2 custom-scrollbar"></div>
           </div>
 
+          <!-- Tab 3: Mass Upload -->
           <div id="admin-tab-mass" class="admin-panel-section hidden animate-in fade-in bg-slate-900 border border-slate-800 p-8 rounded-3xl">
             <h3 class="text-xl font-bold mb-2 flex items-center gap-2">Mass Ingestion Queue <i class="fa-solid fa-sparkles text-theme-500 text-sm" title="AI Powered"></i></h3>
             <p class="text-slate-400 text-sm mb-6">Upload multiple assets simultaneously. AI Vision will automatically categorize each image.</p>
@@ -273,6 +270,7 @@
             </div>
           </div>
 
+          <!-- Tab 4: Audit Logs -->
           <div id="admin-tab-audit" class="admin-panel-section hidden animate-in fade-in bg-slate-900 border border-slate-800 p-8 rounded-3xl">
             <div class="flex justify-between items-center mb-6">
               <h3 class="text-xl font-bold">System Audit Logs</h3>
@@ -398,6 +396,16 @@
               </div>
               <button id="save-visuals-btn" class="mt-6 bg-theme-600 hover:bg-theme-500 w-full py-3 rounded-xl font-bold shadow-lg transition-colors">Deploy Configuration</button>
             </div>
+            
+            <!-- Security Protocols -->
+            <div class="bg-slate-900 border border-slate-800 p-8 rounded-3xl mt-6">
+                <h3 class="text-xl font-bold flex items-center gap-2 mb-6"><i class="fa-solid fa-shield-halved text-red-500"></i> Protocol Controls</h3>
+                <div class="space-y-4">
+                  <div class="bg-slate-950 p-4 rounded-xl border border-yellow-500/30"><button id="toggle-maintenance-btn" class="bg-yellow-600 hover:bg-yellow-500 w-full py-2 rounded-lg text-sm font-bold shadow-lg shadow-yellow-600/20">Toggle Maintenance Mode</button></div>
+                  <div class="bg-slate-950 p-4 rounded-xl border border-red-500/30"><div class="flex gap-2"><input type="password" id="lockdown-pin" placeholder="Apollyon Protocol Code" class="flex-grow bg-slate-900 border border-slate-800 rounded-lg px-4 py-2 outline-none focus:border-red-500"><button id="toggle-lockdown-btn" class="bg-red-600 hover:bg-red-500 px-4 rounded-lg text-sm font-bold">Lockdown</button></div></div>
+                  <textarea id="lockdown-msg" rows="2" class="w-full bg-slate-950 border border-slate-800 rounded-xl px-4 py-3 outline-none text-sm" placeholder="Lockdown/Maintenance Message..."></textarea>
+                </div>
+            </div>
 
             <!-- Custom Theme Forge (Developer) -->
             <div class="bg-slate-900 border border-slate-800 p-8 rounded-3xl mt-6">
@@ -459,16 +467,16 @@
   <!-- ADVANCED MODAL (Fixed Image Constraints) -->
   <div id="post-modal" class="fixed inset-0 z-[110] bg-slate-950/95 backdrop-blur-md flex items-center justify-center p-4 sm:p-8 opacity-0 pointer-events-none transition-opacity duration-300">
     <button id="close-modal-btn" class="absolute top-6 right-6 text-slate-400 hover:text-white bg-slate-800/50 hover:bg-slate-700/80 rounded-full w-12 h-12 flex items-center justify-center text-xl z-20 transition-all"><i class="fa-solid fa-xmark"></i></button>
-    <div class="max-w-6xl w-full bg-slate-900 border border-slate-800 rounded-3xl overflow-hidden flex flex-col md:flex-row h-[85vh] scale-95 transform transition-transform shadow-2xl shadow-theme-900/20 relative" id="modal-content-scale">
-      <div class="md:w-3/5 bg-black relative flex items-center justify-center border-b md:border-b-0 md:border-r border-slate-800 group h-1/2 md:h-full overflow-hidden p-6">
-        <img id="modal-img" src="" class="w-full h-full object-contain drop-shadow-2xl">
+    <div class="max-w-6xl w-full bg-slate-900 border border-slate-800 rounded-3xl overflow-hidden flex flex-col md:flex-row h-auto max-h-[90vh] md:h-[85vh] scale-95 transform transition-transform shadow-2xl shadow-theme-900/20 relative" id="modal-content-scale">
+      <div class="w-full md:w-3/5 bg-black relative flex items-center justify-center border-b md:border-b-0 md:border-r border-slate-800 group h-[40vh] md:h-full p-4 overflow-hidden">
+        <img id="modal-img" src="" class="max-w-full max-h-full object-contain drop-shadow-2xl">
         <div class="absolute bottom-4 right-4 flex gap-2 opacity-0 group-hover:opacity-100 transition-opacity">
           <button id="modal-download-btn" class="bg-black/60 hover:bg-theme-600 text-white p-3 rounded-xl backdrop-blur-md transition-colors shadow-lg border border-white/10" title="Download Asset"><i class="fa-solid fa-download"></i></button>
         </div>
       </div>
-      <div class="md:w-2/5 p-8 flex flex-col overflow-y-auto bg-gradient-to-b from-slate-900 to-slate-950 custom-scrollbar h-1/2 md:h-full">
+      <div class="w-full md:w-2/5 p-6 md:p-8 flex flex-col overflow-y-auto bg-gradient-to-b from-slate-900 to-slate-950 custom-scrollbar max-h-[50vh] md:max-h-full">
         <div class="flex gap-2 flex-wrap mb-4" id="modal-badges"></div>
-        <h2 id="modal-title" class="text-3xl font-bold text-white mb-1">Title</h2>
+        <h2 id="modal-title" class="text-2xl md:text-3xl font-bold text-white mb-1">Title</h2>
         <div class="grid grid-cols-2 gap-4 mb-6 bg-slate-950/80 p-5 rounded-2xl border border-slate-800/50 shadow-inner mt-4">
           <div id="modal-distance" class="hidden"><p class="text-[9px] text-slate-500 uppercase tracking-widest flex items-center gap-1"><i class="fa-solid fa-ruler-horizontal"></i> Distance</p><p class="text-sm font-mono text-slate-200 mt-1"><span></span></p></div>
           <div id="modal-radec" class="hidden"><p class="text-[9px] text-slate-500 uppercase tracking-widest flex items-center gap-1"><i class="fa-solid fa-location-crosshairs"></i> Coordinates</p><p class="text-sm font-mono text-slate-200 mt-1"><span></span></p></div>
@@ -488,6 +496,9 @@
     import { getAuth, signInAnonymously, signInWithCustomToken, onAuthStateChanged } from "https://www.gstatic.com/firebasejs/11.6.1/firebase-auth.js";
     import { getFirestore, collection, onSnapshot, doc, setDoc, deleteDoc, serverTimestamp } from "https://www.gstatic.com/firebasejs/11.6.1/firebase-firestore.js";
 
+    let animationId = null;
+    let starsInitialized = false;
+
     let firebaseConfig = { apiKey: "AIzaSyA2VwS1hQGroNlkXi2E-vVFz4t3k-JAd6I", authDomain: "cosmos-catalog-v1.firebaseapp.com", projectId: "cosmos-catalog-v1" };
     if (typeof __firebase_config !== 'undefined') { try { firebaseConfig = typeof __firebase_config === 'string' ? JSON.parse(__firebase_config) : __firebase_config; } catch (e) {} }
     const app = initializeApp(firebaseConfig); const auth = getAuth(app); const db = getFirestore(app);
@@ -497,12 +508,11 @@
     let currentUser = null, isAdmin = false, currentImageBase64 = null, editingId = null, allCatalogItems = [], allAuditLogs = [];
     let viewState = 'catalog', activeCategoryFilter = 'all';
     
-    let globalSettings = { theme: 'blue', starsOn: true, fabricOn: false, liveMode: false, lockdownActive: false, customThemes: {}, randomizerOn: false, randomizerBaseTime: 30 };
+    let globalSettings = { theme: 'blue', starsOn: true, fabricOn: false, liveMode: false, lockdownActive: false, maintenanceActive: false, lockdownMsg: '', customThemes: {}, randomizerOn: false, randomizerBaseTime: 30 };
     let previewOriginalTheme = null;
     let currentRandomTheme = null;
     let randomizerTimeout = null;
 
-    // Multi-Verse Theme Registry
     let THEMES = { 
       'blue': {name: 'Deep Space Blue', '400':'#60a5fa','500':'#3b82f6','600':'#2563eb', particle: 'default', complexity: 1}, 
       'emerald': {name: 'Aurora Emerald', '400':'#34d399','500':'#10b981','600':'#059669', particle: 'default', complexity: 1}, 
@@ -535,8 +545,6 @@
       'fragile-blue-dot': {name: 'Blue Dot', '400':'#38bdf8','500':'#0ea5e9','600':'#0284c7', particle: 'default', bg: '#082f49', complexity: 1}, 
       'meteor-storm': {name: 'Meteor Storm', '400':'#94a3b8','500':'#64748b','600':'#475569', particle: 'meteor', complexity: 2},
       'cosmic-love': {name: 'Cosmic Love', '400':'#f472b6','500':'#ec4899','600':'#db2777', particle: 'binary', complexity: 2},
-
-      // New Unsettling Themes
       'time-collapse': {name: 'Time Collapse', '400':'#ffffff','500':'#e2e8f0','600':'#94a3b8', particle: 'default', bg: '#000', cssClass: 'theme-time-collapse', complexity: 3},
       'cosmic-awareness': {name: 'Cosmic Awareness', '400':'#60a5fa','500':'#3b82f6','600':'#2563eb', particle: 'repel', bg: '#020617', cssClass: 'theme-awareness', complexity: 3},
       'event-horizon': {name: 'Event Horizon', '400':'#a855f7','500':'#9333ea','600':'#7e22ce', particle: 'pulse', bg: '#000', cssClass: 'theme-event', complexity: 3},
@@ -553,14 +561,20 @@
       'reality-desync': {name: 'Reality Desync', '400':'#e879f9','500':'#d946ef','600':'#c026d3', particle: 'pulse', bg: '#020617', cssClass: 'theme-desync', complexity: 3},
       'time-echo': {name: 'Time Echo', '400':'#2dd4bf','500':'#14b8a6','600':'#0d9488', particle: 'default', bg: '#020617', cssClass: 'theme-echo', complexity: 3},
       'pattern-recognition': {name: 'Pattern Rec', '400':'#fdba74','500':'#f97316','600':'#ea580c', particle: 'orbit', bg: '#020617', cssClass: 'theme-pattern', complexity: 3},
-      
-      // The Final Bosses
       'unknown-limit': {name: 'Unknown Limit (Boss)', '400':'#ef4444','500':'#dc2626','600':'#b91c1c', particle: 'warp', bg: '#000', cssClass: 'theme-unknown', complexity: 3},
       'runaway-energy': {name: 'Runaway Energy', '400':'#f97316','500':'#ea580c','600':'#c2410c', particle: 'pulse', bg: '#1c0505', cssClass: 'theme-runaway', complexity: 3},
       'light-devoured': {name: 'Light Devoured', '400':'#475569','500':'#334155','600':'#1e293b', particle: 'default', bg: '#000', cssClass: 'theme-devour', complexity: 3},
       'point-of-no-return': {name: 'Point of No Return', '400':'#7e22ce','500':'#6b21a8','600':'#581c87', particle: 'repel', bg: '#000', cssClass: 'theme-no-return', complexity: 3},
       'chaos-order': {name: 'Chaos to Order', '400':'#6366f1','500':'#4f46e5','600':'#4338ca', particle: 'default', bg: '#020617', cssClass: 'theme-chaos-order', complexity: 3}
     };
+
+    let globalMouseX = 0, globalMouseY = 0;
+    let isFrozen = true;
+    let themeIntervals = [];
+    let themeCleanups = [];
+    let originalNavText = null;
+    let devourTimer = null;
+    let energyTimer = 0;
 
     const UI = {
       mainNav: document.getElementById('main-nav'), navBtn: document.getElementById('nav-btn'), navIcon: document.getElementById('nav-icon'), navText: document.getElementById('nav-text'), navLogo: document.getElementById('nav-logo'), navTitleText: document.getElementById('nav-title-text'), statusBadge: document.getElementById('site-status-badge'), liveModeBadge: document.getElementById('live-mode-badge'),
@@ -579,30 +593,18 @@
       statActive: document.getElementById('stat-active'), statArchived: document.getElementById('stat-archived'), statStatus: document.getElementById('stat-status'), statViews: document.getElementById('stat-views'), statStorage: document.getElementById('stat-storage'),
       auditLogBody: document.getElementById('audit-log-body'),
       lockdownDisplayMsg: document.getElementById('lockdown-display-msg'), secretAdminTrigger: document.getElementById('secret-admin-trigger'),
+      lockdownPinInput: document.getElementById('lockdown-pin'), lockdownMsgInput: document.getElementById('lockdown-msg'), toggleLockdownBtn: document.getElementById('toggle-lockdown-btn'), toggleMaintenanceBtn: document.getElementById('toggle-maintenance-btn'),
       
-      // Theme Forge Elements
       customThemeStyles: document.getElementById('custom-theme-styles'), themeRadioContainer: document.getElementById('theme-radio-container'), customThemesBlock: document.getElementById('custom-themes-block'), customThemesList: document.getElementById('custom-themes-list'),
       devThemeId: document.getElementById('dev-theme-id'), devThemeName: document.getElementById('dev-theme-name'), devThemeColor: document.getElementById('dev-theme-color'), devThemeParticle: document.getElementById('dev-theme-particle'), devThemeCss: document.getElementById('dev-theme-css'),
       previewThemeBtn: document.getElementById('preview-theme-btn'), saveCustomThemeBtn: document.getElementById('save-custom-theme-btn'), previewBanner: document.getElementById('preview-banner'), cancelPreviewBtn: document.getElementById('cancel-preview-btn')
     };
 
-    let globalMouseX = 0, globalMouseY = 0;
-    let isFrozen = true;
-    
-    let themeIntervals = [];
-    let themeCleanups = [];
-    let originalNavText = null;
-    let devourTimer = null;
-    let starsInitialized = false, animationId = null;
-
     window.addEventListener('mousemove', (e) => {
       globalMouseX = e.clientX; globalMouseY = e.clientY;
-      
-      // Interactions for advanced themes
-      if (globalSettings.theme === 'light-devoured') devourTimer = 0; // Reset light decay
-      if (globalSettings.theme === 'absolute-zero' && isFrozen) isFrozen = false; // Break freeze
+      if (globalSettings.theme === 'light-devoured') devourTimer = 0;
+      if (globalSettings.theme === 'frozen-time' && isFrozen) isFrozen = false;
 
-      // Parallax Shift for "Cosmic Ocean"
       if (globalSettings.theme === 'cosmic-ocean' && UI.starsCanvas) {
         const x = (e.clientX / window.innerWidth - 0.5) * 40;
         const y = (e.clientY / window.innerHeight - 0.5) * 40;
@@ -632,11 +634,7 @@
          UI.mainBody.classList.remove('simulation-break-active', 'theme-frozen');
       }
       if(UI.starsCanvas) UI.starsCanvas.style.transform = '';
-      
-      if(UI.navTitleText && originalNavText) {
-         UI.navTitleText.innerHTML = originalNavText;
-      }
-      
+      if(UI.navTitleText && originalNavText) UI.navTitleText.innerHTML = originalNavText;
       document.querySelectorAll('.judgment-focus').forEach(el => el.classList.remove('judgment-focus'));
     }
 
@@ -644,7 +642,6 @@
       if(!originalNavText && UI.navTitleText) originalNavText = UI.navTitleText.innerHTML;
       clearThemeEffects();
       
-      // Interaction & Physics Setup
       if (theme === 'cosmic-ocean') {
          const oceanMouseHandler = (e) => {
              if (UI.starsCanvas) {
@@ -718,8 +715,6 @@
           window.addEventListener('scroll', scrollHandler);
           themeCleanups.push(() => window.removeEventListener('scroll', scrollHandler));
       }
-
-      // -- THE FINAL BOSSES --
       
       if(theme === 'light-devoured') {
           const resetDevour = () => {
@@ -779,7 +774,6 @@
           
           themeIntervals.push(setInterval(() => {
               if(!UI.mainBody) return;
-              
               const rParticle = possibleParticles[Math.floor(Math.random() * possibleParticles.length)];
               initStars(rParticle);
               
@@ -795,21 +789,18 @@
               
               UI.mainBody.style.filter = filter;
               UI.mainBody.style.transform = `scale(${scale}) skew(${skew}deg)`;
-              
           }, 3000));
       }
     }
 
-    // --- SECURE AUDIT LOGGING ---
     async function logSystemAction(actionType, targetId) {
       if (!currentUser) return;
-      try { await setDoc(doc(collection(db, 'artifacts', appId, 'public', 'data', 'audit_logs')), { action: actionType, targetId: targetId, user: currentUser.uid, timestamp: serverTimestamp() }); } catch (err) { console.error("Logging Error:", err); }
+      try { await setDoc(doc(collection(db, 'artifacts', appId, 'public', 'data', 'audit_logs')), { action: actionType, targetId: targetId, user: currentUser.uid, timestamp: serverTimestamp() }); } catch (err) {}
     }
 
     function renderAuditLogs(logs) {
       if (!UI.auditLogBody) return;
       if (logs.length === 0) { UI.auditLogBody.innerHTML = `<tr><td colspan="4" class="px-4 py-8 text-center text-slate-500">No logs found.</td></tr>`; return; }
-      
       UI.auditLogBody.innerHTML = logs.map(log => {
         const time = log.timestamp ? new Date(log.timestamp.seconds * 1000).toLocaleString() : 'Pending...';
         let color = 'text-slate-400'; let icon = 'fa-circle-info';
@@ -822,25 +813,21 @@
       }).join('');
     }
 
-    // --- AI VISION ENGINE ---
     async function categorizeImageWithAI(base64Url) {
-      if (!geminiKey) return "Other"; // Fallback
+      if (!geminiKey) return "Other";
       try {
         const base64Data = base64Url.split(',')[1];
-        const prompt = "Analyze this astronomical image and classify it into EXACTLY ONE of the following categories: Galaxy, Nebula, Star Cluster, Planet, Black Hole, Other. Reply ONLY with the category name.";
-        const payload = { contents: [{ role: "user", parts: [{ text: prompt }, { inlineData: { mimeType: "image/jpeg", data: base64Data } }] }] };
+        const payload = { contents: [{ role: "user", parts: [{ text: "Analyze this astronomical image and classify it into EXACTLY ONE of the following categories: Galaxy, Nebula, Star Cluster, Planet, Black Hole, Other. Reply ONLY with the category name." }, { inlineData: { mimeType: "image/jpeg", data: base64Data } }] }] };
         const response = await fetch(`https://generativelanguage.googleapis.com/v1beta/models/gemini-2.5-flash-preview-09-2025:generateContent?key=${geminiKey}`, { method: 'POST', headers: { 'Content-Type': 'application/json' }, body: JSON.stringify(payload) });
         const result = await response.json();
         let category = result.candidates?.[0]?.content?.parts?.[0]?.text?.trim() || 'Other';
         const validCats = ["Galaxy", "Nebula", "Star Cluster", "Planet", "Black Hole", "Other"];
-        let matched = validCats.find(c => category.toLowerCase().includes(c.toLowerCase()));
-        return matched || "Other";
+        return validCats.find(c => category.toLowerCase().includes(c.toLowerCase())) || "Other";
       } catch(e) { return "Other"; }
     }
 
-    // --- ADVANCED PARTICLE PHYSICS ---
     function initStars(particleMode = 'default') {
-      if(typeof animationId !== 'undefined' && animationId) cancelAnimationFrame(animationId);
+      if(animationId) cancelAnimationFrame(animationId);
       const ctx = UI.starsCanvas?.getContext('2d'); 
       if (!ctx) return;
       let width, height, particles = [];
@@ -921,7 +908,7 @@
     }
 
     async function initAuth() {
-      try { if (typeof __initial_auth_token !== 'undefined' && __initial_auth_token) await signInWithCustomToken(auth, __initial_auth_token); else await signInAnonymously(auth); } catch (err) { showToast("Connection failed", "error"); }
+      try { if (typeof __initial_auth_token !== 'undefined' && __initial_auth_token) await signInWithCustomToken(auth, __initial_auth_token); else await signInAnonymously(auth); } catch (err) {}
       onAuthStateChanged(auth, (user) => { currentUser = user; if (user) { loadCatalogData(); loadGlobalSettings(); } });
       fetchWeather();
     }
@@ -932,22 +919,17 @@
             const data = await res.json();
             if(data.current_weather) {
                 const code = data.current_weather.weathercode;
-                let icon = 'fa-cloud';
-                let text = 'Syncing';
+                let icon = 'fa-cloud'; let text = 'Syncing';
                 if(code === 0) { icon = 'fa-sun'; text = 'Clear'; }
                 else if(code <= 3) { icon = 'fa-cloud-sun'; text = 'Cloudy'; }
                 else if(code <= 48) { icon = 'fa-smog'; text = 'Fog'; }
                 else if(code <= 67) { icon = 'fa-cloud-rain'; text = 'Rain'; }
                 else if(code <= 79) { icon = 'fa-snowflake'; text = 'Snow'; }
                 else { icon = 'fa-cloud-bolt'; text = 'Storm'; }
-                
                 if(UI.weatherText) UI.weatherText.innerText = text;
                 if(UI.weatherIcon) UI.weatherIcon.className = `fa-solid ${icon} mr-1`;
             }
-        } catch(e) {
-            console.error('Weather error:', e);
-            if(UI.weatherText) UI.weatherText.innerText = 'Offline';
-        }
+        } catch(e) { if(UI.weatherText) UI.weatherText.innerText = 'Offline'; }
     }
 
     function loadCatalogData() {
@@ -955,11 +937,9 @@
       onSnapshot(collection(db, 'artifacts', appId, 'public', 'data', 'astronomy_items'), (snapshot) => {
         allCatalogItems = snapshot.docs.map(doc => ({ id: doc.id, ...doc.data() }));
         processPublicDisplay();
-        
         if (isAdmin) {
           const q = UI.adminSearch?.value.toLowerCase() || '';
           renderAdminList(q ? allCatalogItems.filter(i => i.title.toLowerCase().includes(q) || (i.category && i.category.toLowerCase().includes(q))) : allCatalogItems.sort((a, b) => ((b.createdAt && b.createdAt.seconds) || 0) - ((a.createdAt && a.createdAt.seconds) || 0)));
-          
           const activeItems = allCatalogItems.filter(i => !i.archived); 
           const totalViews = allCatalogItems.reduce((sum, item) => sum + (item.views || 0), 0);
           if (UI.statActive) UI.statActive.innerText = activeItems.length; 
@@ -967,7 +947,6 @@
           if (UI.statViews) UI.statViews.innerText = totalViews;
         }
       });
-
       onSnapshot(collection(db, 'artifacts', appId, 'public', 'data', 'audit_logs'), (snapshot) => {
         allAuditLogs = snapshot.docs.map(d => d.data());
         allAuditLogs.sort((a, b) => ((b.timestamp && b.timestamp.seconds) || 0) - ((a.timestamp && a.timestamp.seconds) || 0));
@@ -986,8 +965,7 @@
       else if (sortPref === 'popular') activeItems.sort((a, b) => (b.views || 0) - (a.views || 0));
       else if (sortPref === 'az') activeItems.sort((a, b) => a.title.localeCompare(b.title));
 
-      renderCatalog(activeItems); 
-      renderArchive(allCatalogItems.filter(i => i.archived));
+      renderCatalog(activeItems); renderArchive(allCatalogItems.filter(i => i.archived));
     }
     
     UI.publicSort?.addEventListener('change', processPublicDisplay);
@@ -1005,17 +983,11 @@
             const data = docSnap.data();
             const prevRandomizer = globalSettings.randomizerOn;
             const prevRandTime = globalSettings.randomizerBaseTime;
-            
             globalSettings = { ...globalSettings, ...data };
             if(data.customThemes) {
-                globalSettings.customThemes = data.customThemes;
-                Object.assign(THEMES, data.customThemes);
-                renderCustomThemes();
+                globalSettings.customThemes = data.customThemes; Object.assign(THEMES, data.customThemes); renderCustomThemes();
             }
-            
-            if (globalSettings.randomizerOn !== prevRandomizer || globalSettings.randomizerBaseTime !== prevRandTime) {
-                startThemeRandomizer();
-            }
+            if (globalSettings.randomizerOn !== prevRandomizer || globalSettings.randomizerBaseTime !== prevRandTime) startThemeRandomizer();
         }
         if(!previewOriginalTheme && !globalSettings.randomizerOn) applySettingsToUI();
       });
@@ -1023,28 +995,13 @@
     
     function startThemeRandomizer() {
       clearTimeout(randomizerTimeout);
-      if(!globalSettings.randomizerOn) {
-         if(currentRandomTheme) {
-             currentRandomTheme = null;
-             applySettingsToUI();
-         }
-         return;
-      }
-      
+      if(!globalSettings.randomizerOn) { if(currentRandomTheme) { currentRandomTheme = null; applySettingsToUI(); } return; }
       const themeKeys = Object.keys(THEMES);
       currentRandomTheme = themeKeys[Math.floor(Math.random() * themeKeys.length)];
       applySettingsToUI();
-      
       const comp = THEMES[currentRandomTheme]?.complexity || 2;
-      let baseTime = parseInt(globalSettings.randomizerBaseTime) || 30;
-      let duration = baseTime;
-      
-      if (comp === 1) {
-         duration = 10; 
-      } else if (comp === 3) {
-         duration = 120;
-      }
-      
+      let duration = parseInt(globalSettings.randomizerBaseTime) || 30;
+      if (comp === 1) duration = 10; else if (comp === 3) duration = 120;
       randomizerTimeout = setTimeout(startThemeRandomizer, duration * 1000);
     }
 
@@ -1056,15 +1013,11 @@
       let activeThemeKey = forceTheme || currentRandomTheme || globalSettings.theme || 'blue';
       if (globalSettings.liveMode && !forceTheme && !currentRandomTheme) { 
         const d = new Date(); const m = d.getMonth() + 1; const day = d.getDate();
-        if (m === 10 && day > 20) activeThemeKey = 'dark-void'; 
-        else if (m === 12) activeThemeKey = 'cosmic-winter';
-        else activeThemeKey = 'blue';
+        if (m === 10 && day > 20) activeThemeKey = 'dark-void'; else if (m === 12) activeThemeKey = 'cosmic-winter'; else activeThemeKey = 'blue';
         UI.liveModeBadge?.classList.remove('hidden'); 
       } else UI.liveModeBadge?.classList.add('hidden');
       
       const themeConfig = THEMES[activeThemeKey] || THEMES.blue;
-      
-      // Setup Badge
       if(UI.activeThemeName) UI.activeThemeName.innerText = themeConfig.name || activeThemeKey;
 
       document.documentElement.style.setProperty('--theme-400', themeConfig['400']); document.documentElement.style.setProperty('--theme-500', themeConfig['500']); document.documentElement.style.setProperty('--theme-600', themeConfig['600']);
@@ -1074,15 +1027,12 @@
       }
 
       if (globalSettings.starsOn) { UI.starsCanvas?.classList.remove('hidden'); initStars(themeConfig.particle); } 
-      else { UI.starsCanvas?.classList.add('hidden'); if(typeof animationId !== 'undefined' && animationId) cancelAnimationFrame(animationId); }
+      else { UI.starsCanvas?.classList.add('hidden'); if(animationId) cancelAnimationFrame(animationId); }
       
       initThemeBehaviors(activeThemeKey);
 
       const radios = document.getElementsByName('theme');
-      if(radios) Array.from(radios).forEach(r => { 
-          r.checked = (r.value === activeThemeKey); 
-          r.disabled = (globalSettings.liveMode || globalSettings.randomizerOn || activeThemeKey === 'point-of-no-return'); 
-      });
+      if(radios) Array.from(radios).forEach(r => { r.checked = (r.value === activeThemeKey); r.disabled = (globalSettings.liveMode || globalSettings.randomizerOn || activeThemeKey === 'point-of-no-return'); });
       
       if(UI.starsToggle) UI.starsToggle.checked = globalSettings.starsOn; 
       if(UI.fabricToggle) UI.fabricToggle.checked = globalSettings.fabricOn; 
@@ -1090,123 +1040,58 @@
       if(UI.randomizerToggle) UI.randomizerToggle.checked = globalSettings.randomizerOn || false;
       if(UI.randomizerTime) UI.randomizerTime.value = globalSettings.randomizerBaseTime || 30;
 
-      if (globalSettings.lockdownActive && !isAdmin) { 
-          switchView('lockdown'); 
-          if(UI.lockdownDisplayMsg) UI.lockdownDisplayMsg.innerHTML = (globalSettings.lockdownMsg || 'System Secured').replace(/\n/g, '<br>'); 
-      }
+      if (globalSettings.lockdownActive && !isAdmin) { switchView('lockdown'); if(UI.lockdownDisplayMsg) UI.lockdownDisplayMsg.innerHTML = (globalSettings.lockdownMsg || 'System Secured').replace(/\n/g, '<br>'); }
       else if (viewState === 'lockdown' && !globalSettings.lockdownActive) switchView('catalog');
     }
 
-    // --- THEME FORGE LOGIC ---
     function renderCustomThemes() {
         if(!UI.customThemesBlock || !UI.customThemesList || !UI.customThemeStyles) return;
-        
-        let styleContent = "";
-        let listHTML = "";
-        
+        let styleContent = ""; let listHTML = "";
         const customKeys = Object.keys(globalSettings.customThemes || {});
-        if(customKeys.length === 0) {
-            UI.customThemesBlock.classList.add('hidden');
-        } else {
+        if(customKeys.length === 0) UI.customThemesBlock.classList.add('hidden');
+        else {
             UI.customThemesBlock.classList.remove('hidden');
             customKeys.forEach(key => {
                 const t = globalSettings.customThemes[key];
                 if(t.customCSS) styleContent += `\n${t.customCSS}`;
-                listHTML += `
-                <div class="flex items-center gap-3 p-3 bg-slate-950 border border-slate-800 rounded-xl">
-                    <label class="flex items-center gap-3 cursor-pointer hover:text-white flex-grow">
-                        <input type="radio" name="theme" value="${key}" class="text-white">
-                        <span class="text-sm font-bold" style="color: ${t['500']}">${t.name || key}</span>
-                        <div class="w-3 h-3 rounded-full" style="background: ${t['500']}"></div>
-                    </label>
-                    <button type="button" onclick="window.deleteCustomTheme('${key}')" class="text-red-500 hover:text-white hover:bg-red-500/20 p-2 rounded transition-colors"><i class="fa-solid fa-trash text-xs"></i></button>
-                </div>`;
+                listHTML += `<div class="flex items-center gap-3 p-3 bg-slate-950 border border-slate-800 rounded-xl"><label class="flex items-center gap-3 cursor-pointer hover:text-white flex-grow"><input type="radio" name="theme" value="${key}" class="text-white"><span class="text-sm font-bold" style="color: ${t['500']}">${t.name || key}</span><div class="w-3 h-3 rounded-full" style="background: ${t['500']}"></div></label><button type="button" onclick="window.deleteCustomTheme('${key}')" class="text-red-500 hover:text-white hover:bg-red-500/20 p-2 rounded transition-colors"><i class="fa-solid fa-trash text-xs"></i></button></div>`;
             });
         }
-        
-        UI.customThemeStyles.innerHTML = styleContent;
-        UI.customThemesList.innerHTML = listHTML;
-        
-        const radios = document.getElementsByName('theme');
-        Array.from(radios).forEach(r => { r.checked = (r.value === (previewOriginalTheme || globalSettings.theme)); r.disabled = globalSettings.liveMode; });
+        UI.customThemeStyles.innerHTML = styleContent; UI.customThemesList.innerHTML = listHTML;
+        const radios = document.getElementsByName('theme'); Array.from(radios).forEach(r => { r.checked = (r.value === (previewOriginalTheme || globalSettings.theme)); r.disabled = globalSettings.liveMode; });
     }
 
     window.deleteCustomTheme = async (themeId) => {
         if(!confirm(`Permanently delete custom theme '${themeId}'?`)) return;
         const newThemes = { ...globalSettings.customThemes };
-        delete newThemes[themeId];
-        delete THEMES[themeId];
-        
-        let newActiveTheme = globalSettings.theme;
-        if(newActiveTheme === themeId) newActiveTheme = 'blue';
-
-        try {
-            await setDoc(doc(db, 'artifacts', appId, 'public', 'data', 'site_settings', 'global'), { customThemes: newThemes, theme: newActiveTheme }, { merge: true });
-            logSystemAction('THEME_DELETE', themeId);
-            showToast("Theme deleted.");
-        } catch(e) { showToast("Failed to delete", "error"); }
+        delete newThemes[themeId]; delete THEMES[themeId];
+        let newActiveTheme = globalSettings.theme; if(newActiveTheme === themeId) newActiveTheme = 'blue';
+        try { await setDoc(doc(db, 'artifacts', appId, 'public', 'data', 'site_settings', 'global'), { customThemes: newThemes, theme: newActiveTheme }, { merge: true }); logSystemAction('THEME_DELETE', themeId); showToast("Theme deleted."); } catch(e) { showToast("Failed to delete", "error"); }
     };
 
     UI.previewThemeBtn?.addEventListener('click', () => {
         const id = UI.devThemeId.value.trim().toLowerCase().replace(/[^a-z0-9-]/g, '-');
         if(!id) return showToast("Theme ID required", "error");
-        
         const colorHex = UI.devThemeColor.value.trim() || '#ffffff';
-        const particle = UI.devThemeParticle.value;
-        const cssContent = UI.devThemeCss.value;
-        
-        const newTheme = {
-            '400': colorHex, '500': colorHex, '600': colorHex,
-            particle: particle, bg: '#020617',
-            cssClass: `theme-${id}`,
-            customCSS: cssContent, name: UI.devThemeName.value.trim() || id
-        };
-
+        const newTheme = { '400': colorHex, '500': colorHex, '600': colorHex, particle: UI.devThemeParticle.value, bg: '#020617', cssClass: `theme-${id}`, customCSS: UI.devThemeCss.value, name: UI.devThemeName.value.trim() || id };
         if(!previewOriginalTheme) previewOriginalTheme = globalSettings.theme;
-        
-        THEMES[id] = newTheme;
-        UI.customThemeStyles.innerHTML += `\n${cssContent}`;
-        
-        applySettingsToUI(id);
-        UI.previewBanner?.classList.remove('hidden');
-        switchView('catalog');
+        THEMES[id] = newTheme; UI.customThemeStyles.innerHTML += `\n${UI.devThemeCss.value}`;
+        applySettingsToUI(id); UI.previewBanner?.classList.remove('hidden'); switchView('catalog');
     });
 
     UI.cancelPreviewBtn?.addEventListener('click', () => {
-        if(previewOriginalTheme) {
-            applySettingsToUI(previewOriginalTheme);
-            previewOriginalTheme = null;
-            UI.previewBanner?.classList.add('hidden');
-            renderCustomThemes(); // Reset injected styles
-            switchView('admin-panel');
-        }
+        if(previewOriginalTheme) { applySettingsToUI(previewOriginalTheme); previewOriginalTheme = null; UI.previewBanner?.classList.add('hidden'); renderCustomThemes(); switchView('admin-panel'); }
     });
 
     UI.saveCustomThemeBtn?.addEventListener('click', async () => {
         const id = UI.devThemeId.value.trim().toLowerCase().replace(/[^a-z0-9-]/g, '-');
         if(!id) return showToast("Theme ID required", "error");
-        
         const colorHex = UI.devThemeColor.value.trim() || '#ffffff';
-        
-        const newTheme = {
-            '400': colorHex, '500': colorHex, '600': colorHex,
-            particle: UI.devThemeParticle.value, bg: '#020617',
-            cssClass: `theme-${id}`, customCSS: UI.devThemeCss.value,
-            name: UI.devThemeName.value.trim() || id
-        };
-
+        const newTheme = { '400': colorHex, '500': colorHex, '600': colorHex, particle: UI.devThemeParticle.value, bg: '#020617', cssClass: `theme-${id}`, customCSS: UI.devThemeCss.value, name: UI.devThemeName.value.trim() || id };
         const updatedThemes = { ...(globalSettings.customThemes || {}), [id]: newTheme };
-        
-        try {
-            await setDoc(doc(db, 'artifacts', appId, 'public', 'data', 'site_settings', 'global'), { customThemes: updatedThemes }, { merge: true });
-            logSystemAction('THEME_CREATED', id);
-            showToast("Theme Saved to DB!");
-            UI.devThemeId.value = ''; UI.devThemeName.value = ''; UI.devThemeColor.value = ''; UI.devThemeCss.value = '';
-            if(previewOriginalTheme) UI.cancelPreviewBtn.click();
-        } catch(e) { showToast("Failed to save", "error"); }
+        try { await setDoc(doc(db, 'artifacts', appId, 'public', 'data', 'site_settings', 'global'), { customThemes: updatedThemes }, { merge: true }); logSystemAction('THEME_CREATED', id); showToast("Theme Saved to DB!"); UI.devThemeId.value = ''; UI.devThemeName.value = ''; UI.devThemeColor.value = ''; UI.devThemeCss.value = ''; if(previewOriginalTheme) UI.cancelPreviewBtn.click(); } catch(e) { showToast("Failed to save", "error"); }
     });
 
-    // --- NAVIGATION & VIEWS ---
     function switchView(view) {
       viewState = view;
       [UI.viewCatalog, UI.viewArchive, UI.viewAdminLogin, UI.viewAdminPanel, UI.viewLockdown].forEach(el => el?.classList.add('hidden'));
@@ -1308,8 +1193,18 @@
     if (UI.secretAdminTrigger) {
         UI.secretAdminTrigger.addEventListener('click', () => { escapeClicks++; clearTimeout(escapeTimer); if (escapeClicks >= 3) { switchView('admin-login'); escapeClicks = 0; } else escapeTimer = setTimeout(() => { escapeClicks = 0; }, 1000); });
     }
+    
+    // Security Protocols Listeners
+    UI.toggleLockdownBtn?.addEventListener('click', () => { 
+        if (UI.lockdownPinInput?.value === 'Apollyon') { 
+            updateSettings({ lockdownActive: !globalSettings.lockdownActive, lockdownMsg: UI.lockdownMsgInput?.value || '' }); 
+            UI.lockdownPinInput.value = ''; 
+        } else showToast("Invalid Protocol", "error"); 
+    });
+    UI.toggleMaintenanceBtn?.addEventListener('click', () => {
+        updateSettings({ maintenanceActive: !globalSettings.maintenanceActive, lockdownMsg: UI.lockdownMsgInput?.value || '' });
+    });
 
-    // --- FORM LOGIC ---
     UI.imageInput?.addEventListener('change', (e) => {
       const file = e.target.files[0]; if (!file) return; const reader = new FileReader();
       reader.onload = (event) => { const img = new Image(); img.onload = async () => {
@@ -1319,7 +1214,7 @@
         
         if (UI.singleAiStatus) {
             UI.singleAiStatus.classList.remove('hidden');
-            UI.singleAiStatus.innerHTML = `<i class="fa-solid fa-sparkles fa-spin text-theme-500"></i> AI Categorizing Image...`;
+            UI.singleAiStatus.innerHTML = `<i class="fa-solid fa-sparkles fa-spin text-theme-500"></i> AI Categorizing...`;
             const aiCategory = await categorizeImageWithAI(currentImageBase64);
             if(UI.uploadCategory) UI.uploadCategory.value = aiCategory;
             UI.singleAiStatus.innerHTML = `<i class="fa-solid fa-check text-green-400"></i> Vision Set: ${aiCategory}`;
@@ -1340,18 +1235,9 @@
       e.preventDefault(); if (!currentUser || !currentImageBase64) return;
       if(UI.submitBtn) { UI.submitBtn.disabled = true; UI.submitBtn.innerHTML = `<i class="fa-solid fa-circle-notch fa-spin"></i> Saving...`; }
       try {
-        const payload = { 
-          title: UI.titleInput?.value.trim() || '', category: UI.uploadCategory?.value || 'Galaxy', classification: UI.uploadClassification?.value.trim() || '', distance: UI.uploadDistance?.value.trim() || '', radec: UI.uploadRadec?.value.trim() || '', equipment: UI.uploadEquipment?.value.trim() || '', credit: UI.uploadCredit?.value.trim() || '', description: UI.descInput?.value.trim() || '', image: currentImageBase64, author: currentUser.uid 
-        };
-        if (editingId) { 
-          await setDoc(doc(db, 'artifacts', appId, 'public', 'data', 'astronomy_items', editingId), payload, { merge: true }); 
-          logSystemAction('ENTRY_UPDATE', editingId); showToast("Updated!"); 
-        } else { 
-          payload.createdAt = serverTimestamp(); payload.views = 0; payload.archived = false; 
-          const newDocRef = doc(collection(db, 'artifacts', appId, 'public', 'data', 'astronomy_items'));
-          await setDoc(newDocRef, payload); 
-          logSystemAction('ENTRY_CREATE', newDocRef.id); showToast("Published!"); 
-        }
+        const payload = { title: UI.titleInput?.value.trim() || '', category: UI.uploadCategory?.value || 'Galaxy', classification: UI.uploadClassification?.value.trim() || '', distance: UI.uploadDistance?.value.trim() || '', radec: UI.uploadRadec?.value.trim() || '', equipment: UI.uploadEquipment?.value.trim() || '', credit: UI.uploadCredit?.value.trim() || '', description: UI.descInput?.value.trim() || '', image: currentImageBase64, author: currentUser.uid };
+        if (editingId) { await setDoc(doc(db, 'artifacts', appId, 'public', 'data', 'astronomy_items', editingId), payload, { merge: true }); logSystemAction('ENTRY_UPDATE', editingId); showToast("Updated!"); } 
+        else { payload.createdAt = serverTimestamp(); payload.views = 0; payload.archived = false; const newDocRef = doc(collection(db, 'artifacts', appId, 'public', 'data', 'astronomy_items')); await setDoc(newDocRef, payload); logSystemAction('ENTRY_CREATE', newDocRef.id); showToast("Published!"); }
         resetForm();
       } catch (err) { showToast("Save failed", "error"); if(UI.submitBtn) { UI.submitBtn.innerHTML = editingId ? `Update` : `Publish`; UI.submitBtn.disabled = false; } }
     });
@@ -1422,17 +1308,12 @@
           const item = pendingMassUploads[i];
           const domEl = document.getElementById(item.id);
           if(!domEl) continue; 
-
           const title = document.getElementById(`${item.id}-title`)?.value || 'Untitled';
           const cat = document.getElementById(`${item.id}-cat`)?.value || 'Galaxy';
 
           try {
             const docRef = doc(collection(db, 'artifacts', appId, 'public', 'data', 'astronomy_items'));
-            await setDoc(docRef, {
-              title: title, category: cat, classification: 'Auto-Ingest', distance: 'Unknown', radec: 'TBD',
-              equipment: 'Mass Ingestion Tool', credit: 'Catalog DB', description: 'Batch uploaded asset.',
-              image: item.b64, author: currentUser.uid, views: 0, archived: false, createdAt: serverTimestamp()
-            });
+            await setDoc(docRef, { title: title, category: cat, classification: 'Auto-Ingest', distance: 'Unknown', radec: 'TBD', equipment: 'Mass Ingestion Tool', credit: 'Catalog DB', description: 'Batch uploaded asset.', image: item.b64, author: currentUser.uid, views: 0, archived: false, createdAt: serverTimestamp() });
             logSystemAction('MASS_INGEST_CREATE', docRef.id);
             domEl.innerHTML = `<div class="flex items-center gap-3 min-w-0"><i class="fa-solid fa-check text-green-500"></i><span class="text-sm text-slate-300 truncate">${title}</span></div><span class="text-xs text-green-500 whitespace-nowrap ml-2">Complete</span>`;
           } catch(err) {
