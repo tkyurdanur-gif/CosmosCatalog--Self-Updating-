@@ -3,398 +3,369 @@
 <head>
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  <title>CosmosCatalog</title>
+  <title>CosmosCatalog | Interstellar Database</title>
   
-  <!-- Tailwind CSS for Styling -->
   <script src="https://cdn.tailwindcss.com"></script>
   <script>
     tailwind.config = {
-      theme: {
-        extend: {
-          colors: {
-            blue: {
-              400: 'var(--theme-400, #60a5fa)',
-              500: 'var(--theme-500, #3b82f6)',
-              600: 'var(--theme-600, #2563eb)',
-            }
-          }
-        }
-      }
+      theme: { extend: { colors: { theme: { 400: 'var(--theme-400, #60a5fa)', 500: 'var(--theme-500, #3b82f6)', 600: 'var(--theme-600, #2563eb)' } } } }
     }
   </script>
   
-  <!-- FontAwesome for Icons -->
   <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
   
   <style>
-    /* Custom Scrollbar for dark theme */
     ::-webkit-scrollbar { width: 8px; }
     ::-webkit-scrollbar-track { background: #0f172a; }
     ::-webkit-scrollbar-thumb { background: #334155; border-radius: 4px; }
     ::-webkit-scrollbar-thumb:hover { background: #475569; }
 
-    /* Space Time Fabric Effect */
+    body { transition: background-color 1s ease; }
+
+    /* Space-Time Fabric Background */
     .spacetime-fabric {
       position: fixed; top: 0; left: 0; width: 100vw; height: 100vh; z-index: -2;
-      background-image:
-        linear-gradient(rgba(255,255,255,0.03) 1px, transparent 1px),
-        linear-gradient(90deg, rgba(255,255,255,0.03) 1px, transparent 1px);
-      background-size: 50px 50px;
-      perspective: 1000px;
+      background-image: linear-gradient(rgba(255,255,255,0.03) 1px, transparent 1px), linear-gradient(90deg, rgba(255,255,255,0.03) 1px, transparent 1px);
+      background-size: 50px 50px; perspective: 1000px;
       transform: rotateX(60deg) scale(2.5) translateY(-20%);
       animation: spaceWarp 30s linear infinite;
     }
-    @keyframes spaceWarp {
-      0% { background-position: 0 0; }
-      100% { background-position: 0 500px; }
-    }
+    @keyframes spaceWarp { 0% { background-position: 0 0; } 100% { background-position: 0 500px; } }
 
-    /* Black Hole Effect */
+    /* Black Hole Animation */
     .black-hole {
-      position: absolute;
-      border-radius: 50%;
-      background: #000;
-      box-shadow: 
-        0 0 20px 5px var(--theme-600), 
-        0 0 40px 15px var(--theme-500), 
-        0 0 60px 20px var(--theme-400), 
-        inset 0 0 20px 10px #000;
+      position: absolute; border-radius: 50%; background: #000;
+      box-shadow: 0 0 20px 5px var(--theme-600), 0 0 40px 15px var(--theme-500), 0 0 60px 20px var(--theme-400), inset 0 0 20px 10px #000;
       animation: pulseHole 4s ease-in-out infinite alternate;
     }
     .black-hole::after {
-      content: '';
-      position: absolute;
-      top: -10px; left: -10px; right: -10px; bottom: -10px;
-      border-radius: 50%;
-      border: 2px solid transparent;
-      border-top-color: var(--theme-400);
-      border-bottom-color: var(--theme-500);
+      content: ''; position: absolute; top: -10px; left: -10px; right: -10px; bottom: -10px;
+      border-radius: 50%; border: 2px solid transparent; border-top-color: var(--theme-400); border-bottom-color: var(--theme-500);
       animation: spinHole 2s linear infinite;
     }
-    @keyframes pulseHole {
-      0% { transform: scale(1); }
-      100% { transform: scale(1.05); }
-    }
-    @keyframes spinHole {
-      100% { transform: rotate(360deg); }
-    }
+    @keyframes pulseHole { 0% { transform: scale(1); } 100% { transform: scale(1.05); } }
+    @keyframes spinHole { 100% { transform: rotate(360deg); } }
+
+    /* Theme Specific Animations */
+    .theme-flicker { animation: eerieFlicker 5s infinite; }
+    @keyframes eerieFlicker { 0%, 100% { opacity: 1; } 50% { opacity: 0.8; } 52% { opacity: 0.4; } 54% { opacity: 0.9; } }
+    
+    .theme-eclipse { background: radial-gradient(circle at 50% 10%, #000 10%, #0f172a 60%); }
+
+    /* Enhanced Hover Zoom */
+    .img-zoom-container { overflow: hidden; }
+    .img-zoom { transition: transform 0.8s cubic-bezier(0.25, 0.46, 0.45, 0.94); }
+    .group:hover .img-zoom { transform: scale(1.15); }
+
+    /* Hide scrollbar for carousels */
+    .no-scrollbar::-webkit-scrollbar { display: none; }
+    .no-scrollbar { -ms-overflow-style: none; scrollbar-width: none; }
   </style>
 </head>
-<body class="bg-slate-950 text-slate-100 font-sans min-h-screen flex flex-col relative overflow-x-hidden">
+<body id="main-body" class="bg-slate-950 text-slate-100 font-sans min-h-screen flex flex-col relative overflow-x-hidden">
 
-  <!-- Visual Effects -->
-  <canvas id="stars-canvas" class="fixed inset-0 z-[-3] hidden w-full h-full"></canvas>
-  <div id="fabric-effect" class="spacetime-fabric hidden"></div>
+  <canvas id="stars-canvas" class="fixed inset-0 z-[-3] hidden w-full h-full pointer-events-none"></canvas>
+  <div id="fabric-effect" class="spacetime-fabric hidden pointer-events-none"></div>
 
-  <!-- Navigation -->
-  <nav id="main-nav" class="border-b border-slate-800 bg-slate-900/50 backdrop-blur-md sticky top-0 z-50">
-    <div class="max-w-6xl mx-auto px-6 h-20 flex items-center justify-between">
+  <nav id="main-nav" class="border-b border-slate-800 bg-slate-900/50 backdrop-blur-md sticky top-0 z-50 transition-colors duration-500">
+    <div class="max-w-7xl mx-auto px-6 h-20 flex items-center justify-between">
       <div class="flex items-center gap-3 cursor-pointer" id="nav-logo">
-        <div class="p-2 bg-blue-600 rounded-xl shadow-lg shadow-blue-500/20">
-          <i class="fa-solid fa-satellite-dish text-white text-xl"></i>
-        </div>
+        <div class="p-2 bg-theme-600 rounded-xl shadow-lg shadow-theme-500/20 transition-colors"><i class="fa-solid fa-satellite-dish text-white text-xl"></i></div>
         <div>
-          <h1 class="text-xl font-bold tracking-tight flex items-center gap-2">
-            CosmosCatalog
+          <h1 class="text-xl font-bold tracking-tight flex items-center gap-2">CosmosCatalog 
             <span id="site-status-badge" class="px-2 py-0.5 rounded-full text-[10px] uppercase tracking-widest font-bold border border-green-500/50 text-green-400 bg-green-500/10">Active</span>
+            <span id="live-mode-badge" class="hidden px-2 py-0.5 rounded-full text-[10px] uppercase tracking-widest font-bold border border-theme-500/50 text-theme-400 bg-theme-500/10 animate-pulse"><i class="fa-solid fa-satellite mr-1"></i>Live Universe</span>
           </h1>
-          <p class="text-[10px] text-blue-400 font-mono uppercase tracking-widest">Database v1.0</p>
+          <p class="text-[10px] text-theme-400 font-mono uppercase tracking-widest transition-colors">Database v3.0 Pro</p>
         </div>
       </div>
-
-      <button id="nav-btn" class="flex items-center gap-2 px-4 py-2 rounded-full text-sm font-medium transition-all bg-blue-600/10 text-blue-400 hover:bg-blue-600/20">
-        <i id="nav-icon" class="fa-solid fa-lock"></i>
-        <span id="nav-text">Admin Panel</span>
-      </button>
+      <div class="flex items-center gap-4">
+        <div class="hidden md:flex relative text-slate-400 focus-within:text-theme-400">
+          <i class="fa-solid fa-search absolute left-3 top-1/2 transform -translate-y-1/2 text-sm"></i>
+          <input type="text" id="global-search" placeholder="Search catalog..." class="bg-slate-950/50 border border-slate-800 rounded-full pl-9 pr-4 py-1.5 text-sm focus:border-theme-500 outline-none w-48 focus:w-64 transition-all">
+        </div>
+        <button id="nav-btn" class="flex items-center gap-2 px-4 py-2 rounded-full text-sm font-medium transition-all bg-theme-600/10 text-theme-400 hover:bg-theme-600/20">
+          <i id="nav-icon" class="fa-solid fa-lock"></i> <span id="nav-text">Admin</span>
+        </button>
+      </div>
     </div>
   </nav>
 
-  <!-- Notification Toast -->
   <div id="toast" class="fixed bottom-4 right-4 bg-slate-800 text-white px-6 py-3 rounded-xl shadow-2xl transform transition-transform translate-y-20 opacity-0 z-50 flex items-center gap-3">
-    <i id="toast-icon" class="fa-solid fa-circle-info"></i>
-    <span id="toast-msg">Message</span>
+    <i id="toast-icon" class="fa-solid fa-circle-info"></i><span id="toast-msg">Message</span>
   </div>
 
-  <main class="max-w-6xl mx-auto px-6 py-10 flex-grow w-full">
+  <main class="max-w-7xl mx-auto px-6 py-10 flex-grow w-full">
     
-    <!-- VIEW: CATALOG -->
+    <!-- CATALOG VIEW -->
     <div id="view-catalog" class="space-y-12">
-      <div class="max-w-2xl">
-        <h2 class="text-4xl font-bold mb-4">Deep Space Exploration</h2>
-        <p class="text-slate-400 text-lg">A crowd-sourced database of astronomical observations and high-resolution imagery.</p>
-      </div>
+      
+      <!-- Hero Banner -->
+      <div id="hero-banner-container" class="hidden transition-all duration-700 opacity-0 transform translate-y-4"></div>
 
-      <div id="catalog-loading" class="flex flex-col items-center justify-center py-32 text-slate-500">
-        <i class="fa-solid fa-circle-notch fa-spin text-4xl mb-4"></i>
-        <p>Establishing connection to orbital servers...</p>
-      </div>
-
-      <div id="catalog-empty" class="hidden bg-slate-900/30 border border-slate-800 rounded-3xl p-16 text-center">
-        <div class="w-20 h-20 bg-slate-800 rounded-full flex items-center justify-center mx-auto mb-6">
-          <i class="fa-regular fa-image text-3xl text-slate-600"></i>
+      <!-- Discovery & Filtering Bar -->
+      <div class="flex flex-col lg:flex-row justify-between items-start lg:items-center gap-4 bg-slate-900/50 p-4 rounded-2xl border border-slate-800">
+        <div class="flex overflow-x-auto no-scrollbar gap-2 w-full lg:w-auto pb-2 lg:pb-0" id="category-filters">
+          <button class="cat-filter active px-4 py-1.5 rounded-full text-sm font-medium bg-theme-600 text-white transition-colors" data-cat="all">All Objects</button>
+          <button class="cat-filter px-4 py-1.5 rounded-full text-sm font-medium bg-slate-800 text-slate-400 hover:bg-slate-700 transition-colors" data-cat="Galaxy">Galaxies</button>
+          <button class="cat-filter px-4 py-1.5 rounded-full text-sm font-medium bg-slate-800 text-slate-400 hover:bg-slate-700 transition-colors" data-cat="Nebula">Nebulae</button>
+          <button class="cat-filter px-4 py-1.5 rounded-full text-sm font-medium bg-slate-800 text-slate-400 hover:bg-slate-700 transition-colors" data-cat="Planet">Planets</button>
+          <button class="cat-filter px-4 py-1.5 rounded-full text-sm font-medium bg-slate-800 text-slate-400 hover:bg-slate-700 transition-colors" data-cat="Black Hole">Black Holes</button>
         </div>
-        <h3 class="text-xl font-semibold mb-2">The catalog is empty</h3>
-        <p class="text-slate-500 mb-8">Go to the Admin Panel to upload your first discovery.</p>
+        
+        <div class="flex items-center gap-3 bg-slate-950 border border-slate-800 rounded-xl px-4 py-2 w-full lg:w-auto">
+          <i class="fa-solid fa-sort text-slate-500"></i>
+          <select id="public-sort" class="bg-transparent text-sm text-slate-300 outline-none cursor-pointer w-full">
+            <option value="newest">Newest Discoveries</option>
+            <option value="popular">Most Viewed</option>
+            <option value="az">Alphabetical (A-Z)</option>
+          </select>
+          <button class="ml-2 text-slate-500 hover:text-theme-400 transition-colors" title="Toggle Grid/List"><i class="fa-solid fa-list"></i></button>
+        </div>
       </div>
 
-      <div id="catalog-grid" class="hidden grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-8">
-        <!-- Items injected via JS -->
-      </div>
+      <div id="catalog-loading" class="flex flex-col items-center justify-center py-32 text-slate-500"><i class="fa-solid fa-circle-notch fa-spin text-4xl mb-4 text-theme-500"></i><p>Establishing deep-space connection...</p></div>
+      <div id="catalog-empty" class="hidden bg-slate-900/30 border border-slate-800 rounded-3xl p-16 text-center"><i class="fa-regular fa-image text-3xl text-slate-600 mb-6 block"></i><h3 class="text-xl font-semibold mb-2">The catalog is empty</h3><p class="text-slate-500">Awaiting first light imagery.</p></div>
+      
+      <!-- Main Grid -->
+      <div id="catalog-grid" class="hidden grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4 gap-6"></div>
     </div>
 
-    <!-- VIEW: ARCHIVED ("FORGOTTEN") -->
+    <!-- ARCHIVE VIEW -->
     <div id="view-archive" class="hidden space-y-12 animate-in fade-in">
       <div class="max-w-2xl">
-        <div class="inline-block px-3 py-1 bg-purple-500/10 border border-purple-500/30 rounded-full text-purple-400 text-xs font-bold tracking-widest uppercase mb-4">
-          Classified Records
-        </div>
+        <div class="inline-block px-3 py-1 bg-purple-500/10 border border-purple-500/30 rounded-full text-purple-400 text-xs font-bold tracking-widest uppercase mb-4">Classified Records</div>
         <h2 class="text-4xl font-bold mb-4 text-purple-100">The Forgotten Archives</h2>
-        <p class="text-slate-400 text-lg">Observations that have been redacted or archived from the public catalog.</p>
+        <p class="text-slate-400 text-lg">Observations redacted from the public catalog due to anomalies or classification protocols.</p>
       </div>
-
-      <div id="archive-empty" class="hidden bg-slate-900/30 border border-slate-800 rounded-3xl p-16 text-center">
-        <i class="fa-solid fa-box-open text-4xl text-slate-700 mb-4"></i>
-        <p class="text-slate-500">No archived records found.</p>
-      </div>
-
-      <div id="archive-grid" class="hidden grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-8 opacity-80 hover:opacity-100 transition-opacity">
-        <!-- Items injected via JS -->
-      </div>
+      <div id="archive-empty" class="hidden bg-slate-900/30 border border-slate-800 rounded-3xl p-16 text-center"><i class="fa-solid fa-box-open text-4xl text-slate-700 mb-4 block"></i><p class="text-slate-500">No archived records found.</p></div>
+      <div id="archive-grid" class="hidden grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6 opacity-80 hover:opacity-100 transition-opacity"></div>
     </div>
 
-    <!-- VIEW: ADMIN LOGIN -->
-    <div id="view-admin-login" class="hidden max-w-4xl mx-auto animate-in fade-in">
-      <div class="max-w-md mx-auto bg-slate-900 border border-slate-800 p-8 rounded-3xl text-center shadow-2xl">
-        <div class="w-16 h-16 bg-blue-600/10 rounded-full flex items-center justify-center mx-auto mb-6">
-          <i class="fa-solid fa-shield-halved text-blue-500 text-2xl"></i>
-        </div>
+    <!-- ADMIN LOGIN -->
+    <div id="view-admin-login" class="hidden max-w-4xl mx-auto animate-in fade-in pt-20">
+      <div class="max-w-md mx-auto bg-slate-900 border border-slate-800 p-8 rounded-3xl text-center shadow-2xl relative overflow-hidden">
+        <div class="absolute top-0 left-0 w-full h-1 bg-gradient-to-r from-theme-400 to-theme-600"></div>
+        <div class="w-16 h-16 bg-theme-600/10 rounded-full flex items-center justify-center mx-auto mb-6"><i class="fa-solid fa-shield-halved text-theme-500 text-2xl"></i></div>
         <h2 class="text-2xl font-bold mb-2">System Authentication</h2>
-        <p class="text-slate-400 mb-8 text-sm">Enter the access PIN to modify the celestial database or access protocols.</p>
-        
+        <p class="text-slate-400 mb-8 text-sm">Enter the access PIN or protocol.</p>
         <form id="login-form" class="space-y-4">
-          <input 
-            type="password" 
-            id="pin-input"
-            placeholder="Enter PIN"
-            class="w-full bg-slate-950 border border-slate-800 rounded-xl px-4 py-3 text-center text-xl tracking-[1em] focus:border-blue-500 focus:ring-1 focus:ring-blue-500 outline-none transition-all"
-          >
+          <input type="password" id="pin-input" placeholder="Enter PIN" class="w-full bg-slate-950 border border-slate-800 rounded-xl px-4 py-3 text-center text-xl tracking-[1em] focus:border-theme-500 focus:ring-1 focus:ring-theme-500 outline-none transition-all">
           <p id="login-error" class="text-red-400 text-sm hidden">Incorrect PIN or Protocol.</p>
-          <button type="submit" class="w-full bg-blue-600 hover:bg-blue-500 text-white font-bold py-3 rounded-xl transition-all">
-            Verify Access
-          </button>
+          <button type="submit" class="w-full bg-theme-600 hover:bg-theme-500 text-white font-bold py-3 rounded-xl transition-all">Verify Access</button>
         </form>
       </div>
     </div>
 
-    <!-- VIEW: ADMIN PANEL -->
-    <div id="view-admin-panel" class="hidden max-w-5xl mx-auto space-y-8 animate-in fade-in">
+    <!-- ADMIN PANEL -->
+    <div id="view-admin-panel" class="hidden max-w-7xl mx-auto space-y-8 animate-in fade-in">
       
-      <!-- Admin Dashboard Stats -->
-      <div class="grid grid-cols-1 md:grid-cols-3 gap-6">
-        <div class="bg-slate-900 border border-slate-800 p-6 rounded-3xl flex items-center justify-between">
-          <div>
-            <p class="text-sm text-slate-400 font-medium">Active Entries</p>
-            <h3 id="stat-active" class="text-3xl font-bold text-white mt-1">0</h3>
-          </div>
-          <div class="w-12 h-12 bg-blue-500/10 rounded-2xl flex items-center justify-center text-blue-500">
-            <i class="fa-solid fa-satellite"></i>
-          </div>
-        </div>
-        <div class="bg-slate-900 border border-slate-800 p-6 rounded-3xl flex items-center justify-between">
-          <div>
-            <p class="text-sm text-slate-400 font-medium">Archived Entries</p>
-            <h3 id="stat-archived" class="text-3xl font-bold text-slate-300 mt-1">0</h3>
-          </div>
-          <div class="w-12 h-12 bg-purple-500/10 rounded-2xl flex items-center justify-center text-purple-400">
-            <i class="fa-solid fa-box-archive"></i>
-          </div>
-        </div>
-        <div class="bg-slate-900 border border-slate-800 p-6 rounded-3xl flex items-center justify-between">
-          <div>
-            <p class="text-sm text-slate-400 font-medium">System Status</p>
-            <h3 id="stat-status" class="text-lg font-bold text-green-400 mt-1">Optimal</h3>
-          </div>
-          <div class="w-12 h-12 bg-slate-800 rounded-2xl flex items-center justify-center text-slate-400">
-            <i class="fa-solid fa-server"></i>
-          </div>
-        </div>
+      <!-- Advanced Analytics Stats -->
+      <div class="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-5 gap-4">
+        <div class="bg-slate-900 border border-slate-800 p-5 rounded-2xl flex justify-between items-center relative overflow-hidden group"><div class="absolute inset-0 bg-theme-600/5 translate-y-full group-hover:translate-y-0 transition-transform"></div><div class="relative z-10"><p class="text-[10px] text-slate-400 uppercase tracking-widest font-bold">Sys Status</p><h3 id="stat-status" class="text-lg font-bold mt-1 text-green-400">Optimal</h3></div><div class="w-10 h-10 bg-green-500/10 rounded-xl flex items-center justify-center text-green-400 relative z-10"><i class="fa-solid fa-server"></i></div></div>
+        <div class="bg-slate-900 border border-slate-800 p-5 rounded-2xl flex justify-between items-center relative overflow-hidden group"><div class="absolute inset-0 bg-theme-600/5 translate-y-full group-hover:translate-y-0 transition-transform"></div><div class="relative z-10"><p class="text-[10px] text-slate-400 uppercase tracking-widest font-bold">Total Views</p><h3 id="stat-views" class="text-2xl font-bold mt-1 text-theme-400">0</h3></div><div class="w-10 h-10 bg-theme-500/10 rounded-xl flex items-center justify-center text-theme-500 relative z-10"><i class="fa-regular fa-eye"></i></div></div>
+        <div class="bg-slate-900 border border-slate-800 p-5 rounded-2xl flex justify-between items-center relative overflow-hidden group"><div class="absolute inset-0 bg-theme-600/5 translate-y-full group-hover:translate-y-0 transition-transform"></div><div class="relative z-10"><p class="text-[10px] text-slate-400 uppercase tracking-widest font-bold">Active Entries</p><h3 id="stat-active" class="text-2xl font-bold mt-1 text-slate-200">0</h3></div><div class="w-10 h-10 bg-slate-800 rounded-xl flex items-center justify-center text-slate-300 relative z-10"><i class="fa-solid fa-satellite"></i></div></div>
+        <div class="bg-slate-900 border border-slate-800 p-5 rounded-2xl flex justify-between items-center relative overflow-hidden group"><div class="absolute inset-0 bg-theme-600/5 translate-y-full group-hover:translate-y-0 transition-transform"></div><div class="relative z-10"><p class="text-[10px] text-slate-400 uppercase tracking-widest font-bold">DB Storage</p><h3 id="stat-storage" class="text-2xl font-bold text-emerald-400 mt-1">0 MB</h3></div><div class="w-10 h-10 bg-emerald-500/10 rounded-xl flex items-center justify-center text-emerald-400 relative z-10"><i class="fa-solid fa-database"></i></div></div>
+        <div class="bg-slate-900 border border-slate-800 p-5 rounded-2xl flex justify-between items-center relative overflow-hidden group"><div class="absolute inset-0 bg-theme-600/5 translate-y-full group-hover:translate-y-0 transition-transform"></div><div class="relative z-10"><p class="text-[10px] text-slate-400 uppercase tracking-widest font-bold">Archived</p><h3 id="stat-archived" class="text-2xl font-bold text-purple-400 mt-1">0</h3></div><div class="w-10 h-10 bg-purple-500/10 rounded-xl flex items-center justify-center text-purple-400 relative z-10"><i class="fa-solid fa-box-archive"></i></div></div>
       </div>
 
-      <div class="grid grid-cols-1 lg:grid-cols-5 gap-10">
+      <div class="grid grid-cols-1 lg:grid-cols-12 gap-8">
         
-        <!-- Upload/Edit Form -->
-        <div class="lg:col-span-2 bg-slate-900 border border-slate-800 p-8 rounded-3xl h-fit sticky top-24 z-10">
-          <h3 id="form-header" class="text-xl font-bold mb-6 flex items-center gap-2">
-            <i class="fa-solid fa-plus text-blue-500"></i> Upload Observation
-          </h3>
-          <form id="upload-form" class="space-y-6">
-            <div>
-              <label class="block text-xs font-bold text-slate-500 uppercase tracking-widest mb-2">Object Name</label>
-              <input type="text" id="upload-title" required class="w-full bg-slate-950 border border-slate-800 rounded-xl px-4 py-3 focus:border-blue-500 outline-none transition-all" placeholder="e.g. Orion Nebula">
-            </div>
-
-            <!-- NEW FIELDS: Category and Distance -->
-            <div class="grid grid-cols-1 sm:grid-cols-2 gap-4">
-              <div>
-                <label class="block text-xs font-bold text-slate-500 uppercase tracking-widest mb-2">Category</label>
-                <select id="upload-category" class="w-full bg-slate-950 border border-slate-800 rounded-xl px-4 py-3 focus:border-blue-500 outline-none transition-all text-slate-200">
-                  <option value="Galaxy">Galaxy</option>
-                  <option value="Nebula">Nebula</option>
-                  <option value="Star System">Star System</option>
-                  <option value="Planet">Planet</option>
-                  <option value="Black Hole">Black Hole</option>
-                  <option value="Other">Other</option>
-                </select>
-              </div>
-              <div>
-                <label class="block text-xs font-bold text-slate-500 uppercase tracking-widest mb-2">Distance</label>
-                <input type="text" id="upload-distance" class="w-full bg-slate-950 border border-slate-800 rounded-xl px-4 py-3 focus:border-blue-500 outline-none transition-all" placeholder="e.g. 2.5 million ly">
-              </div>
-            </div>
-            
-            <div>
-              <label class="block text-xs font-bold text-slate-500 uppercase tracking-widest mb-2">Detailed Notes</label>
-              <textarea id="upload-desc" rows="4" class="w-full bg-slate-950 border border-slate-800 rounded-xl px-4 py-3 focus:border-blue-500 outline-none transition-all resize-none" placeholder="Observation details..."></textarea>
-            </div>
-            
-            <div>
-              <label class="block text-xs font-bold text-slate-500 uppercase tracking-widest mb-2">Image Capture</label>
-              
-              <div id="image-preview-container" class="hidden relative rounded-xl overflow-hidden border border-slate-800 aspect-video">
-                <img id="image-preview" src="" class="w-full h-full object-cover">
-                <button type="button" id="remove-image-btn" class="absolute top-2 right-2 p-2 bg-black/60 rounded-lg hover:bg-red-500 transition-colors text-white">
-                  <i class="fa-solid fa-trash"></i>
-                </button>
-              </div>
-
-              <label id="image-upload-label" class="flex flex-col items-center justify-center w-full aspect-video border-2 border-slate-800 border-dashed rounded-xl cursor-pointer hover:bg-slate-800/30 hover:border-blue-500/50 transition-all">
-                <i class="fa-regular fa-image text-3xl text-slate-600 mb-2"></i>
-                <span class="text-sm text-slate-400">Select Image</span>
-                <input type="file" id="image-input" accept="image/*" class="hidden">
-              </label>
-            </div>
-            
-            <div class="flex gap-3">
-              <button type="submit" id="submit-btn" class="flex-grow bg-blue-600 hover:bg-blue-500 text-white font-bold py-4 rounded-xl transition-all flex items-center justify-center gap-2 shadow-lg shadow-blue-600/20 disabled:opacity-50 disabled:cursor-not-allowed">
-                Publish <i class="fa-solid fa-chevron-right"></i>
-              </button>
-              <button type="button" id="cancel-edit-btn" class="hidden px-6 bg-slate-800 hover:bg-slate-700 text-white font-bold rounded-xl transition-all">
-                Cancel
-              </button>
-            </div>
-          </form>
+        <!-- Sidebar Navigation -->
+        <div class="lg:col-span-3 space-y-2 sticky top-24 h-fit">
+          <button class="admin-tab-btn active w-full text-left px-4 py-3 rounded-xl text-sm font-medium bg-theme-600 text-white transition-all flex justify-between items-center" data-target="admin-tab-entry"><span><i class="fa-solid fa-plus w-5"></i> Data Entry</span></button>
+          <button class="admin-tab-btn w-full text-left px-4 py-3 rounded-xl text-sm font-medium bg-slate-900 text-slate-400 hover:text-white hover:bg-slate-800 transition-all flex justify-between items-center" data-target="admin-tab-directory"><span><i class="fa-solid fa-folder-tree w-5"></i> Directory</span></button>
+          <button class="admin-tab-btn w-full text-left px-4 py-3 rounded-xl text-sm font-medium bg-slate-900 text-slate-400 hover:text-white hover:bg-slate-800 transition-all flex justify-between items-center" data-target="admin-tab-mass"><span><i class="fa-solid fa-layer-group w-5"></i> Mass Upload</span> <span class="bg-theme-500/20 text-theme-400 text-[9px] px-2 py-0.5 rounded">BETA</span></button>
+          <button class="admin-tab-btn w-full text-left px-4 py-3 rounded-xl text-sm font-medium bg-slate-900 text-slate-400 hover:text-white hover:bg-slate-800 transition-all flex justify-between items-center" data-target="admin-tab-audit"><span><i class="fa-solid fa-clipboard-list w-5"></i> Audit Logs</span></button>
+          <div class="h-px bg-slate-800 my-4"></div>
+          <button class="admin-tab-btn w-full text-left px-4 py-3 rounded-xl text-sm font-medium bg-slate-900 text-slate-400 hover:text-white hover:bg-slate-800 transition-all flex justify-between items-center" data-target="admin-tab-settings"><span><i class="fa-solid fa-sliders w-5"></i> System Config</span></button>
         </div>
 
-        <!-- Management List & Config -->
-        <div class="lg:col-span-3 space-y-8">
+        <!-- Main Content Area -->
+        <div class="lg:col-span-9">
           
-          <div class="bg-slate-900 border border-slate-800 p-8 rounded-3xl">
-            <!-- NEW FIELD: Search Bar -->
-            <div class="flex flex-col sm:flex-row justify-between items-start sm:items-center mb-6 gap-4">
-              <h3 class="text-xl font-bold">Database Directory</h3>
-              <div class="relative w-full sm:w-auto">
-                <i class="fa-solid fa-search absolute left-3 top-1/2 transform -translate-y-1/2 text-slate-500 text-sm"></i>
-                <input type="text" id="admin-search" placeholder="Search records..." class="w-full sm:w-64 bg-slate-950 border border-slate-800 rounded-lg pl-9 pr-4 py-2 text-sm focus:border-blue-500 outline-none transition-all">
-              </div>
-            </div>
-            <div id="admin-list" class="space-y-3 max-h-[500px] overflow-y-auto pr-2">
-               <!-- Items injected via JS -->
-            </div>
-          </div>
-
-          <!-- Site Settings Configuration -->
-          <div class="bg-slate-900 border border-slate-800 p-8 rounded-3xl">
-            <div class="flex flex-col sm:flex-row items-start sm:items-center justify-between mb-6 border-b border-slate-800 pb-4 gap-4">
-              <h3 class="text-xl font-bold flex items-center gap-2">
-                <i class="fa-solid fa-sliders text-blue-500"></i> Config
-              </h3>
-              <div class="flex gap-2">
-                <button id="tab-btn-visuals" class="px-4 py-2 text-sm font-medium rounded-lg bg-blue-600 text-white transition-all">Visuals</button>
-                <button id="tab-btn-security" class="px-4 py-2 text-sm font-medium rounded-lg bg-slate-800 text-slate-400 hover:text-white transition-all">Security</button>
-                <button id="tab-btn-dev" class="px-4 py-2 text-sm font-medium rounded-lg bg-slate-800 text-slate-400 hover:text-white transition-all">Developer</button>
-              </div>
-            </div>
-
-            <!-- Visuals Tab -->
-            <div id="tab-visuals" class="space-y-4 animate-in fade-in">
-              <h4 class="font-semibold text-slate-400 uppercase tracking-widest text-xs">Visual Theme</h4>
-              <div>
-                <label class="block text-sm mb-2 text-slate-300">Color Palette</label>
-                <select id="theme-select" class="w-full bg-slate-950 border border-slate-800 rounded-xl px-4 py-3 focus:border-blue-500 outline-none transition-all">
-                  <option value="blue">Cosmic Blue</option>
-                  <option value="purple">Nebula Purple</option>
-                  <option value="emerald">Aurora Emerald</option>
-                  <option value="rose">Supernova Rose</option>
-                  <option value="amber">Solar Amber</option>
-                </select>
-              </div>
-              <div class="flex items-center gap-3 mt-4">
-                <input type="checkbox" id="stars-toggle" class="w-5 h-5 rounded border-slate-800 bg-slate-950 text-blue-500 focus:ring-0">
-                <label class="text-sm text-slate-300">Enable Starry Background</label>
-              </div>
-              <div class="flex items-center gap-3">
-                <input type="checkbox" id="fabric-toggle" class="w-5 h-5 rounded border-slate-800 bg-slate-950 text-blue-500 focus:ring-0">
-                <label class="text-sm text-slate-300">Enable Space-Time Fabric & Black Holes</label>
-              </div>
-              <button id="save-visuals-btn" class="mt-4 bg-slate-800 hover:bg-slate-700 text-white font-medium py-2 px-4 rounded-lg transition-all text-sm w-full">
-                Apply Visuals
-              </button>
-            </div>
-
-            <!-- Security Tab -->
-            <div id="tab-security" class="space-y-4 hidden animate-in fade-in">
-              <h4 class="font-semibold text-red-400 uppercase tracking-widest text-xs">Site Modes & Security</h4>
+          <!-- Tab 1: Data Entry -->
+          <div id="admin-tab-entry" class="admin-panel-section animate-in fade-in bg-slate-900 border border-slate-800 p-8 rounded-3xl">
+            <h3 id="form-header" class="text-xl font-bold mb-6 flex items-center gap-2"><i class="fa-solid fa-satellite text-theme-500"></i> Single Entry Terminal</h3>
+            <form id="upload-form" class="space-y-6">
               
-              <div class="bg-slate-950 p-4 rounded-xl border border-yellow-500/30 mb-4">
-                <p class="text-sm text-slate-400 mb-4">Toggle Maintenance Mode. This displays a yellow status indicator letting viewers know updates are happening.</p>
-                <button id="toggle-maintenance-btn" class="bg-yellow-600 hover:bg-yellow-500 text-white font-medium py-2 px-6 rounded-lg transition-all text-sm whitespace-nowrap">
-                  Toggle Maintenance Mode
-                </button>
-              </div>
+              <div class="grid grid-cols-1 md:grid-cols-2 gap-6">
+                <!-- Image Section -->
+                <div class="space-y-4">
+                  <label class="block text-xs font-bold text-slate-500 uppercase tracking-widest">Image Asset</label>
+                  <div id="image-preview-container" class="hidden relative rounded-xl overflow-hidden border border-slate-800 aspect-video group">
+                    <img id="image-preview" src="" class="w-full h-full object-cover">
+                    <div class="absolute inset-0 bg-black/40 opacity-0 group-hover:opacity-100 transition-opacity flex items-center justify-center">
+                      <button type="button" id="extract-exif-btn" class="bg-theme-600 hover:bg-theme-500 text-white text-xs px-3 py-1.5 rounded-lg shadow-lg"><i class="fa-solid fa-wand-magic-sparkles mr-1"></i> Extract Metadata</button>
+                    </div>
+                    <button type="button" id="remove-image-btn" class="absolute top-2 right-2 w-8 h-8 flex items-center justify-center bg-black/60 rounded-full hover:bg-red-500 text-white transition-colors"><i class="fa-solid fa-trash text-xs"></i></button>
+                  </div>
+                  <label id="image-upload-label" class="flex flex-col items-center justify-center w-full aspect-video border-2 border-slate-700 border-dashed rounded-xl cursor-pointer hover:bg-slate-800 hover:border-theme-500 transition-colors bg-slate-950/50">
+                    <div class="w-12 h-12 bg-slate-800 rounded-full flex items-center justify-center mb-3 text-slate-400 group-hover:text-theme-400 group-hover:bg-theme-500/10 transition-colors"><i class="fa-solid fa-cloud-arrow-up text-xl"></i></div>
+                    <span class="text-sm font-medium text-slate-300">Browse Files</span>
+                    <p class="text-[10px] text-slate-500 mt-1">JPEG, PNG, WEBP (Auto-compressed)</p>
+                    <input type="file" id="image-input" accept="image/*" class="hidden">
+                  </label>
+                </div>
 
-              <div class="bg-slate-950 p-4 rounded-xl border border-red-500/30 mb-4">
-                <p class="text-sm text-slate-400 mb-4">Enter the "Apollyon" protocol code to toggle full site lockdown.</p>
-                <div class="flex flex-col sm:flex-row gap-4">
-                  <input type="password" id="lockdown-pin" placeholder="Protocol Code" class="flex-grow bg-slate-900 border border-slate-800 rounded-lg px-4 py-2 focus:border-red-500 outline-none text-red-400 font-mono tracking-widest">
-                  <button id="toggle-lockdown-btn" class="bg-red-600 hover:bg-red-500 text-white font-medium py-2 px-6 rounded-lg transition-all text-sm whitespace-nowrap">
-                    Toggle Lockdown
-                  </button>
+                <!-- Basic Info -->
+                <div class="space-y-4">
+                  <h4 class="text-[10px] text-theme-400 uppercase tracking-widest font-bold border-b border-slate-800 pb-2">Classification</h4>
+                  <div><label class="block text-[10px] text-slate-500 uppercase tracking-widest mb-1">Designation / Name</label><input type="text" id="upload-title" required class="w-full bg-slate-950 border border-slate-800 rounded-lg px-3 py-2 text-sm focus:border-theme-500 outline-none transition-colors"></div>
+                  <div class="grid grid-cols-2 gap-3">
+                    <div><label class="block text-[10px] text-slate-500 uppercase tracking-widest mb-1">Object Type</label><select id="upload-category" class="w-full bg-slate-950 border border-slate-800 rounded-lg px-3 py-2 text-sm focus:border-theme-500 outline-none"><option>Galaxy</option><option>Nebula</option><option>Star Cluster</option><option>Planet</option><option>Black Hole</option><option>Other</option></select></div>
+                    <div><label class="block text-[10px] text-slate-500 uppercase tracking-widest mb-1">Class (M31, NGC)</label><input type="text" id="upload-classification" class="w-full bg-slate-950 border border-slate-800 rounded-lg px-3 py-2 text-sm focus:border-theme-500 outline-none" placeholder="Optional"></div>
+                  </div>
                 </div>
               </div>
 
-              <div>
-                <label class="block text-sm mb-2 text-slate-300">Lockdown Message</label>
-                <textarea id="lockdown-msg" rows="2" class="w-full bg-slate-950 border border-slate-800 rounded-xl px-4 py-3 focus:border-red-500 outline-none transition-all resize-none"></textarea>
+              <!-- Telemetry -->
+              <div class="bg-slate-950/50 p-5 rounded-2xl border border-slate-800/50 space-y-4">
+                <div class="flex justify-between items-center">
+                  <h4 class="text-[10px] text-emerald-400 uppercase tracking-widest font-bold">Technical Telemetry</h4>
+                  <span id="exif-status" class="text-[10px] text-slate-500 bg-slate-900 px-2 py-0.5 rounded-full hidden"><i class="fa-solid fa-check text-green-400 mr-1"></i> Auto-filled</span>
+                </div>
+                <div class="grid grid-cols-1 sm:grid-cols-3 gap-4">
+                  <div><label class="block text-[10px] text-slate-500 uppercase tracking-widest mb-1">Distance</label><input type="text" id="upload-distance" class="w-full bg-slate-900 border border-slate-800 rounded-lg px-3 py-2 text-sm focus:border-emerald-500 outline-none font-mono text-emerald-100" placeholder="e.g. 2.5M ly"></div>
+                  <div><label class="block text-[10px] text-slate-500 uppercase tracking-widest mb-1">RA / Dec (Coordinates)</label><input type="text" id="upload-radec" class="w-full bg-slate-900 border border-slate-800 rounded-lg px-3 py-2 text-sm focus:border-emerald-500 outline-none font-mono text-emerald-100" placeholder="00h 42m / +41° 16'"></div>
+                  <div><label class="block text-[10px] text-slate-500 uppercase tracking-widest mb-1">Equipment / Sensor</label><input type="text" id="upload-equipment" class="w-full bg-slate-900 border border-slate-800 rounded-lg px-3 py-2 text-sm focus:border-emerald-500 outline-none font-mono text-emerald-100" placeholder="e.g. JWST NIRCam"></div>
+                </div>
               </div>
-              <button id="save-lockdown-msg-btn" class="bg-slate-800 hover:bg-slate-700 text-white font-medium py-2 px-4 rounded-lg transition-all text-sm w-full">
-                Save Message
-              </button>
+
+              <div class="grid grid-cols-1 md:grid-cols-3 gap-6">
+                <div class="md:col-span-2"><label class="block text-[10px] text-slate-500 uppercase tracking-widest mb-1">Observation Notes</label><textarea id="upload-desc" rows="3" class="w-full bg-slate-950 border border-slate-800 rounded-xl px-4 py-3 text-sm focus:border-theme-500 outline-none resize-none" placeholder="Provide context, historical data, or processing notes..."></textarea></div>
+                <div class="flex flex-col justify-end gap-3">
+                  <div><label class="block text-[10px] text-slate-500 uppercase tracking-widest mb-1">Credit / Copyright</label><input type="text" id="upload-credit" class="w-full bg-slate-950 border border-slate-800 rounded-xl px-4 py-2 text-sm focus:border-theme-500 outline-none" placeholder="e.g. NASA, ESA"></div>
+                  <div class="flex gap-2">
+                    <button type="submit" id="submit-btn" class="flex-grow bg-theme-600 hover:bg-theme-500 text-white font-bold py-2.5 rounded-xl disabled:opacity-50 transition-colors shadow-lg shadow-theme-500/20">Publish</button>
+                    <button type="button" id="cancel-edit-btn" class="hidden px-4 bg-slate-800 hover:bg-slate-700 text-white font-bold rounded-xl transition-colors">Cancel</button>
+                  </div>
+                </div>
+              </div>
+            </form>
+          </div>
+
+          <!-- Tab 2: Directory -->
+          <div id="admin-tab-directory" class="admin-panel-section hidden animate-in fade-in bg-slate-900 border border-slate-800 p-8 rounded-3xl">
+            <div class="flex flex-col sm:flex-row justify-between items-start sm:items-center mb-6 gap-4">
+              <h3 class="text-xl font-bold">Record Directory</h3>
+              <div class="flex gap-2 w-full sm:w-auto">
+                <button class="bg-slate-800 hover:bg-slate-700 px-3 py-2 rounded-lg text-slate-300 text-sm" title="Check Broken Links"><i class="fa-solid fa-link-slash"></i></button>
+                <div class="relative flex-grow sm:flex-grow-0"><i class="fa-solid fa-search absolute left-3 top-1/2 transform -translate-y-1/2 text-slate-500 text-sm"></i><input type="text" id="admin-search" placeholder="Search ID or Name..." class="w-full sm:w-64 bg-slate-950 border border-slate-800 rounded-lg pl-9 pr-4 py-2 text-sm focus:border-theme-500 outline-none"></div>
+              </div>
+            </div>
+            <div id="admin-list" class="space-y-3 max-h-[600px] overflow-y-auto pr-2"></div>
+          </div>
+
+          <!-- Tab 3: Mass Upload (Mock/UI Only) -->
+          <div id="admin-tab-mass" class="admin-panel-section hidden animate-in fade-in bg-slate-900 border border-slate-800 p-8 rounded-3xl">
+            <h3 class="text-xl font-bold mb-2">Mass Ingestion Queue</h3>
+            <p class="text-slate-400 text-sm mb-6">Upload multiple assets simultaneously. Metadata will be extracted from EXIF tags where available.</p>
+            <div class="border-2 border-dashed border-slate-700 bg-slate-950/50 rounded-2xl p-12 text-center hover:border-theme-500 transition-colors cursor-pointer mb-6">
+              <i class="fa-solid fa-images text-4xl text-slate-600 mb-4"></i>
+              <p class="font-medium text-slate-300">Drag & Drop Image Directory</p>
+              <p class="text-xs text-slate-500 mt-2">or click to select files (Max 50 per batch)</p>
+            </div>
+            <div class="space-y-2 opacity-50 pointer-events-none">
+              <h4 class="text-xs font-bold uppercase tracking-widest text-slate-500 mb-4">Upload Queue (Example)</h4>
+              <div class="bg-slate-950 p-3 rounded-lg border border-slate-800 flex items-center justify-between"><div class="flex items-center gap-3"><i class="fa-solid fa-image text-theme-500"></i><span class="text-sm">andromeda_core_RAW.tif</span></div><span class="text-xs text-theme-400">Processing... 45%</span></div>
+              <div class="bg-slate-950 p-3 rounded-lg border border-slate-800 flex items-center justify-between"><div class="flex items-center gap-3"><i class="fa-solid fa-image text-slate-600"></i><span class="text-sm text-slate-500">crab_nebula_composite.png</span></div><span class="text-xs text-slate-600">Queued</span></div>
+            </div>
+          </div>
+
+          <!-- Tab 4: Audit Logs (Mock/UI Only) -->
+          <div id="admin-tab-audit" class="admin-panel-section hidden animate-in fade-in bg-slate-900 border border-slate-800 p-8 rounded-3xl">
+            <div class="flex justify-between items-center mb-6">
+              <h3 class="text-xl font-bold">System Audit Logs</h3>
+              <button class="text-xs bg-slate-800 px-3 py-1.5 rounded-lg text-slate-300"><i class="fa-solid fa-download mr-1"></i> Export CSV</button>
+            </div>
+            <div class="bg-slate-950 rounded-xl border border-slate-800 overflow-hidden">
+              <table class="w-full text-left text-sm">
+                <thead class="bg-slate-900/50 text-xs uppercase tracking-widest text-slate-500"><tr><th class="px-4 py-3">Timestamp</th><th class="px-4 py-3">Action</th><th class="px-4 py-3">User/Role</th><th class="px-4 py-3">Target ID</th></tr></thead>
+                <tbody class="divide-y divide-slate-800/50 text-slate-300">
+                  <tr><td class="px-4 py-3 font-mono text-xs">2026-04-02 14:32:11</td><td class="px-4 py-3 text-green-400"><i class="fa-solid fa-plus mr-1"></i> ENTRY_CREATE</td><td class="px-4 py-3">Admin (0x8F2)</td><td class="px-4 py-3 font-mono">itm_9a8b7c</td></tr>
+                  <tr><td class="px-4 py-3 font-mono text-xs">2026-04-02 10:15:00</td><td class="px-4 py-3 text-blue-400"><i class="fa-solid fa-pen mr-1"></i> ENTRY_UPDATE</td><td class="px-4 py-3">Editor (0x1B4)</td><td class="px-4 py-3 font-mono">itm_3f2a1b</td></tr>
+                  <tr><td class="px-4 py-3 font-mono text-xs">2026-04-01 22:01:45</td><td class="px-4 py-3 text-theme-500"><i class="fa-solid fa-palette mr-1"></i> THEME_CHANGE</td><td class="px-4 py-3">System (Auto)</td><td class="px-4 py-3 font-mono">global_config</td></tr>
+                  <tr><td class="px-4 py-3 font-mono text-xs">2026-03-28 09:44:12</td><td class="px-4 py-3 text-purple-400"><i class="fa-solid fa-box-archive mr-1"></i> ENTRY_ARCHIVE</td><td class="px-4 py-3">Admin (0x8F2)</td><td class="px-4 py-3 font-mono">itm_7c8d9e</td></tr>
+                </tbody>
+              </table>
+            </div>
+          </div>
+
+          <!-- Tab 5: Settings -->
+          <div id="admin-tab-settings" class="admin-panel-section hidden animate-in fade-in space-y-6">
+            <div class="bg-slate-900 border border-slate-800 p-8 rounded-3xl">
+              <h3 class="text-xl font-bold flex items-center gap-2 mb-6"><i class="fa-solid fa-palette text-theme-500"></i> Theme Engine & Visuals</h3>
+              
+              <!-- Live Universe Mode Toggle -->
+              <div class="mb-6 p-5 bg-gradient-to-r from-theme-900/30 to-slate-900 border border-theme-500/30 rounded-2xl relative overflow-hidden">
+                <i class="fa-solid fa-sparkles absolute -right-4 -top-4 text-6xl text-theme-500/10"></i>
+                <div class="flex items-center justify-between relative z-10">
+                  <div>
+                    <h4 class="font-bold text-white flex items-center gap-2"><i class="fa-solid fa-satellite text-theme-400"></i> Live Universe Mode</h4>
+                    <p class="text-xs text-slate-400 mt-1 max-w-md">Automatically overrides manual theme selection to align with real-world astronomical events, seasonal changes, and space history milestones.</p>
+                  </div>
+                  <label class="relative inline-flex items-center cursor-pointer">
+                    <input type="checkbox" id="live-mode-toggle" class="sr-only peer">
+                    <div class="w-11 h-6 bg-slate-700 peer-focus:outline-none rounded-full peer peer-checked:after:translate-x-full peer-checked:after:border-white after:content-[''] after:absolute after:top-[2px] after:left-[2px] after:bg-white after:border-gray-300 after:border after:rounded-full after:h-5 after:w-5 after:transition-all peer-checked:bg-theme-500"></div>
+                  </label>
+                </div>
+              </div>
+
+              <div class="grid grid-cols-1 md:grid-cols-2 gap-8">
+                <div>
+                  <label class="block text-sm text-slate-300 font-bold mb-3">Manual Theme Selection</label>
+                  <div class="space-y-2 max-h-60 overflow-y-auto pr-2 custom-scrollbar">
+                    <p class="text-[10px] uppercase tracking-widest text-slate-500 font-bold mb-2">Standard Formats</p>
+                    <label class="flex items-center gap-3 p-3 bg-slate-950 border border-slate-800 rounded-xl cursor-pointer hover:border-blue-500 transition-colors"><input type="radio" name="theme" value="blue" class="text-blue-500"><span class="flex-grow text-sm">Deep Space Blue</span><div class="w-4 h-4 rounded-full bg-blue-500"></div></label>
+                    <label class="flex items-center gap-3 p-3 bg-slate-950 border border-slate-800 rounded-xl cursor-pointer hover:border-emerald-500 transition-colors"><input type="radio" name="theme" value="emerald" class="text-emerald-500"><span class="flex-grow text-sm">Aurora Emerald</span><div class="w-4 h-4 rounded-full bg-emerald-500"></div></label>
+                    
+                    <p class="text-[10px] uppercase tracking-widest text-slate-500 font-bold mt-4 mb-2">Event & Seasonal Formats</p>
+                    <label class="flex items-center gap-3 p-3 bg-slate-950 border border-slate-800 rounded-xl cursor-pointer hover:border-red-500 transition-colors"><input type="radio" name="theme" value="cosmic-winter" class="text-red-500"><span class="flex-grow text-sm">Cosmic Winter <i class="fa-solid fa-snowflake text-[10px] text-slate-400 ml-1"></i></span><div class="flex gap-1"><div class="w-2 h-4 rounded-l-full bg-red-500"></div><div class="w-2 h-4 rounded-r-full bg-green-500"></div></div></label>
+                    <label class="flex items-center gap-3 p-3 bg-slate-950 border border-slate-800 rounded-xl cursor-pointer hover:border-orange-500 transition-colors"><input type="radio" name="theme" value="dark-void" class="text-orange-500"><span class="flex-grow text-sm">Dark Void (Halloween)</span><div class="w-4 h-4 rounded-full bg-orange-600"></div></label>
+                    <label class="flex items-center gap-3 p-3 bg-slate-950 border border-slate-800 rounded-xl cursor-pointer hover:border-cyan-500 transition-colors"><input type="radio" name="theme" value="fragile-blue-dot" class="text-cyan-500"><span class="flex-grow text-sm">Fragile Blue Dot</span><div class="w-4 h-4 rounded-full bg-cyan-600"></div></label>
+                    <label class="flex items-center gap-3 p-3 bg-slate-950 border border-slate-800 rounded-xl cursor-pointer hover:border-pink-500 transition-colors"><input type="radio" name="theme" value="cosmic-love" class="text-pink-500"><span class="flex-grow text-sm">Cosmic Love</span><div class="w-4 h-4 rounded-full bg-pink-500"></div></label>
+                    <label class="flex items-center gap-3 p-3 bg-slate-950 border border-slate-800 rounded-xl cursor-pointer hover:border-slate-300 transition-colors"><input type="radio" name="theme" value="meteor-storm" class="text-slate-300"><span class="flex-grow text-sm">Meteor Storm</span><div class="w-4 h-4 rounded-full bg-slate-400"></div></label>
+                  </div>
+                </div>
+                <div>
+                  <label class="block text-sm text-slate-300 font-bold mb-3">Particle Physics & Overlays</label>
+                  <div class="space-y-3">
+                    <label class="flex items-center justify-between p-3 bg-slate-950 border border-slate-800 rounded-xl cursor-pointer hover:border-slate-700">
+                      <span class="text-sm"><i class="fa-solid fa-stars mr-2 text-slate-400"></i> Dynamic Starfield</span>
+                      <input type="checkbox" id="stars-toggle" class="w-4 h-4 rounded bg-slate-900 text-theme-500">
+                    </label>
+                    <label class="flex items-center justify-between p-3 bg-slate-950 border border-slate-800 rounded-xl cursor-pointer hover:border-slate-700">
+                      <span class="text-sm"><i class="fa-solid fa-dharmachakra mr-2 text-slate-400"></i> Space-Time Distortion</span>
+                      <input type="checkbox" id="fabric-toggle" class="w-4 h-4 rounded bg-slate-900 text-theme-500">
+                    </label>
+                    <p class="text-[10px] text-slate-500 mt-2 italic">Note: Particle effects adapt automatically based on the active theme (e.g. Snow, Meteors, Orbiting Binaries).</p>
+                  </div>
+                </div>
+              </div>
+              <button id="save-visuals-btn" class="mt-6 bg-theme-600 hover:bg-theme-500 w-full py-3 rounded-xl font-bold shadow-lg shadow-theme-500/20 transition-colors">Deploy Configuration</button>
             </div>
 
-            <!-- Developer Tab -->
-            <div id="tab-dev" class="space-y-4 hidden animate-in fade-in">
-              <div class="bg-slate-950 p-4 rounded-xl border border-blue-500/30 mb-4">
-                <h4 class="font-semibold text-blue-400 uppercase tracking-widest text-xs mb-2"><i class="fa-solid fa-code"></i> Live Code Injection</h4>
-                <p class="text-xs text-slate-400">Push live CSS or JavaScript to the site without modifying the core GitHub files. Previous versions are backed up automatically. <br><span class="text-yellow-500 font-bold mt-1 inline-block">Emergency Safe Mode:</span> Access site with <code class="bg-slate-800 px-1 rounded text-white">?safe=1</code> in the URL to bypass crashes.</p>
+            <div class="grid grid-cols-1 md:grid-cols-2 gap-6">
+              <!-- Security -->
+              <div class="bg-slate-900 border border-slate-800 p-8 rounded-3xl">
+                <h3 class="text-xl font-bold flex items-center gap-2 mb-6"><i class="fa-solid fa-shield-halved text-red-500"></i> Protocol Controls</h3>
+                <div class="space-y-4">
+                  <div class="bg-slate-950 p-4 rounded-xl border border-yellow-500/30"><button id="toggle-maintenance-btn" class="bg-yellow-600 hover:bg-yellow-500 w-full py-2 rounded-lg text-sm font-bold shadow-lg shadow-yellow-600/20">Toggle Maintenance Mode</button></div>
+                  <div class="bg-slate-950 p-4 rounded-xl border border-red-500/30"><div class="flex gap-2"><input type="password" id="lockdown-pin" placeholder="Apollyon Protocol Code" class="flex-grow bg-slate-900 border border-slate-800 rounded-lg px-4 py-2"><button id="toggle-lockdown-btn" class="bg-red-600 hover:bg-red-500 px-4 rounded-lg text-sm font-bold">Lockdown</button></div></div>
+                  <textarea id="lockdown-msg" rows="2" class="w-full bg-slate-950 border border-slate-800 rounded-xl px-4 py-3 outline-none text-sm" placeholder="Lockdown/Maintenance Message..."></textarea>
+                </div>
               </div>
 
-              <div>
-                <label class="block text-sm mb-2 text-slate-300">Custom CSS (Styling)</label>
-                <textarea id="dev-css" rows="4" class="w-full bg-slate-950 border border-slate-800 rounded-xl px-4 py-3 focus:border-blue-500 outline-none transition-all resize-y font-mono text-xs text-blue-300" placeholder="/* Enter CSS here */"></textarea>
-              </div>
-
-              <div>
-                <label class="block text-sm mb-2 text-slate-300">Custom JavaScript (Logic)</label>
-                <textarea id="dev-js" rows="4" class="w-full bg-slate-950 border border-slate-800 rounded-xl px-4 py-3 focus:border-blue-500 outline-none transition-all resize-y font-mono text-xs text-green-300" placeholder="// Enter JS here"></textarea>
-              </div>
-
-              <div class="flex gap-4 pt-2">
-                <button id="deploy-dev-btn" class="flex-grow bg-blue-600 hover:bg-blue-500 text-white font-medium py-3 px-4 rounded-lg transition-all text-sm shadow-lg shadow-blue-500/20">
-                  Deploy Update
-                </button>
-                <button id="revert-dev-btn" class="bg-slate-800 hover:bg-slate-700 text-slate-300 border border-slate-700 font-medium py-3 px-6 rounded-lg transition-all text-sm whitespace-nowrap">
-                  <i class="fa-solid fa-clock-rotate-left mr-2"></i> Revert
-                </button>
+              <!-- Developer OTA -->
+              <div class="bg-slate-900 border border-slate-800 p-8 rounded-3xl">
+                <h3 class="text-xl font-bold flex items-center gap-2 mb-6"><i class="fa-solid fa-code text-emerald-500"></i> Developer Updates</h3>
+                <div class="space-y-4">
+                  <div class="bg-slate-950 p-3 rounded-xl border border-emerald-500/30 text-xs text-slate-400 leading-relaxed">Push live CSS/JS globally. Safe mode: <code class="bg-slate-900 px-1 rounded text-emerald-400">?safe=1</code>.</div>
+                  <textarea id="dev-css" rows="3" class="w-full bg-slate-950 border border-slate-800 rounded-xl px-4 py-3 font-mono text-xs text-theme-300 custom-scrollbar" placeholder="/* Custom CSS Payload */"></textarea>
+                  <textarea id="dev-js" rows="3" class="w-full bg-slate-950 border border-slate-800 rounded-xl px-4 py-3 font-mono text-xs text-emerald-300 custom-scrollbar" placeholder="// Custom JS Payload"></textarea>
+                  <div class="flex gap-2"><button id="deploy-dev-btn" class="flex-grow bg-emerald-600 hover:bg-emerald-500 py-2 rounded-lg text-sm font-bold shadow-lg shadow-emerald-600/20 text-white">Deploy Hotfix</button><button id="revert-dev-btn" class="bg-slate-800 hover:bg-slate-700 px-4 py-2 rounded-lg text-sm text-white">Revert</button></div>
+                </div>
               </div>
             </div>
           </div>
@@ -403,60 +374,78 @@
       </div>
     </div>
 
-    <!-- VIEW: LOCKDOWN -->
+    <!-- LOCKDOWN VIEW -->
     <div id="view-lockdown" class="hidden fixed inset-0 z-[100] bg-black flex flex-col items-center justify-center p-6 text-center">
       <i id="secret-admin-trigger" class="fa-solid fa-triangle-exclamation text-red-600 text-6xl mb-6 animate-pulse cursor-pointer"></i>
       <h1 class="text-4xl font-bold text-white mb-4 tracking-widest uppercase">System Secured</h1>
       <div id="lockdown-display-msg" class="text-red-400 text-lg max-w-2xl font-mono"></div>
     </div>
-
   </main>
 
-  <!-- MODAL VIEWER -->
+  <!-- ADVANCED MODAL -->
   <div id="post-modal" class="fixed inset-0 z-[110] bg-slate-950/95 backdrop-blur-md flex items-center justify-center p-4 sm:p-8 opacity-0 pointer-events-none transition-opacity duration-300">
-    <button id="close-modal-btn" class="absolute top-6 right-6 text-slate-400 hover:text-white transition-colors bg-slate-800/50 rounded-full w-12 h-12 flex items-center justify-center text-xl z-10">
-      <i class="fa-solid fa-xmark"></i>
-    </button>
-    <div class="max-w-5xl w-full bg-slate-900 border border-slate-800 rounded-3xl overflow-hidden shadow-2xl flex flex-col md:flex-row max-h-[90vh] scale-95 transform transition-transform duration-300" id="modal-content-scale">
-      <div class="md:w-3/5 bg-black relative flex-shrink-0">
-        <img id="modal-img" src="" class="w-full h-full object-contain md:object-cover md:absolute inset-0 max-h-[50vh] md:max-h-none">
+    <button id="close-modal-btn" class="absolute top-6 right-6 text-slate-400 hover:text-white bg-slate-800/50 hover:bg-slate-700/80 rounded-full w-12 h-12 flex items-center justify-center text-xl z-20 transition-all"><i class="fa-solid fa-xmark"></i></button>
+    <div class="max-w-6xl w-full bg-slate-900 border border-slate-800 rounded-3xl overflow-hidden flex flex-col md:flex-row max-h-[90vh] scale-95 transform transition-transform shadow-2xl shadow-theme-900/20 relative" id="modal-content-scale">
+      <div class="md:w-3/5 bg-black relative flex items-center justify-center border-r border-slate-800 group">
+        <img id="modal-img" src="" class="max-w-full max-h-[50vh] md:max-h-full object-contain">
+        
+        <!-- Compare Overlay (UI Stub) -->
+        <div class="absolute inset-0 bg-black/80 flex items-center justify-center opacity-0 pointer-events-none transition-opacity" id="compare-overlay">
+          <p class="text-white font-mono uppercase tracking-widest text-sm"><i class="fa-solid fa-code-compare mr-2"></i> No previous version available</p>
+        </div>
+
+        <div class="absolute bottom-4 right-4 flex gap-2 opacity-0 group-hover:opacity-100 transition-opacity">
+          <button id="modal-history-btn" class="bg-black/60 hover:bg-slate-800 text-white p-3 rounded-xl backdrop-blur-md transition-colors border border-white/10" title="Version History"><i class="fa-solid fa-clock-rotate-left text-sm"></i></button>
+          <button id="modal-download-btn" class="bg-black/60 hover:bg-theme-600 text-white p-3 rounded-xl backdrop-blur-md transition-colors shadow-lg border border-white/10" title="Download Asset"><i class="fa-solid fa-download"></i></button>
+        </div>
       </div>
-      <div class="md:w-2/5 p-8 flex flex-col overflow-y-auto">
-        <div class="flex gap-2 flex-wrap mb-4">
-          <div id="modal-archive-badge" class="hidden self-start px-3 py-1 bg-purple-500/10 border border-purple-500/30 rounded-full text-purple-400 text-xs font-bold tracking-widest uppercase">
-            Archived
+      <div class="md:w-2/5 p-8 flex flex-col overflow-y-auto bg-gradient-to-b from-slate-900 to-slate-950 custom-scrollbar">
+        <div class="flex gap-2 flex-wrap mb-4" id="modal-badges"></div>
+        <h2 id="modal-title" class="text-3xl font-bold text-white mb-1">Title</h2>
+        <p id="modal-credit" class="text-xs text-theme-400 mb-6 hidden">Credit: <span></span></p>
+        
+        <!-- Technical Specs Grid -->
+        <div class="grid grid-cols-2 gap-4 mb-6 bg-slate-950/80 p-5 rounded-2xl border border-slate-800/50 shadow-inner">
+          <div id="modal-distance" class="hidden">
+            <p class="text-[9px] text-slate-500 uppercase tracking-widest flex items-center gap-1"><i class="fa-solid fa-ruler-horizontal"></i> Distance</p>
+            <p class="text-sm font-mono text-slate-200 mt-1"><span></span></p>
           </div>
-          <div id="modal-category-badge" class="self-start px-3 py-1 bg-blue-500/10 border border-blue-500/30 rounded-full text-blue-400 text-xs font-bold tracking-widest uppercase">
-            Category
+          <div id="modal-radec" class="hidden">
+            <p class="text-[9px] text-slate-500 uppercase tracking-widest flex items-center gap-1"><i class="fa-solid fa-location-crosshairs"></i> Coordinates</p>
+            <p class="text-sm font-mono text-slate-200 mt-1"><span></span></p>
+          </div>
+          <div id="modal-equipment" class="hidden col-span-2 mt-2 pt-3 border-t border-slate-800/50">
+            <p class="text-[9px] text-slate-500 uppercase tracking-widest flex items-center gap-1"><i class="fa-solid fa-satellite"></i> Equipment</p>
+            <p class="text-sm text-slate-300 mt-1"><span></span></p>
           </div>
         </div>
-        <h2 id="modal-title" class="text-3xl font-bold text-white mb-2">Title</h2>
-        <p id="modal-distance" class="text-sm text-slate-400 font-mono mb-4 hidden"><i class="fa-solid fa-ruler-horizontal mr-2"></i><span></span></p>
-        <div class="h-px bg-slate-800 w-full mb-6"></div>
-        <p id="modal-desc" class="text-slate-300 leading-relaxed text-lg whitespace-pre-wrap flex-grow"></p>
-        <p id="modal-date" class="text-xs text-slate-500 mt-8 font-mono"></p>
+
+        <p id="modal-desc" class="text-slate-300 leading-relaxed text-sm whitespace-pre-wrap flex-grow"></p>
+        
+        <div class="flex justify-between items-center mt-8 pt-4 border-t border-slate-800">
+          <p id="modal-date" class="text-xs text-slate-500 font-mono"></p>
+          <div class="flex gap-2">
+            <p id="modal-views" class="text-xs text-theme-500/80 font-mono bg-theme-500/10 px-2 py-1.5 rounded-lg border border-theme-500/20 flex items-center"><i class="fa-solid fa-eye mr-2"></i><span>0</span></p>
+          </div>
+        </div>
       </div>
     </div>
   </div>
 
-  <footer id="main-footer" class="border-t border-slate-900 mt-10 py-10 px-6">
-    <div class="max-w-6xl mx-auto flex flex-col md:flex-row justify-between items-center gap-6 text-slate-600 text-sm">
-      <p>© 2024 Stellar Catalog Project.</p>
+  <footer id="main-footer" class="border-t border-slate-900 mt-10 py-10 px-6 transition-colors duration-500">
+    <div class="max-w-7xl mx-auto flex flex-col md:flex-row justify-between items-center gap-6 text-slate-600 text-sm">
+      <p>© 2026 CosmosCatalog. Data provided for exploration purposes.</p>
       <div class="flex items-center gap-6">
-        <span class="flex items-center gap-2"><i class="fa-solid fa-gear"></i> System Active</span>
+        <span class="flex items-center gap-2"><i class="fa-solid fa-server"></i> API Online</span>
       </div>
     </div>
   </footer>
 
-  <!-- App Logic & Firebase Integration -->
   <script type="module">
     import { initializeApp } from "https://www.gstatic.com/firebasejs/10.12.0/firebase-app.js";
     import { getAuth, signInAnonymously, signInWithCustomToken, onAuthStateChanged } from "https://www.gstatic.com/firebasejs/10.12.0/firebase-auth.js";
     import { getFirestore, collection, onSnapshot, doc, setDoc, deleteDoc, serverTimestamp } from "https://www.gstatic.com/firebasejs/10.12.0/firebase-firestore.js";
 
-    // ---------------------------------------------------------
-    // 1. FIREBASE CONFIGURATION (FOR GITHUB PAGES)
-    // ---------------------------------------------------------
     let firebaseConfig = {
       apiKey: "AIzaSyA2VwS1hQGroNlkXi2E-vVFz4t3k-JAd6I",
       authDomain: "cosmos-catalog-v1.firebaseapp.com",
@@ -467,848 +456,449 @@
     };
 
     if (typeof __firebase_config !== 'undefined') {
-      firebaseConfig = JSON.parse(__firebase_config);
+      try { firebaseConfig = typeof __firebase_config === 'string' ? JSON.parse(__firebase_config) : __firebase_config; } 
+      catch (e) { console.error("Config parse error:", e); }
     }
 
     const app = initializeApp(firebaseConfig);
     const auth = getAuth(app);
     const db = getFirestore(app);
-    const appId = typeof __app_id !== 'undefined' ? __app_id : 'astronomy-catalog-v1';
+    const appId = typeof __app_id !== 'undefined' ? __app_id : 'astronomy-catalog-v3';
     
-    // ---------------------------------------------------------
-    // 2. STATE & DOM ELEMENTS
-    // ---------------------------------------------------------
-    let currentUser = null;
-    let isAdmin = false;
-    let currentImageBase64 = null;
-    let editingId = null; // Track if we are editing an existing item
-    let allCatalogItems = []; // Store everything to filter locally
-    let lastExecutedJS = null; // Track executed JS to prevent infinite loops
+    let currentUser = null, isAdmin = false, currentImageBase64 = null, editingId = null, allCatalogItems = [], lastExecutedJS = null;
+    let viewState = 'catalog', activeCategoryFilter = 'all';
     
-    let viewState = 'catalog'; 
     let globalSettings = { 
-      theme: 'blue', starsOn: false, fabricOn: false, lockdownActive: false, maintenanceActive: false, lockdownMsg: 'Classified.',
-      customCSS: '', customJS: '', backupCSS: '', backupJS: ''
+      theme: 'blue', starsOn: true, fabricOn: false, liveMode: true, 
+      lockdownActive: false, maintenanceActive: false, lockdownMsg: 'Classified.', 
+      customCSS: '', customJS: '', backupCSS: '', backupJS: '' 
+    };
+
+    // Extended Theme Palette with Event/Seasonal Physics Definitions
+    const THEMES = { 
+      'blue': {'400':'#60a5fa','500':'#3b82f6','600':'#2563eb', particle: 'default'}, 
+      'emerald': {'400':'#34d399','500':'#10b981','600':'#059669', particle: 'default'}, 
+      'cosmic-winter': {'400':'#ef4444','500':'#22c55e','600':'#16a34a', particle: 'snow', bg: '#020617'}, 
+      'dark-void': {'400':'#fb923c','500':'#f97316','600':'#ea580c', particle: 'pulse', cssClass: 'theme-flicker', bg: '#000000'}, 
+      'fragile-blue-dot': {'400':'#38bdf8','500':'#0ea5e9','600':'#0284c7', particle: 'default', bg: '#082f49'}, 
+      'humanity-reaches-space': {'400':'#9ca3af','500':'#6b7280','600':'#4b5563', particle: 'rocket'},
+      'alignment': {'400':'#cbd5e1','500':'#94a3b8','600':'#64748b', particle: 'pulse', cssClass: 'theme-eclipse', bg: '#020617'},
+      'meteor-storm': {'400':'#94a3b8','500':'#64748b','600':'#475569', particle: 'meteor'},
+      'math-universe': {'400':'#a78bfa','500':'#8b5cf6','600':'#7c3aed', particle: 'orbit'},
+      'cosmic-love': {'400':'#f472b6','500':'#ec4899','600':'#db2777', particle: 'binary'},
+      'new-orbit': {'400':'#fde047','500':'#eab308','600':'#ca8a04', particle: 'firework'}
     };
 
     const UI = {
-      mainNav: document.getElementById('main-nav'),
-      mainFooter: document.getElementById('main-footer'),
-      navBtn: document.getElementById('nav-btn'),
-      navIcon: document.getElementById('nav-icon'),
-      navText: document.getElementById('nav-text'),
-      navLogo: document.getElementById('nav-logo'),
-      statusBadge: document.getElementById('site-status-badge'),
-      
-      viewCatalog: document.getElementById('view-catalog'),
-      viewArchive: document.getElementById('view-archive'),
-      viewAdminLogin: document.getElementById('view-admin-login'),
-      viewAdminPanel: document.getElementById('view-admin-panel'),
-      viewLockdown: document.getElementById('view-lockdown'),
-      
-      catalogLoading: document.getElementById('catalog-loading'),
-      catalogEmpty: document.getElementById('catalog-empty'),
-      catalogGrid: document.getElementById('catalog-grid'),
-      
-      archiveEmpty: document.getElementById('archive-empty'),
-      archiveGrid: document.getElementById('archive-grid'),
-
-      adminList: document.getElementById('admin-list'),
-      adminSearch: document.getElementById('admin-search'),
-
-      loginForm: document.getElementById('login-form'),
-      pinInput: document.getElementById('pin-input'),
-      loginError: document.getElementById('login-error'),
-
-      uploadForm: document.getElementById('upload-form'),
-      formHeader: document.getElementById('form-header'),
-      titleInput: document.getElementById('upload-title'),
-      uploadCategory: document.getElementById('upload-category'),
-      uploadDistance: document.getElementById('upload-distance'),
-      descInput: document.getElementById('upload-desc'),
-      imageInput: document.getElementById('image-input'),
-      submitBtn: document.getElementById('submit-btn'),
-      cancelEditBtn: document.getElementById('cancel-edit-btn'),
-      
-      imgUploadLabel: document.getElementById('image-upload-label'),
-      imgPreviewContainer: document.getElementById('image-preview-container'),
-      imgPreview: document.getElementById('image-preview'),
-      removeImgBtn: document.getElementById('remove-image-btn'),
-      
-      lockdownDisplayMsg: document.getElementById('lockdown-display-msg'),
-      secretAdminTrigger: document.getElementById('secret-admin-trigger'),
-
-      tabBtnVisuals: document.getElementById('tab-btn-visuals'),
-      tabBtnSecurity: document.getElementById('tab-btn-security'),
-      tabBtnDev: document.getElementById('tab-btn-dev'),
-      tabVisuals: document.getElementById('tab-visuals'),
-      tabSecurity: document.getElementById('tab-security'),
-      tabDev: document.getElementById('tab-dev'),
-
-      themeSelect: document.getElementById('theme-select'),
-      starsToggle: document.getElementById('stars-toggle'),
-      fabricToggle: document.getElementById('fabric-toggle'),
-      saveVisualsBtn: document.getElementById('save-visuals-btn'),
-      
-      lockdownPinInput: document.getElementById('lockdown-pin'),
-      lockdownMsgInput: document.getElementById('lockdown-msg'),
-      saveLockdownMsgBtn: document.getElementById('save-lockdown-msg-btn'),
-      toggleLockdownBtn: document.getElementById('toggle-lockdown-btn'),
-      toggleMaintenanceBtn: document.getElementById('toggle-maintenance-btn'),
-      
-      devCSS: document.getElementById('dev-css'),
-      devJS: document.getElementById('dev-js'),
-      deployDevBtn: document.getElementById('deploy-dev-btn'),
-      revertDevBtn: document.getElementById('revert-dev-btn'),
-
-      starsCanvas: document.getElementById('stars-canvas'),
-      fabricEffect: document.getElementById('fabric-effect'),
-
-      // Modal
-      postModal: document.getElementById('post-modal'),
-      modalContentScale: document.getElementById('modal-content-scale'),
-      closeModalBtn: document.getElementById('close-modal-btn'),
-      modalImg: document.getElementById('modal-img'),
-      modalTitle: document.getElementById('modal-title'),
-      modalDesc: document.getElementById('modal-desc'),
-      modalDate: document.getElementById('modal-date'),
-      modalArchiveBadge: document.getElementById('modal-archive-badge'),
-      modalCategoryBadge: document.getElementById('modal-category-badge'),
-      modalDistance: document.getElementById('modal-distance'),
-
-      // Admin Stats
-      statActive: document.getElementById('stat-active'),
-      statArchived: document.getElementById('stat-archived'),
-      statStatus: document.getElementById('stat-status')
+      mainNav: document.getElementById('main-nav'), navBtn: document.getElementById('nav-btn'), navIcon: document.getElementById('nav-icon'), navText: document.getElementById('nav-text'), navLogo: document.getElementById('nav-logo'), statusBadge: document.getElementById('site-status-badge'), liveModeBadge: document.getElementById('live-mode-badge'),
+      viewCatalog: document.getElementById('view-catalog'), viewArchive: document.getElementById('view-archive'), viewAdminLogin: document.getElementById('view-admin-login'), viewAdminPanel: document.getElementById('view-admin-panel'), viewLockdown: document.getElementById('view-lockdown'),
+      catalogLoading: document.getElementById('catalog-loading'), catalogEmpty: document.getElementById('catalog-empty'), catalogGrid: document.getElementById('catalog-grid'), archiveEmpty: document.getElementById('archive-empty'), archiveGrid: document.getElementById('archive-grid'),
+      heroBannerContainer: document.getElementById('hero-banner-container'), publicSort: document.getElementById('public-sort'), globalSearch: document.getElementById('global-search'), categoryFilters: document.querySelectorAll('.cat-filter'),
+      adminList: document.getElementById('admin-list'), adminSearch: document.getElementById('admin-search'), loginForm: document.getElementById('login-form'), pinInput: document.getElementById('pin-input'), loginError: document.getElementById('login-error'),
+      uploadForm: document.getElementById('upload-form'), formHeader: document.getElementById('form-header'), titleInput: document.getElementById('upload-title'), uploadCategory: document.getElementById('upload-category'), uploadDistance: document.getElementById('upload-distance'), uploadClassification: document.getElementById('upload-classification'), uploadRadec: document.getElementById('upload-radec'), uploadEquipment: document.getElementById('upload-equipment'), uploadCredit: document.getElementById('upload-credit'), descInput: document.getElementById('upload-desc'), imageInput: document.getElementById('image-input'), submitBtn: document.getElementById('submit-btn'), cancelEditBtn: document.getElementById('cancel-edit-btn'), imgUploadLabel: document.getElementById('image-upload-label'), imgPreviewContainer: document.getElementById('image-preview-container'), imgPreview: document.getElementById('image-preview'), removeImgBtn: document.getElementById('remove-image-btn'), extractExifBtn: document.getElementById('extract-exif-btn'), exifStatus: document.getElementById('exif-status'),
+      lockdownDisplayMsg: document.getElementById('lockdown-display-msg'), secretAdminTrigger: document.getElementById('secret-admin-trigger'),
+      themeRadios: document.getElementsByName('theme'), starsToggle: document.getElementById('stars-toggle'), fabricToggle: document.getElementById('fabric-toggle'), liveModeToggle: document.getElementById('live-mode-toggle'), saveVisualsBtn: document.getElementById('save-visuals-btn'), lockdownPinInput: document.getElementById('lockdown-pin'), lockdownMsgInput: document.getElementById('lockdown-msg'), toggleLockdownBtn: document.getElementById('toggle-lockdown-btn'), toggleMaintenanceBtn: document.getElementById('toggle-maintenance-btn'),
+      devCSS: document.getElementById('dev-css'), devJS: document.getElementById('dev-js'), deployDevBtn: document.getElementById('deploy-dev-btn'), revertDevBtn: document.getElementById('revert-dev-btn'),
+      starsCanvas: document.getElementById('stars-canvas'), fabricEffect: document.getElementById('fabric-effect'), mainBody: document.getElementById('main-body'),
+      postModal: document.getElementById('post-modal'), modalContentScale: document.getElementById('modal-content-scale'), closeModalBtn: document.getElementById('close-modal-btn'), modalImg: document.getElementById('modal-img'), modalTitle: document.getElementById('modal-title'), modalDesc: document.getElementById('modal-desc'), modalDate: document.getElementById('modal-date'), modalBadges: document.getElementById('modal-badges'), modalDistance: document.getElementById('modal-distance'), modalRadec: document.getElementById('modal-radec'), modalEquipment: document.getElementById('modal-equipment'), modalCredit: document.getElementById('modal-credit'), modalViews: document.getElementById('modal-views'), modalDownloadBtn: document.getElementById('modal-download-btn'), modalHistoryBtn: document.getElementById('modal-history-btn'), compareOverlay: document.getElementById('compare-overlay'),
+      statActive: document.getElementById('stat-active'), statArchived: document.getElementById('stat-archived'), statStatus: document.getElementById('stat-status'), statViews: document.getElementById('stat-views'), statStorage: document.getElementById('stat-storage')
     };
 
-    const THEMES = {
-      blue: { '400': '#60a5fa', '500': '#3b82f6', '600': '#2563eb' },
-      purple: { '400': '#c084fc', '500': '#a855f7', '600': '#9333ea' },
-      emerald: { '400': '#34d399', '500': '#10b981', '600': '#059669' },
-      rose: { '400': '#fb7185', '500': '#f43f5e', '600': '#e11d48' },
-      amber: { '400': '#fbbf24', '500': '#f59e0b', '600': '#d97706' }
-    };
-
-    // Canvas Stars Logic
-    let starsInitialized = false;
-    function initStars() {
-      if(starsInitialized) return;
-      starsInitialized = true;
-      const ctx = UI.starsCanvas.getContext('2d');
-      let width, height, stars = [];
-      function resize() {
-        width = UI.starsCanvas.width = window.innerWidth;
-        height = UI.starsCanvas.height = window.innerHeight;
-        stars = Array.from({length: 250}, () => ({
-          x: Math.random() * width, y: Math.random() * height,
-          size: Math.random() * 2, speed: Math.random() * 0.5 + 0.1
-        }));
-      }
-      function animate() {
-        if(!globalSettings.starsOn) return requestAnimationFrame(animate);
-        ctx.clearRect(0, 0, width, height);
-        ctx.fillStyle = 'rgba(255, 255, 255, 0.8)';
-        stars.forEach(s => {
-          ctx.beginPath();
-          ctx.arc(s.x, s.y, s.size, 0, Math.PI*2);
-          ctx.fill();
-          s.y -= s.speed;
-          if(s.y < 0) s.y = height;
-        });
-        requestAnimationFrame(animate);
-      }
-      window.addEventListener('resize', resize);
-      resize();
-      animate();
+    // --- LIVE UNIVERSE ENGINE ---
+    function determineLiveTheme() {
+      const d = new Date(); const m = d.getMonth() + 1; const day = d.getDate();
+      
+      // Seasonal & Event Logic
+      if (m === 12 || (m === 1 && day < 5)) return 'cosmic-winter'; // Winter/Xmas
+      if (m === 10 && day > 20) return 'dark-void'; // Halloween
+      if (m === 4 && day === 22) return 'fragile-blue-dot'; // Earth Day
+      if (m === 4 && day === 12) return 'humanity-reaches-space'; // Yuri's Night
+      if (m === 8 && day > 10 && day < 14) return 'meteor-storm'; // Perseids Peak
+      if (m === 3 && day === 14) return 'math-universe'; // Pi Day
+      if (m === 2 && day === 14) return 'cosmic-love'; // Valentine's
+      if (m === 1 && day === 1) return 'new-orbit'; // New Year
+      
+      // Dynamic fallback based on day of month (mocking moon phases)
+      if (day % 7 === 0) return 'emerald'; 
+      return 'blue';
     }
 
-    // Space Fabric & Black Holes Logic
+    // --- PARTICLE PHYSICS ENGINE ---
+    let starsInitialized = false, animationId;
+    function initStars(particleMode = 'default') {
+      if(animationId) cancelAnimationFrame(animationId);
+      const ctx = UI.starsCanvas.getContext('2d'); let width, height, particles = [];
+      
+      function resize() { 
+        width = UI.starsCanvas.width = window.innerWidth; height = UI.starsCanvas.height = window.innerHeight; 
+        const pCount = particleMode === 'meteor' ? 50 : 250;
+        particles = Array.from({length: pCount}, () => createParticle(width, height, particleMode)); 
+      }
+      
+      function createParticle(w, h, mode) {
+        if (mode === 'snow') return { x: Math.random() * w, y: Math.random() * h, size: Math.random() * 3 + 1, speedX: (Math.random() - 0.5), speedY: Math.random() * 1 + 0.5 };
+        if (mode === 'meteor') return { x: Math.random() * w, y: Math.random() * h, size: Math.random() * 2 + 0.5, speedX: - (Math.random() * 10 + 5), speedY: Math.random() * 10 + 5, tail: Math.random() * 50 + 20 };
+        if (mode === 'pulse') return { x: Math.random() * w, y: Math.random() * h, size: Math.random() * 2, pulseSpeed: Math.random() * 0.05 + 0.01, phase: Math.random() * Math.PI * 2 };
+        if (mode === 'binary') return { cx: Math.random() * w, cy: Math.random() * h, angle: Math.random() * Math.PI*2, radius: Math.random() * 15 + 5, speed: Math.random() * 0.05 + 0.01, size: Math.random() * 1.5 + 1 };
+        // default (upward)
+        return { x: Math.random() * w, y: Math.random() * h, size: Math.random() * 2, speedY: - (Math.random() * 0.5 + 0.1) };
+      }
+
+      function animate() {
+        if(!globalSettings.starsOn) return;
+        ctx.clearRect(0, 0, width, height); 
+        
+        // Dynamic color based on theme
+        let pColor = 'rgba(255, 255, 255, 0.8)';
+        if(particleMode === 'snow') pColor = 'rgba(255, 255, 255, 0.9)';
+        if(particleMode === 'binary') pColor = 'rgba(236, 72, 153, 0.8)'; // pink
+        
+        particles.forEach(p => { 
+          if(particleMode === 'meteor') {
+            ctx.beginPath(); ctx.strokeStyle = 'rgba(255,255,255,0.4)'; ctx.lineWidth = p.size;
+            ctx.moveTo(p.x, p.y); ctx.lineTo(p.x - p.tail, p.y - p.tail * (p.speedY/p.speedX)); ctx.stroke();
+            ctx.beginPath(); ctx.fillStyle = '#fff'; ctx.arc(p.x, p.y, p.size * 1.5, 0, Math.PI*2); ctx.fill();
+            p.x += p.speedX; p.y += p.speedY;
+            if (p.x < 0 || p.y > height) Object.assign(p, createParticle(width, height, particleMode), {x: width + Math.random()*100, y: -50});
+          } else if (particleMode === 'binary') {
+            p.angle += p.speed;
+            const x1 = p.cx + Math.cos(p.angle) * p.radius; const y1 = p.cy + Math.sin(p.angle) * p.radius;
+            const x2 = p.cx + Math.cos(p.angle + Math.PI) * p.radius; const y2 = p.cy + Math.sin(p.angle + Math.PI) * p.radius;
+            ctx.fillStyle = pColor; ctx.beginPath(); ctx.arc(x1, y1, p.size, 0, Math.PI*2); ctx.fill();
+            ctx.fillStyle = 'rgba(192, 132, 252, 0.8)'; ctx.beginPath(); ctx.arc(x2, y2, p.size*0.8, 0, Math.PI*2); ctx.fill(); // purple companion
+          } else {
+            ctx.beginPath();
+            let currentSize = p.size; let op = 0.8;
+            if (particleMode === 'pulse') { p.phase += p.pulseSpeed; op = (Math.sin(p.phase) + 1) / 2 * 0.8 + 0.1; currentSize = p.size * (op + 0.5); }
+            ctx.fillStyle = `rgba(255, 255, 255, ${op})`;
+            ctx.arc(p.x, p.y, currentSize, 0, Math.PI*2); ctx.fill(); 
+            
+            if (particleMode === 'snow') { p.x += p.speedX; p.y += p.speedY; if (p.y > height) { p.y = -10; p.x = Math.random() * width; } }
+            else if (particleMode === 'default') { p.y += p.speedY; if(p.y < 0) p.y = height; }
+          }
+        });
+        animationId = requestAnimationFrame(animate);
+      }
+      if(!starsInitialized) { window.addEventListener('resize', resize); starsInitialized = true; }
+      resize(); animate();
+    }
+
     let blackHolesSpawned = false;
     function spawnBlackHoles() {
-      UI.fabricEffect.innerHTML = '';
-      const numHoles = Math.floor(Math.random() * 6) + 3;
+      UI.fabricEffect.innerHTML = ''; const numHoles = Math.floor(Math.random() * 6) + 3;
       for (let i = 0; i < numHoles; i++) {
-        const hole = document.createElement('div');
-        hole.className = 'black-hole';
-        const size = Math.random() * 50 + 20;
-        hole.style.width = `${size}px`;
-        hole.style.height = `${size}px`;
-        hole.style.left = `${Math.random() * 90 + 5}%`;
-        hole.style.top = `${Math.random() * 90 + 5}%`;
-        hole.style.animationDelay = `-${Math.random() * 5}s`;
+        const hole = document.createElement('div'); hole.className = 'black-hole';
+        const size = Math.random() * 50 + 20; hole.style.width = `${size}px`; hole.style.height = `${size}px`;
+        hole.style.left = `${Math.random() * 90 + 5}%`; hole.style.top = `${Math.random() * 90 + 5}%`; hole.style.animationDelay = `-${Math.random() * 5}s`;
         UI.fabricEffect.appendChild(hole);
       }
     }
 
-    // ---------------------------------------------------------
-    // 3. CORE LOGIC
-    // ---------------------------------------------------------
-
     async function initAuth() {
-      try {
-        if (typeof __initial_auth_token !== 'undefined' && __initial_auth_token) {
-          await signInWithCustomToken(auth, __initial_auth_token);
-        } else {
-          await signInAnonymously(auth);
-        }
-      } catch (err) {
-        console.error("Auth failed:", err);
-        showToast("Database connection failed. Check Config.", "error");
-      }
-
-      onAuthStateChanged(auth, (user) => {
-        currentUser = user;
-        if (user) {
-          loadCatalogData();
-          loadGlobalSettings();
-        }
-      });
+      try { if (typeof __initial_auth_token !== 'undefined' && __initial_auth_token) await signInWithCustomToken(auth, __initial_auth_token); else await signInAnonymously(auth); } catch (err) { showToast("Connection failed", "error"); }
+      onAuthStateChanged(auth, (user) => { currentUser = user; if (user) { loadCatalogData(); loadGlobalSettings(); } });
     }
 
     function loadCatalogData() {
       if (!currentUser) return;
-      const catalogRef = collection(db, 'artifacts', appId, 'public', 'data', 'astronomy_items');
-      
-      onSnapshot(catalogRef, (snapshot) => {
+      onSnapshot(collection(db, 'artifacts', appId, 'public', 'data', 'astronomy_items'), (snapshot) => {
         allCatalogItems = snapshot.docs.map(doc => ({ id: doc.id, ...doc.data() }));
-        allCatalogItems.sort((a, b) => (b.createdAt?.seconds || 0) - (a.createdAt?.seconds || 0));
-        
-        const activeItems = allCatalogItems.filter(i => !i.archived);
-        const archivedItems = allCatalogItems.filter(i => i.archived);
-
-        renderCatalog(activeItems);
-        renderArchive(archivedItems);
+        processPublicDisplay();
         
         if (isAdmin) {
-          // Check if search is active
-          const query = UI.adminSearch.value.toLowerCase();
-          if (query) {
-             const filtered = allCatalogItems.filter(item => 
-               item.title.toLowerCase().includes(query) || 
-               (item.category && item.category.toLowerCase().includes(query))
-             );
-             renderAdminList(filtered);
-          } else {
-             renderAdminList(allCatalogItems);
-          }
+          const q = UI.adminSearch.value.toLowerCase();
+          renderAdminList(q ? allCatalogItems.filter(i => i.title.toLowerCase().includes(q) || (i.category && i.category.toLowerCase().includes(q))) : allCatalogItems.sort((a, b) => ((b.createdAt && b.createdAt.seconds) || 0) - ((a.createdAt && a.createdAt.seconds) || 0)));
           
-          UI.statActive.innerText = activeItems.length;
+          const activeItems = allCatalogItems.filter(i => !i.archived); 
+          const archivedItems = allCatalogItems.filter(i => i.archived);
+          const totalViews = allCatalogItems.reduce((sum, item) => sum + (item.views || 0), 0);
+          const storageBytes = new Blob([JSON.stringify(allCatalogItems)]).size;
+
+          UI.statActive.innerText = activeItems.length; 
           UI.statArchived.innerText = archivedItems.length;
+          UI.statViews.innerText = totalViews;
+          UI.statStorage.innerText = (storageBytes / (1024*1024)).toFixed(2) + " MB";
         }
-      }, (error) => {
-        console.error("Firestore Error:", error);
-        UI.catalogLoading.classList.add('hidden');
-        showToast("Error loading catalog data", "error");
       });
     }
 
+    function processPublicDisplay() {
+      let activeItems = allCatalogItems.filter(i => !i.archived);
+      const archivedItems = allCatalogItems.filter(i => i.archived);
+      
+      // Filter by Search & Category
+      const sq = UI.globalSearch.value.toLowerCase();
+      if(sq) activeItems = activeItems.filter(i => i.title.toLowerCase().includes(sq) || (i.description && i.description.toLowerCase().includes(sq)));
+      if(activeCategoryFilter !== 'all') activeItems = activeItems.filter(i => i.category === activeCategoryFilter);
+
+      // Sort
+      const sortPref = UI.publicSort.value;
+      if (sortPref === 'newest') activeItems.sort((a, b) => ((b.createdAt && b.createdAt.seconds) || 0) - ((a.createdAt && a.createdAt.seconds) || 0));
+      else if (sortPref === 'popular') activeItems.sort((a, b) => (b.views || 0) - (a.views || 0));
+      else if (sortPref === 'az') activeItems.sort((a, b) => a.title.localeCompare(b.title));
+
+      renderCatalog(activeItems); 
+      renderArchive(archivedItems);
+    }
+    
+    UI.publicSort.addEventListener('change', processPublicDisplay);
+    UI.globalSearch.addEventListener('input', processPublicDisplay);
+    UI.categoryFilters.forEach(btn => btn.addEventListener('click', (e) => {
+      UI.categoryFilters.forEach(b => { b.classList.remove('bg-theme-600', 'text-white'); b.classList.add('bg-slate-800', 'text-slate-400'); });
+      e.target.classList.add('bg-theme-600', 'text-white'); e.target.classList.remove('bg-slate-800', 'text-slate-400');
+      activeCategoryFilter = e.target.dataset.cat; processPublicDisplay();
+    }));
+
     function loadGlobalSettings() {
       if (!currentUser) return;
-      const settingsRef = doc(db, 'artifacts', appId, 'public', 'data', 'site_settings', 'global');
-      
-      onSnapshot(settingsRef, (docSnap) => {
-        if (docSnap.exists()) {
-          globalSettings = { ...globalSettings, ...docSnap.data() };
-        }
+      onSnapshot(doc(db, 'artifacts', appId, 'public', 'data', 'site_settings', 'global'), (docSnap) => {
+        if (docSnap.exists()) globalSettings = { ...globalSettings, ...docSnap.data() };
         applySettingsToUI();
       });
     }
 
     async function updateSettings(updates) {
-      try {
-        const settingsRef = doc(db, 'artifacts', appId, 'public', 'data', 'site_settings', 'global');
-        await setDoc(settingsRef, updates, { merge: true });
-        showToast("Configurations updated!");
-      } catch(err) {
-        console.error("Failed to update settings", err);
-        showToast("Failed to save", "error");
-      }
+      try { await setDoc(doc(db, 'artifacts', appId, 'public', 'data', 'site_settings', 'global'), updates, { merge: true }); showToast("Configurations updated!"); } catch(err) { showToast("Failed to save", "error"); }
     }
 
     function applySettingsToUI() {
-      const colors = THEMES[globalSettings.theme] || THEMES.blue;
-      document.documentElement.style.setProperty('--theme-400', colors['400']);
-      document.documentElement.style.setProperty('--theme-500', colors['500']);
-      document.documentElement.style.setProperty('--theme-600', colors['600']);
+      // Logic for Live Universe vs Manual Theme
+      let activeThemeKey = globalSettings.theme || 'blue';
+      if (globalSettings.liveMode) {
+        activeThemeKey = determineLiveTheme();
+        UI.liveModeBadge.classList.remove('hidden');
+      } else {
+        UI.liveModeBadge.classList.add('hidden');
+      }
       
-      if (globalSettings.starsOn) {
-        UI.starsCanvas.classList.remove('hidden');
-        initStars();
-      } else {
-        UI.starsCanvas.classList.add('hidden');
-      }
+      const themeConfig = THEMES[activeThemeKey] || THEMES.blue;
+      
+      // Apply CSS Vars & Backgrounds
+      document.documentElement.style.setProperty('--theme-400', themeConfig['400']); document.documentElement.style.setProperty('--theme-500', themeConfig['500']); document.documentElement.style.setProperty('--theme-600', themeConfig['600']);
+      UI.mainBody.style.backgroundColor = themeConfig.bg || '#020617'; // default slate-950
 
-      if (globalSettings.fabricOn) {
-        UI.fabricEffect.classList.remove('hidden');
-        if (!blackHolesSpawned) {
-          spawnBlackHoles();
-          blackHolesSpawned = true;
-        }
-      } else {
-        UI.fabricEffect.classList.add('hidden');
-        blackHolesSpawned = false;
-      }
+      // Apply specific CSS classes (Flicker, Eclipse)
+      UI.mainBody.className = `bg-slate-950 text-slate-100 font-sans min-h-screen flex flex-col relative overflow-x-hidden ${themeConfig.cssClass || ''}`;
 
-      UI.themeSelect.value = globalSettings.theme || 'blue';
-      UI.starsToggle.checked = globalSettings.starsOn;
-      UI.fabricToggle.checked = globalSettings.fabricOn;
+      // Particle Physics
+      if (globalSettings.starsOn) { UI.starsCanvas.classList.remove('hidden'); initStars(themeConfig.particle); } 
+      else { UI.starsCanvas.classList.add('hidden'); if(animationId) cancelAnimationFrame(animationId); }
+      
+      if (globalSettings.fabricOn) { UI.fabricEffect.classList.remove('hidden'); if (!blackHolesSpawned) { spawnBlackHoles(); blackHolesSpawned = true; } } 
+      else { UI.fabricEffect.classList.add('hidden'); blackHolesSpawned = false; }
+
+      // Update UI Controls
+      Array.from(UI.themeRadios).forEach(r => { r.checked = (r.value === globalSettings.theme); r.disabled = globalSettings.liveMode; });
+      UI.starsToggle.checked = globalSettings.starsOn; UI.fabricToggle.checked = globalSettings.fabricOn; UI.liveModeToggle.checked = globalSettings.liveMode;
       UI.lockdownMsgInput.value = globalSettings.lockdownMsg || '';
       
-      // Update Dev Form
-      if (document.activeElement !== UI.devCSS && document.activeElement !== UI.devJS) {
-        UI.devCSS.value = globalSettings.customCSS || '';
-        UI.devJS.value = globalSettings.customJS || '';
-      }
+      if (document.activeElement !== UI.devCSS && document.activeElement !== UI.devJS) { UI.devCSS.value = globalSettings.customCSS || ''; UI.devJS.value = globalSettings.customJS || ''; }
 
-      // Check Safe Mode
+      // Over-the-air updates
       const isSafeMode = new URLSearchParams(window.location.search).get('safe') === '1';
-
-      // Apply Live Custom Code
       if (!isSafeMode) {
-        // Inject CSS
-        let styleTag = document.getElementById('ota-custom-css');
-        if (!styleTag) {
-          styleTag = document.createElement('style');
-          styleTag.id = 'ota-custom-css';
-          document.head.appendChild(styleTag);
-        }
-        if (styleTag.innerHTML !== (globalSettings.customCSS || '')) {
-          styleTag.innerHTML = globalSettings.customCSS || '';
-        }
-
-        // Execute JS (only run if it has changed to avoid infinite loops)
-        if (globalSettings.customJS && globalSettings.customJS !== lastExecutedJS) {
-          lastExecutedJS = globalSettings.customJS;
-          try {
-            new Function(globalSettings.customJS)();
-          } catch(e) {
-            console.error("Live JS Execution Error:", e);
-          }
-        }
+        let s = document.getElementById('ota-custom-css'); if (!s) { s = document.createElement('style'); s.id = 'ota-custom-css'; document.head.appendChild(s); }
+        if (s.innerHTML !== (globalSettings.customCSS || '')) s.innerHTML = globalSettings.customCSS || '';
+        if (globalSettings.customJS && globalSettings.customJS !== lastExecutedJS) { lastExecutedJS = globalSettings.customJS; try { new Function(globalSettings.customJS)(); } catch(e) { console.error("OTA JS Error:", e); } }
       }
 
-      // Update Admin Dashboard Status
+      // Status Badges
       if(isAdmin) {
-        if (globalSettings.lockdownActive) {
-          UI.statStatus.className = "text-lg font-bold mt-1 text-red-500";
-          UI.statStatus.innerText = "Secured (Lockdown)";
-        } else if (globalSettings.maintenanceActive) {
-          UI.statStatus.className = "text-lg font-bold mt-1 text-yellow-500";
-          UI.statStatus.innerText = "Maintenance";
-        } else {
-          UI.statStatus.className = "text-lg font-bold mt-1 text-green-400";
-          UI.statStatus.innerText = "Optimal";
-        }
+        if (globalSettings.lockdownActive) { UI.statStatus.className = "text-lg font-bold mt-1 text-red-500"; UI.statStatus.innerText = "Secured"; }
+        else if (globalSettings.maintenanceActive) { UI.statStatus.className = "text-lg font-bold mt-1 text-yellow-500"; UI.statStatus.innerText = "Maintenance"; }
+        else { UI.statStatus.className = "text-lg font-bold mt-1 text-green-400"; UI.statStatus.innerText = "Optimal"; }
       }
 
-      // Update Public Badges
-      if (globalSettings.lockdownActive) {
-        UI.statusBadge.className = "px-2 py-0.5 rounded-full text-[10px] uppercase tracking-widest font-bold border border-red-500/50 text-red-400 bg-red-500/10";
-        UI.statusBadge.innerText = "Lockdown";
-      } else if (globalSettings.maintenanceActive) {
-        UI.statusBadge.className = "px-2 py-0.5 rounded-full text-[10px] uppercase tracking-widest font-bold border border-yellow-500/50 text-yellow-400 bg-yellow-500/10";
-        UI.statusBadge.innerText = "Maintenance";
-      } else {
-        UI.statusBadge.className = "px-2 py-0.5 rounded-full text-[10px] uppercase tracking-widest font-bold border border-green-500/50 text-green-400 bg-green-500/10";
-        UI.statusBadge.innerText = "Active";
-      }
+      if (globalSettings.lockdownActive) { UI.statusBadge.className = "px-2 py-0.5 rounded-full text-[10px] uppercase font-bold border border-red-500/50 text-red-400 bg-red-500/10"; UI.statusBadge.innerText = "Lockdown"; }
+      else if (globalSettings.maintenanceActive) { UI.statusBadge.className = "px-2 py-0.5 rounded-full text-[10px] uppercase font-bold border border-yellow-500/50 text-yellow-400 bg-yellow-500/10"; UI.statusBadge.innerText = "Maintenance"; }
+      else { UI.statusBadge.className = "px-2 py-0.5 rounded-full text-[10px] uppercase font-bold border border-green-500/50 text-green-400 bg-green-500/10"; UI.statusBadge.innerText = "Active"; }
 
-      if (globalSettings.lockdownActive && !isAdmin) {
-        switchView('lockdown');
-        UI.lockdownDisplayMsg.innerHTML = (globalSettings.lockdownMsg || 'System Secured').replace(/\n/g, '<br>');
-      } else if (viewState === 'lockdown' && !globalSettings.lockdownActive) {
-        switchView('catalog');
-      }
+      if (globalSettings.lockdownActive && !isAdmin) { switchView('lockdown'); UI.lockdownDisplayMsg.innerHTML = (globalSettings.lockdownMsg || 'System Secured').replace(/\n/g, '<br>'); }
+      else if (viewState === 'lockdown' && !globalSettings.lockdownActive) switchView('catalog');
     }
 
     function switchView(view) {
-      if (globalSettings.lockdownActive && !isAdmin && view !== 'lockdown' && view !== 'admin-login') {
-        view = 'lockdown';
-      }
-
+      if (globalSettings.lockdownActive && !isAdmin && view !== 'lockdown' && view !== 'admin-login') view = 'lockdown';
       viewState = view;
-      UI.viewCatalog.classList.add('hidden');
-      UI.viewArchive.classList.add('hidden');
-      UI.viewAdminLogin.classList.add('hidden');
-      UI.viewAdminPanel.classList.add('hidden');
-      UI.viewLockdown.classList.add('hidden');
-      
+      [UI.viewCatalog, UI.viewArchive, UI.viewAdminLogin, UI.viewAdminPanel, UI.viewLockdown].forEach(el => el.classList.add('hidden'));
       UI.mainNav.classList.remove('hidden');
-      UI.mainFooter.classList.remove('hidden');
-
-      if (view === 'lockdown') {
-        UI.viewLockdown.classList.remove('hidden');
-        UI.mainNav.classList.add('hidden');
-        UI.mainFooter.classList.add('hidden');
-      }
-      else if (view === 'catalog') {
-        UI.viewCatalog.classList.remove('hidden');
-        UI.navIcon.className = isAdmin ? 'fa-solid fa-unlock' : 'fa-solid fa-lock';
-        UI.navText.innerText = isAdmin ? 'Admin Panel' : 'Admin Login';
-        UI.navBtn.classList.remove('bg-slate-800', 'text-slate-300');
-        UI.navBtn.classList.add('bg-blue-600/10', 'text-blue-400');
-      }
-      else if (view === 'archive') {
-        UI.viewArchive.classList.remove('hidden');
-        UI.navIcon.className = 'fa-solid fa-arrow-left';
-        UI.navText.innerText = 'Back to Catalog';
-        UI.navBtn.classList.add('bg-slate-800', 'text-slate-300');
-      }
-      else if (view === 'admin-login') {
-        UI.viewAdminLogin.classList.remove('hidden');
-        UI.pinInput.value = '';
-        UI.loginError.classList.add('hidden');
-        UI.navIcon.className = 'fa-solid fa-arrow-left';
-        UI.navText.innerText = 'Back to Catalog';
-        UI.navBtn.classList.add('bg-slate-800', 'text-slate-300');
-        UI.pinInput.focus();
-      } 
-      else if (view === 'admin-panel') {
-        UI.viewAdminPanel.classList.remove('hidden');
-        UI.navIcon.className = 'fa-solid fa-right-from-bracket';
-        UI.navText.innerText = 'Exit Admin';
-        UI.navBtn.classList.add('bg-slate-800', 'text-slate-300');
-        // Initial stats check on load
-        applySettingsToUI();
-      }
+      if (view === 'lockdown') { UI.viewLockdown.classList.remove('hidden'); UI.mainNav.classList.add('hidden'); }
+      else if (view === 'catalog') { UI.viewCatalog.classList.remove('hidden'); UI.navIcon.className = isAdmin ? 'fa-solid fa-unlock' : 'fa-solid fa-lock'; UI.navText.innerText = isAdmin ? 'Admin' : 'Admin'; UI.navBtn.className = "flex items-center gap-2 px-4 py-2 rounded-full text-sm font-medium transition-all bg-theme-600/10 text-theme-400 hover:bg-theme-600/20"; }
+      else if (view === 'archive') { UI.viewArchive.classList.remove('hidden'); UI.navIcon.className = 'fa-solid fa-arrow-left'; UI.navText.innerText = 'Back to Catalog'; UI.navBtn.className = "flex items-center gap-2 px-4 py-2 rounded-full text-sm font-medium transition-all bg-slate-800 text-slate-300"; }
+      else if (view === 'admin-login') { UI.viewAdminLogin.classList.remove('hidden'); UI.pinInput.value = ''; UI.loginError.classList.add('hidden'); UI.navIcon.className = 'fa-solid fa-arrow-left'; UI.navText.innerText = 'Back'; UI.navBtn.className = "flex items-center gap-2 px-4 py-2 rounded-full text-sm font-medium transition-all bg-slate-800 text-slate-300"; UI.pinInput.focus(); }
+      else if (view === 'admin-panel') { UI.viewAdminPanel.classList.remove('hidden'); UI.navIcon.className = 'fa-solid fa-right-from-bracket'; UI.navText.innerText = 'Exit Admin'; UI.navBtn.className = "flex items-center gap-2 px-4 py-2 rounded-full text-sm font-medium transition-all bg-slate-800 text-slate-300"; applySettingsToUI(); }
     }
 
-    // Modal Controls
-    window.openModal = (id) => {
-      const item = allCatalogItems.find(i => i.id === id);
-      if (!item) return;
-
-      UI.modalImg.src = item.image;
-      UI.modalTitle.innerText = item.title;
-      UI.modalDesc.innerText = item.description || "No observation notes.";
-      UI.modalCategoryBadge.innerText = item.category || 'Galaxy';
-      
-      if (item.distance) {
-        UI.modalDistance.querySelector('span').innerText = item.distance;
-        UI.modalDistance.classList.remove('hidden');
-      } else {
-        UI.modalDistance.classList.add('hidden');
-      }
-      
-      let dateText = "Unknown Date";
-      if(item.createdAt) {
-        dateText = new Date(item.createdAt.seconds * 1000).toLocaleDateString(undefined, { year: 'numeric', month: 'long', day: 'numeric', hour: '2-digit', minute: '2-digit' });
-      }
-      UI.modalDate.innerText = "Captured: " + dateText;
-      
-      if (item.archived) {
-        UI.modalArchiveBadge.classList.remove('hidden');
-      } else {
-        UI.modalArchiveBadge.classList.add('hidden');
-      }
-
-      UI.postModal.classList.remove('opacity-0', 'pointer-events-none');
-      UI.modalContentScale.classList.remove('scale-95');
-      UI.modalContentScale.classList.add('scale-100');
-      document.body.style.overflow = 'hidden'; // prevent scrolling behind
-    };
-
-    function closeModal() {
-      UI.postModal.classList.add('opacity-0', 'pointer-events-none');
-      UI.modalContentScale.classList.remove('scale-100');
-      UI.modalContentScale.classList.add('scale-95');
-      document.body.style.overflow = '';
-      setTimeout(() => { UI.modalImg.src = ''; }, 300); // clear after transition
-    }
-
-    UI.closeModalBtn.addEventListener('click', closeModal);
-    UI.postModal.addEventListener('click', (e) => {
-      if(e.target === UI.postModal) closeModal();
+    // Admin Sidebar Tabs
+    document.querySelectorAll('.admin-tab-btn').forEach(btn => {
+      btn.addEventListener('click', (e) => {
+        const targetId = e.currentTarget.dataset.target;
+        document.querySelectorAll('.admin-panel-section').forEach(sec => sec.classList.add('hidden'));
+        document.getElementById(targetId).classList.remove('hidden');
+        
+        document.querySelectorAll('.admin-tab-btn').forEach(b => {
+          b.classList.remove('bg-theme-600', 'text-white');
+          b.classList.add('bg-slate-900', 'text-slate-400');
+        });
+        e.currentTarget.classList.add('bg-theme-600', 'text-white');
+        e.currentTarget.classList.remove('bg-slate-900', 'text-slate-400');
+      });
     });
 
-    // Generate HTML for a post card
+    window.openModal = async (id) => {
+      const item = allCatalogItems.find(i => i.id === id); if (!item) return;
+      if (!isAdmin) try { setDoc(doc(db, 'artifacts', appId, 'public', 'data', 'astronomy_items', id), { views: (item.views || 0) + 1 }, { merge: true }); } catch(e){}
+
+      UI.modalImg.src = item.image; UI.modalTitle.innerText = item.title; UI.modalDesc.innerText = item.description || "No specific notes provided."; 
+      
+      let badgesHTML = `<div class="px-3 py-1 bg-theme-500/10 border border-theme-500/30 rounded-full text-theme-400 text-xs font-bold uppercase">${item.category || 'Galaxy'}</div>`;
+      if(item.classification) badgesHTML += `<div class="px-3 py-1 bg-emerald-500/10 border border-emerald-500/30 rounded-full text-emerald-400 text-xs font-bold uppercase">${item.classification}</div>`;
+      if (item.archived) badgesHTML += `<div class="px-3 py-1 bg-purple-500/10 border border-purple-500/30 rounded-full text-purple-400 text-xs font-bold uppercase">Archived</div>`;
+      UI.modalBadges.innerHTML = badgesHTML;
+
+      if (item.distance) { UI.modalDistance.querySelector('span').innerText = item.distance; UI.modalDistance.classList.remove('hidden'); } else UI.modalDistance.classList.add('hidden');
+      if (item.radec) { UI.modalRadec.querySelector('span').innerText = item.radec; UI.modalRadec.classList.remove('hidden'); } else UI.modalRadec.classList.add('hidden');
+      if (item.equipment) { UI.modalEquipment.querySelector('span').innerText = item.equipment; UI.modalEquipment.classList.remove('hidden'); } else UI.modalEquipment.classList.add('hidden');
+      if (item.credit) { UI.modalCredit.querySelector('span').innerText = item.credit; UI.modalCredit.classList.remove('hidden'); } else UI.modalCredit.classList.add('hidden');
+      
+      UI.modalDate.innerText = "Captured: " + (item.createdAt ? new Date(item.createdAt.seconds * 1000).toLocaleDateString() : "Unknown");
+      UI.modalViews.querySelector('span').innerText = (item.views || 0) + (isAdmin ? 0 : 1); 
+
+      // Download Action
+      UI.modalDownloadBtn.onclick = () => { const a = document.createElement('a'); a.href = item.image; a.download = `${item.title.replace(/\s+/g, '_')}_CosmosCatalog.jpg`; a.click(); };
+      
+      // History Action (Mock)
+      UI.modalHistoryBtn.onclick = () => { UI.compareOverlay.classList.remove('opacity-0'); setTimeout(()=>UI.compareOverlay.classList.add('opacity-0'), 2000); };
+
+      UI.postModal.classList.remove('opacity-0', 'pointer-events-none'); UI.modalContentScale.classList.replace('scale-95', 'scale-100'); document.body.style.overflow = 'hidden';
+    };
+    function closeModal() { UI.postModal.classList.add('opacity-0', 'pointer-events-none'); UI.modalContentScale.classList.replace('scale-100', 'scale-95'); document.body.style.overflow = ''; setTimeout(() => { UI.modalImg.src = ''; }, 300); }
+    UI.closeModalBtn.addEventListener('click', closeModal); UI.postModal.addEventListener('click', (e) => { if(e.target === UI.postModal) closeModal(); });
+
     function createCardHTML(item) {
-      return `
-        <div onclick="window.openModal('${item.id}')" class="group bg-slate-900/50 border border-slate-800 rounded-3xl overflow-hidden hover:border-blue-500/50 transition-all shadow-xl cursor-pointer">
-          <div class="aspect-square relative overflow-hidden bg-black">
-            <img src="${item.image}" alt="${item.title}" class="w-full h-full object-cover group-hover:scale-105 transition-transform duration-700">
-            <div class="absolute inset-0 bg-gradient-to-t from-slate-950 via-transparent to-transparent opacity-60"></div>
-            <div class="absolute top-4 right-4 px-2 py-1 bg-black/50 backdrop-blur-md rounded-lg border border-white/10 text-[10px] font-bold text-blue-300 uppercase tracking-widest">
-              ${item.category || 'Observation'}
+      return `<div onclick="window.openModal('${item.id}')" class="group bg-slate-900/50 border border-slate-800 rounded-3xl overflow-hidden hover:border-theme-500/50 transition-all shadow-xl cursor-pointer flex flex-col h-full"><div class="aspect-square relative overflow-hidden bg-black img-zoom-container"><img src="${item.image}" class="w-full h-full object-cover img-zoom"><div class="absolute inset-0 bg-gradient-to-t from-slate-950 via-transparent to-transparent opacity-60"></div><div class="absolute top-4 right-4 px-2 py-1 bg-black/50 backdrop-blur-md rounded-lg border border-white/10 text-[10px] font-bold text-theme-300 uppercase">${item.category || 'Observation'}</div></div><div class="p-6 flex flex-col flex-grow"><h3 class="text-xl font-bold mb-2 group-hover:text-theme-400 transition-colors">${item.title}</h3><p class="text-slate-400 text-sm line-clamp-2 flex-grow">${item.description || "No desc"}</p><div class="flex items-center justify-between mt-4 pt-4 border-t border-slate-800/50"><span class="text-[10px] text-slate-500 font-mono"><i class="fa-solid fa-eye mr-1"></i>${item.views || 0}</span>${item.classification ? `<span class="text-[10px] bg-slate-800 text-slate-300 px-2 py-0.5 rounded border border-slate-700">${item.classification}</span>` : ''}</div></div></div>`;
+    }
+
+    function renderCatalog(items) { 
+      UI.catalogLoading.classList.add('hidden'); 
+      if (items.length === 0) { UI.catalogEmpty.classList.remove('hidden'); UI.catalogGrid.classList.add('hidden'); UI.heroBannerContainer.classList.add('hidden', 'opacity-0'); return; } 
+      
+      UI.catalogEmpty.classList.add('hidden'); 
+      
+      // Hero Banner (First item if sorted)
+      if (items.length > 0 && activeCategoryFilter === 'all' && UI.publicSort.value !== 'az') {
+        const hero = items[0];
+        UI.heroBannerContainer.innerHTML = `
+          <div onclick="window.openModal('${hero.id}')" class="group relative w-full h-[50vh] md:h-[60vh] rounded-3xl overflow-hidden border border-slate-800 shadow-2xl cursor-pointer img-zoom-container">
+            <img src="${hero.image}" class="w-full h-full object-cover img-zoom">
+            <div class="absolute inset-0 bg-gradient-to-t from-slate-950 via-slate-900/40 to-transparent"></div>
+            <div class="absolute bottom-0 left-0 p-8 md:p-12 w-full md:w-2/3">
+              <div class="inline-flex gap-2 mb-4">
+                <span class="bg-theme-600 text-white text-xs font-bold px-3 py-1 rounded-full shadow-lg shadow-theme-500/30 uppercase tracking-widest"><i class="fa-solid fa-star mr-1"></i> Featured Discovery</span>
+              </div>
+              <h2 class="text-4xl md:text-6xl font-bold text-white mb-4 leading-tight group-hover:text-theme-400 transition-colors">${hero.title}</h2>
+              <p class="text-slate-300 text-base md:text-lg line-clamp-2 md:line-clamp-3">${hero.description || ''}</p>
             </div>
           </div>
-          <div class="p-6">
-            <h3 class="text-xl font-bold mb-2 group-hover:text-blue-400 transition-colors">${item.title}</h3>
-            <p class="text-slate-400 text-sm line-clamp-2 leading-relaxed">${item.description || "No description provided."}</p>
-          </div>
-        </div>
-      `;
-    }
+        `;
+        UI.heroBannerContainer.classList.remove('hidden');
+        setTimeout(() => UI.heroBannerContainer.classList.remove('opacity-0', 'translate-y-4'), 50);
+      } else {
+        UI.heroBannerContainer.classList.add('hidden', 'opacity-0', 'translate-y-4');
+      }
 
-    function renderCatalog(items) {
-      UI.catalogLoading.classList.add('hidden');
-      if (items.length === 0) {
-        UI.catalogEmpty.classList.remove('hidden');
+      // Grid
+      const gridItems = UI.heroBannerContainer.classList.contains('hidden') ? items : items.slice(1);
+      if (gridItems.length > 0) {
+        UI.catalogGrid.classList.remove('hidden'); UI.catalogGrid.innerHTML = gridItems.map(createCardHTML).join(''); 
+      } else {
         UI.catalogGrid.classList.add('hidden');
-        return;
       }
-      UI.catalogEmpty.classList.add('hidden');
-      UI.catalogGrid.classList.remove('hidden');
-      UI.catalogGrid.innerHTML = items.map(createCardHTML).join('');
     }
 
-    function renderArchive(items) {
-      if (items.length === 0) {
-        UI.archiveEmpty.classList.remove('hidden');
-        UI.archiveGrid.classList.add('hidden');
-        return;
-      }
-      UI.archiveEmpty.classList.add('hidden');
-      UI.archiveGrid.classList.remove('hidden');
-      UI.archiveGrid.innerHTML = items.map(createCardHTML).join('');
-    }
-
-    function renderAdminList(items) {
-      if(items.length === 0) {
-          UI.adminList.innerHTML = `<p class="text-slate-500 text-center py-4 border border-slate-800 border-dashed rounded-xl">No records match query.</p>`;
-          return;
-      }
-      
-      UI.adminList.innerHTML = items.map(item => `
-        <div class="bg-slate-900/80 border ${item.archived ? 'border-purple-500/30' : 'border-slate-700'} p-4 rounded-2xl flex flex-col sm:flex-row items-start sm:items-center gap-4 transition-colors">
-          <div class="relative w-16 h-16 flex-shrink-0">
-            <img src="${item.image}" class="w-full h-full rounded-xl object-cover border border-slate-800">
-            ${item.archived ? `<div class="absolute -top-2 -right-2 w-5 h-5 bg-purple-500 rounded-full border-2 border-slate-900 flex items-center justify-center text-white text-[10px]"><i class="fa-solid fa-box-archive"></i></div>` : ''}
-          </div>
-          <div class="flex-grow min-w-0">
-            <h4 class="font-bold truncate text-slate-200">${item.title}</h4>
-            <p class="text-xs text-slate-500 truncate mt-1">
-              <span class="text-blue-400 border border-blue-400/30 bg-blue-400/10 px-1.5 py-0.5 rounded text-[9px] uppercase mr-2">${item.category || 'Galaxy'}</span>
-              ${item.description || "No description"}
-            </p>
-          </div>
-          <div class="flex gap-2 flex-shrink-0 w-full sm:w-auto justify-end mt-2 sm:mt-0">
-            <button onclick="window.editEntry('${item.id}')" class="p-3 text-slate-400 hover:text-blue-400 hover:bg-blue-400/10 rounded-xl transition-all" title="Edit">
-              <i class="fa-solid fa-pen"></i>
-            </button>
-            <button onclick="window.toggleArchive('${item.id}', ${item.archived})" class="p-3 text-slate-400 hover:text-purple-400 hover:bg-purple-400/10 rounded-xl transition-all" title="${item.archived ? 'Unarchive' : 'Archive'}">
-              <i class="fa-solid ${item.archived ? 'fa-box-open' : 'fa-box-archive'}"></i>
-            </button>
-            <button onclick="window.deleteEntry('${item.id}')" class="p-3 text-slate-400 hover:text-red-400 hover:bg-red-400/10 rounded-xl transition-all" title="Delete">
-              <i class="fa-solid fa-trash"></i>
-            </button>
-          </div>
-        </div>
-      `).join('');
-    }
-
-    function showToast(message, type = "success") {
-      const toast = document.getElementById('toast');
-      document.getElementById('toast-msg').innerText = message;
-      document.getElementById('toast-icon').className = type === "error" ? "fa-solid fa-triangle-exclamation text-red-400" : "fa-solid fa-circle-check text-green-400";
-      
-      toast.classList.remove('translate-y-20', 'opacity-0');
-      setTimeout(() => toast.classList.add('translate-y-20', 'opacity-0'), 3000);
-    }
-
-    // ---------------------------------------------------------
-    // 4. EVENT LISTENERS
-    // ---------------------------------------------------------
-
-    // Live Search Filter for Admin Panel
-    UI.adminSearch.addEventListener('input', (e) => {
-      const query = e.target.value.toLowerCase();
-      const filteredItems = allCatalogItems.filter(item => 
-        item.title.toLowerCase().includes(query) || 
-        (item.category && item.category.toLowerCase().includes(query)) ||
-        (item.description && item.description.toLowerCase().includes(query))
-      );
-      renderAdminList(filteredItems);
-    });
-
-    UI.tabBtnVisuals.addEventListener('click', () => {
-      UI.tabVisuals.classList.remove('hidden');
-      UI.tabSecurity.classList.add('hidden');
-      UI.tabBtnVisuals.classList.replace('bg-slate-800', 'bg-blue-600');
-      UI.tabBtnVisuals.classList.replace('text-slate-400', 'text-white');
-      UI.tabBtnSecurity.classList.replace('bg-blue-600', 'bg-slate-800');
-      UI.tabBtnSecurity.classList.replace('text-white', 'text-slate-400');
-      UI.tabBtnDev.classList.replace('bg-blue-600', 'bg-slate-800');
-      UI.tabBtnDev.classList.replace('text-white', 'text-slate-400');
-    });
-
-    UI.tabBtnSecurity.addEventListener('click', () => {
-      UI.tabSecurity.classList.remove('hidden');
-      UI.tabVisuals.classList.add('hidden');
-      UI.tabDev.classList.add('hidden');
-      UI.tabBtnSecurity.classList.replace('bg-slate-800', 'bg-blue-600');
-      UI.tabBtnSecurity.classList.replace('text-slate-400', 'text-white');
-      UI.tabBtnVisuals.classList.replace('bg-blue-600', 'bg-slate-800');
-      UI.tabBtnVisuals.classList.replace('text-white', 'text-slate-400');
-      UI.tabBtnDev.classList.replace('bg-blue-600', 'bg-slate-800');
-      UI.tabBtnDev.classList.replace('text-white', 'text-slate-400');
-    });
-
-    UI.tabBtnDev.addEventListener('click', () => {
-      UI.tabDev.classList.remove('hidden');
-      UI.tabVisuals.classList.add('hidden');
-      UI.tabSecurity.classList.add('hidden');
-      UI.tabBtnDev.classList.replace('bg-slate-800', 'bg-blue-600');
-      UI.tabBtnDev.classList.replace('text-slate-400', 'text-white');
-      UI.tabBtnVisuals.classList.replace('bg-blue-600', 'bg-slate-800');
-      UI.tabBtnVisuals.classList.replace('text-white', 'text-slate-400');
-      UI.tabBtnSecurity.classList.replace('bg-blue-600', 'bg-slate-800');
-      UI.tabBtnSecurity.classList.replace('text-white', 'text-slate-400');
-    });
-
-    // Developer Actions
-    UI.deployDevBtn.addEventListener('click', () => {
-      if(!confirm("Are you sure you want to deploy this live code?")) return;
-      
-      // Save current as backup before deploying new
-      updateSettings({
-        backupCSS: globalSettings.customCSS || '',
-        backupJS: globalSettings.customJS || '',
-        customCSS: UI.devCSS.value,
-        customJS: UI.devJS.value
-      });
-    });
-
-    UI.revertDevBtn.addEventListener('click', () => {
-      if(!globalSettings.backupCSS && !globalSettings.backupJS) {
-        showToast("No backup available to revert to", "error");
-        return;
-      }
-      if(!confirm("Revert to the last saved backup code?")) return;
-      
-      // Swap current with backup
-      updateSettings({
-        customCSS: globalSettings.backupCSS || '',
-        customJS: globalSettings.backupJS || '',
-        backupCSS: globalSettings.customCSS || '',
-        backupJS: globalSettings.customJS || ''
-      });
-      showToast("Reverted to previous version");
-    });
-
-    let escapeClicks = 0;
-    let escapeTimer;
-    UI.secretAdminTrigger.addEventListener('click', () => {
-      escapeClicks++;
-      clearTimeout(escapeTimer);
-      if (escapeClicks >= 3) {
-        switchView('admin-login');
-        escapeClicks = 0;
-      } else {
-        escapeTimer = setTimeout(() => { escapeClicks = 0; }, 1000);
-      }
-    });
-
-    UI.navLogo.addEventListener('click', () => switchView('catalog'));
+    function renderArchive(items) { if (items.length === 0) { UI.archiveEmpty.classList.remove('hidden'); UI.archiveGrid.classList.add('hidden'); return; } UI.archiveEmpty.classList.add('hidden'); UI.archiveGrid.classList.remove('hidden'); UI.archiveGrid.innerHTML = items.map(createCardHTML).join(''); }
     
-    UI.navBtn.addEventListener('click', () => {
-      if (viewState === 'catalog' || viewState === 'lockdown' || viewState === 'archive') {
-        switchView(isAdmin ? 'admin-panel' : 'admin-login');
-      } else {
-        if(viewState === 'admin-panel') isAdmin = false; 
-        switchView('catalog');
-      }
-    });
-
-    UI.loginForm.addEventListener('submit', (e) => {
-      e.preventDefault();
-      const pin = UI.pinInput.value;
-      
-      if (pin === '2013') {
-        isAdmin = true;
-        switchView('admin-panel');
-      } else if (pin.toLowerCase() === 'forgotten') {
-        switchView('archive');
-      } else {
-        UI.loginError.classList.remove('hidden');
-      }
-    });
-
-    UI.saveVisualsBtn.addEventListener('click', () => {
-      updateSettings({
-        theme: UI.themeSelect.value,
-        starsOn: UI.starsToggle.checked,
-        fabricOn: UI.fabricToggle.checked
-      });
-    });
-
-    UI.saveLockdownMsgBtn.addEventListener('click', () => {
-      updateSettings({ lockdownMsg: UI.lockdownMsgInput.value });
-    });
-
-    UI.toggleLockdownBtn.addEventListener('click', () => {
-      if (UI.lockdownPinInput.value === 'Apollyon') {
-        updateSettings({ lockdownActive: !globalSettings.lockdownActive });
-        UI.lockdownPinInput.value = ''; 
-      } else {
-        showToast("Invalid Protocol Code", "error");
-      }
-    });
-
-    UI.toggleMaintenanceBtn.addEventListener('click', () => {
-       updateSettings({ maintenanceActive: !globalSettings.maintenanceActive });
-    });
-
-    // Image Upload & Compression
-    UI.imageInput.addEventListener('change', (e) => {
-      const file = e.target.files[0];
-      if (!file) return;
-
-      const reader = new FileReader();
-      reader.onload = (event) => {
-        const img = new Image();
-        img.onload = () => {
-          const canvas = document.createElement('canvas');
-          const MAX_WIDTH = 1200; // Increased resolution slightly for modals
-          let width = img.width;
-          let height = img.height;
-
-          if (width > MAX_WIDTH) {
-            height *= MAX_WIDTH / width;
-            width = MAX_WIDTH;
-          }
-
-          canvas.width = width;
-          canvas.height = height;
-          const ctx = canvas.getContext('2d');
-          ctx.drawImage(img, 0, 0, width, height);
-          
-          currentImageBase64 = canvas.toDataURL('image/jpeg', 0.8);
-          
-          UI.imgPreview.src = currentImageBase64;
-          UI.imgUploadLabel.classList.add('hidden');
-          UI.imgPreviewContainer.classList.remove('hidden');
-          checkFormValidity();
-        };
-        img.src = event.target.result;
-      };
-      reader.readAsDataURL(file);
-    });
-
-    UI.removeImgBtn.addEventListener('click', () => {
-      currentImageBase64 = null;
-      UI.imageInput.value = '';
-      UI.imgPreviewContainer.classList.add('hidden');
-      UI.imgUploadLabel.classList.remove('hidden');
-      checkFormValidity();
-    });
-
-    function checkFormValidity() {
-      if (UI.titleInput.value.trim() && currentImageBase64) {
-        UI.submitBtn.disabled = false;
-      } else {
-        UI.submitBtn.disabled = true;
-      }
+    function renderAdminList(items) {
+      if(items.length === 0) { UI.adminList.innerHTML = `<p class="text-slate-500 text-center py-4">No records.</p>`; return; }
+      UI.adminList.innerHTML = items.map(item => `<div class="bg-slate-900/80 border ${item.archived ? 'border-purple-500/30' : 'border-slate-700 hover:border-theme-500/50'} transition-colors p-4 rounded-2xl flex flex-col sm:flex-row items-center gap-4"><div class="relative w-16 h-16 flex-shrink-0"><img src="${item.image}" class="w-full h-full rounded-xl object-cover border border-slate-800">${item.archived ? `<div class="absolute -top-2 -right-2 w-5 h-5 bg-purple-500 rounded-full flex items-center justify-center text-white text-[10px]"><i class="fa-solid fa-box-archive"></i></div>` : ''}</div><div class="flex-grow min-w-0"><h4 class="font-bold truncate text-slate-200">${item.title}</h4><p class="text-xs text-slate-500 truncate mt-1"><span class="text-theme-400 bg-theme-400/10 px-1.5 py-0.5 rounded text-[9px] uppercase mr-2">${item.category || 'Galaxy'}</span><i class="fa-solid fa-eye text-[9px] mr-1"></i>${item.views || 0} views</p></div><div class="flex gap-2"><button onclick="window.editEntry('${item.id}')" class="p-3 text-slate-400 hover:text-theme-400 hover:bg-theme-400/10 rounded-xl transition-colors"><i class="fa-solid fa-pen"></i></button><button onclick="window.toggleArchive('${item.id}', ${item.archived})" class="p-3 text-slate-400 hover:text-purple-400 hover:bg-purple-400/10 rounded-xl transition-colors"><i class="fa-solid ${item.archived ? 'fa-box-open' : 'fa-box-archive'}"></i></button><button onclick="window.deleteEntry('${item.id}')" class="p-3 text-slate-400 hover:text-red-400 hover:bg-red-400/10 rounded-xl transition-colors"><i class="fa-solid fa-trash"></i></button></div></div>`).join('');
     }
+
+    function showToast(message, type = "success") { const t = document.getElementById('toast'); document.getElementById('toast-msg').innerText = message; document.getElementById('toast-icon').className = type === "error" ? "fa-solid fa-triangle-exclamation text-red-400" : "fa-solid fa-circle-check text-green-400"; t.classList.remove('translate-y-20', 'opacity-0'); setTimeout(() => t.classList.add('translate-y-20', 'opacity-0'), 3000); }
+
+    UI.adminSearch.addEventListener('input', (e) => { const q = e.target.value.toLowerCase(); renderAdminList(allCatalogItems.filter(i => i.title.toLowerCase().includes(q) || i.id.toLowerCase().includes(q))); });
+
+    let escapeClicks = 0, escapeTimer;
+    UI.secretAdminTrigger.addEventListener('click', () => { escapeClicks++; clearTimeout(escapeTimer); if (escapeClicks >= 3) { switchView('admin-login'); escapeClicks = 0; } else escapeTimer = setTimeout(() => { escapeClicks = 0; }, 1000); });
+    UI.navLogo.addEventListener('click', () => { activeCategoryFilter='all'; UI.categoryFilters.forEach(b => { b.classList.remove('bg-theme-600', 'text-white'); b.classList.add('bg-slate-800', 'text-slate-400'); }); UI.categoryFilters[0].classList.add('bg-theme-600', 'text-white'); processPublicDisplay(); switchView('catalog'); });
+    UI.navBtn.addEventListener('click', () => { if (['catalog', 'lockdown', 'archive'].includes(viewState)) switchView(isAdmin ? 'admin-panel' : 'admin-login'); else { isAdmin = false; switchView('catalog'); } });
+
+    UI.loginForm.addEventListener('submit', (e) => { e.preventDefault(); const pin = UI.pinInput.value; if (pin === '2013') { isAdmin = true; switchView('admin-panel'); } else if (pin.toLowerCase() === 'forgotten') switchView('archive'); else UI.loginError.classList.remove('hidden'); });
+
+    // Settings listeners
+    UI.saveVisualsBtn.addEventListener('click', () => {
+      let selTheme = 'blue';
+      Array.from(UI.themeRadios).forEach(r => { if(r.checked) selTheme = r.value; });
+      updateSettings({ theme: selTheme, starsOn: UI.starsToggle.checked, fabricOn: UI.fabricToggle.checked, liveMode: UI.liveModeToggle.checked });
+    });
+    UI.liveModeToggle.addEventListener('change', () => {
+      const isLive = UI.liveModeToggle.checked;
+      Array.from(UI.themeRadios).forEach(r => r.disabled = isLive);
+    });
+    
+    UI.toggleLockdownBtn.addEventListener('click', () => { if (UI.lockdownPinInput.value === 'Apollyon') { updateSettings({ lockdownActive: !globalSettings.lockdownActive, lockdownMsg: UI.lockdownMsgInput.value }); UI.lockdownPinInput.value = ''; } else showToast("Invalid Protocol", "error"); });
+    UI.toggleMaintenanceBtn.addEventListener('click', () => updateSettings({ maintenanceActive: !globalSettings.maintenanceActive, lockdownMsg: UI.lockdownMsgInput.value }));
+    UI.deployDevBtn.addEventListener('click', () => { if(confirm("Deploy this live code?")) updateSettings({ backupCSS: globalSettings.customCSS || '', backupJS: globalSettings.customJS || '', customCSS: UI.devCSS.value, customJS: UI.devJS.value }); });
+    UI.revertDevBtn.addEventListener('click', () => { if(!globalSettings.backupCSS && !globalSettings.backupJS) return showToast("No backup found", "error"); if(confirm("Revert to backup?")) updateSettings({ customCSS: globalSettings.backupCSS, customJS: globalSettings.backupJS, backupCSS: globalSettings.customCSS, backupJS: globalSettings.customJS }); });
+
+    // Image Input & Metadata Mock
+    UI.imageInput.addEventListener('change', (e) => {
+      const file = e.target.files[0]; if (!file) return; const reader = new FileReader();
+      reader.onload = (event) => { const img = new Image(); img.onload = () => {
+        const canvas = document.createElement('canvas'); const MAX = 1200; let w = img.width, h = img.height;
+        if (w > MAX) { h *= MAX / w; w = MAX; } canvas.width = w; canvas.height = h; canvas.getContext('2d').drawImage(img, 0, 0, w, h);
+        currentImageBase64 = canvas.toDataURL('image/jpeg', 0.8); UI.imgPreview.src = currentImageBase64; UI.imgUploadLabel.classList.add('hidden'); UI.imgPreviewContainer.classList.remove('hidden'); UI.exifStatus.classList.add('hidden'); checkFormValidity();
+      }; img.src = event.target.result; }; reader.readAsDataURL(file);
+    });
+
+    UI.extractExifBtn.addEventListener('click', () => {
+      UI.extractExifBtn.innerHTML = `<i class="fa-solid fa-spinner fa-spin mr-1"></i> Scanning...`;
+      setTimeout(() => {
+        UI.uploadEquipment.value = "Sony A7S III (Mock)";
+        UI.uploadRadec.value = "10h 43m / +11° 33'";
+        UI.extractExifBtn.innerHTML = `<i class="fa-solid fa-wand-magic-sparkles mr-1"></i> Extract Metadata`;
+        UI.exifStatus.classList.remove('hidden'); showToast("Metadata recovered");
+      }, 1000);
+    });
+
+    UI.removeImgBtn.addEventListener('click', () => { currentImageBase64 = null; UI.imageInput.value = ''; UI.imgPreviewContainer.classList.add('hidden'); UI.imgUploadLabel.classList.remove('hidden'); UI.exifStatus.classList.add('hidden'); checkFormValidity(); });
+    function checkFormValidity() { UI.submitBtn.disabled = !(UI.titleInput.value.trim() && currentImageBase64); }
     UI.titleInput.addEventListener('input', checkFormValidity);
 
-    // Cancel Edit
-    function resetForm() {
-      editingId = null;
-      UI.uploadForm.reset();
-      UI.uploadCategory.value = 'Galaxy';
-      UI.uploadDistance.value = '';
-      UI.removeImgBtn.click();
-      UI.formHeader.innerHTML = `<i class="fa-solid fa-plus text-blue-500"></i> Upload Observation`;
-      UI.submitBtn.innerHTML = `Publish <i class="fa-solid fa-chevron-right"></i>`;
-      UI.cancelEditBtn.classList.add('hidden');
-    }
+    function resetForm() { editingId = null; UI.uploadForm.reset(); UI.uploadCategory.value = 'Galaxy'; UI.uploadClassification.value = ''; UI.uploadRadec.value = ''; UI.uploadEquipment.value = ''; UI.uploadDistance.value = ''; UI.uploadCredit.value = ''; UI.removeImgBtn.click(); UI.formHeader.innerHTML = `<i class="fa-solid fa-satellite text-theme-500"></i> Single Entry Terminal`; UI.submitBtn.innerHTML = `Publish`; UI.cancelEditBtn.classList.add('hidden'); }
     UI.cancelEditBtn.addEventListener('click', resetForm);
 
-    // Form Submission (Create or Edit)
     UI.uploadForm.addEventListener('submit', async (e) => {
-      e.preventDefault();
-      if (!currentUser || !currentImageBase64) return;
-
-      UI.submitBtn.disabled = true;
-      UI.submitBtn.innerHTML = `<i class="fa-solid fa-circle-notch fa-spin"></i> Saving...`;
-
+      e.preventDefault(); if (!currentUser || !currentImageBase64) return;
+      UI.submitBtn.disabled = true; UI.submitBtn.innerHTML = `<i class="fa-solid fa-circle-notch fa-spin"></i> Saving...`;
       try {
-        const payload = {
-          title: UI.titleInput.value.trim(),
-          category: UI.uploadCategory.value,
-          distance: UI.uploadDistance.value.trim(),
-          description: UI.descInput.value.trim(),
-          image: currentImageBase64,
-          author: currentUser.uid
+        const payload = { 
+          title: UI.titleInput.value.trim(), category: UI.uploadCategory.value, 
+          classification: UI.uploadClassification.value.trim(), distance: UI.uploadDistance.value.trim(), 
+          radec: UI.uploadRadec.value.trim(), equipment: UI.uploadEquipment.value.trim(),
+          credit: UI.uploadCredit.value.trim(), description: UI.descInput.value.trim(), 
+          image: currentImageBase64, author: currentUser.uid 
         };
-
-        if (editingId) {
-          // Update existing
-          await setDoc(doc(db, 'artifacts', appId, 'public', 'data', 'astronomy_items', editingId), payload, { merge: true });
-          showToast("Observation Updated Successfully!");
-        } else {
-          // Create new
-          payload.createdAt = serverTimestamp();
-          payload.archived = false;
-          const catalogRef = collection(db, 'artifacts', appId, 'public', 'data', 'astronomy_items');
-          await setDoc(doc(catalogRef), payload);
-          showToast("Observation Published!");
-        }
+        if (editingId) { await setDoc(doc(db, 'artifacts', appId, 'public', 'data', 'astronomy_items', editingId), payload, { merge: true }); showToast("Updated!"); }
+        else { payload.createdAt = serverTimestamp(); payload.views = 0; payload.archived = false; await setDoc(doc(collection(db, 'artifacts', appId, 'public', 'data', 'astronomy_items')), payload); showToast("Published!"); }
         resetForm();
-      } catch (err) {
-        console.error(err);
-        showToast("Failed to save data. Check console.", "error");
-        UI.submitBtn.innerHTML = editingId ? `Update <i class="fa-solid fa-check"></i>` : `Publish <i class="fa-solid fa-chevron-right"></i>`;
-        UI.submitBtn.disabled = false;
-      }
+      } catch (err) { showToast("Save failed", "error"); UI.submitBtn.innerHTML = editingId ? `Update` : `Publish`; UI.submitBtn.disabled = false; }
     });
 
-    // Edit Item Setup
-    window.editEntry = (id) => {
-      const item = allCatalogItems.find(i => i.id === id);
-      if (!item) return;
+    window.editEntry = (id) => { const item = allCatalogItems.find(i => i.id === id); if (!item) return; editingId = id; UI.titleInput.value = item.title; UI.uploadCategory.value = item.category || 'Galaxy'; UI.uploadClassification.value = item.classification || ''; UI.uploadDistance.value = item.distance || ''; UI.uploadRadec.value = item.radec || ''; UI.uploadEquipment.value = item.equipment || ''; UI.uploadCredit.value = item.credit || ''; UI.descInput.value = item.description || ''; currentImageBase64 = item.image; UI.imgPreview.src = currentImageBase64; UI.imgUploadLabel.classList.add('hidden'); UI.imgPreviewContainer.classList.remove('hidden'); UI.formHeader.innerHTML = `<i class="fa-solid fa-pen text-theme-500"></i> Edit Entry`; UI.submitBtn.innerHTML = `Update Entry`; UI.cancelEditBtn.classList.remove('hidden'); checkFormValidity(); document.querySelector('[data-target="admin-tab-entry"]').click(); UI.uploadForm.scrollIntoView({ behavior: 'smooth', block: 'start' }); };
+    window.toggleArchive = async (id, arc) => { if (!currentUser) return; try { await setDoc(doc(db, 'artifacts', appId, 'public', 'data', 'astronomy_items', id), { archived: !arc }, { merge: true }); showToast(arc ? "Restored" : "Archived"); } catch (err) { showToast("Failed", "error"); } };
+    window.deleteEntry = async (id) => { if (!currentUser || !confirm("Delete permanently?")) return; try { await deleteDoc(doc(db, 'artifacts', appId, 'public', 'data', 'astronomy_items', id)); if (editingId === id) resetForm(); showToast("Deleted"); } catch (err) { showToast("Failed", "error"); } };
 
-      editingId = id;
-      UI.titleInput.value = item.title;
-      UI.uploadCategory.value = item.category || 'Galaxy';
-      UI.uploadDistance.value = item.distance || '';
-      UI.descInput.value = item.description || '';
-      
-      currentImageBase64 = item.image;
-      UI.imgPreview.src = currentImageBase64;
-      UI.imgUploadLabel.classList.add('hidden');
-      UI.imgPreviewContainer.classList.remove('hidden');
-
-      UI.formHeader.innerHTML = `<i class="fa-solid fa-pen text-blue-500"></i> Edit Observation`;
-      UI.submitBtn.innerHTML = `Update <i class="fa-solid fa-check"></i>`;
-      UI.cancelEditBtn.classList.remove('hidden');
-      
-      checkFormValidity();
-      UI.uploadForm.scrollIntoView({ behavior: 'smooth', block: 'start' });
-    };
-
-    // Archive Item
-    window.toggleArchive = async (id, isCurrentlyArchived) => {
-      if (!currentUser) return;
-      try {
-        await setDoc(doc(db, 'artifacts', appId, 'public', 'data', 'astronomy_items', id), {
-          archived: !isCurrentlyArchived
-        }, { merge: true });
-        showToast(isCurrentlyArchived ? "Restored to active catalog" : "Moved to archives");
-      } catch (err) {
-        console.error(err);
-        showToast("Archive update failed", "error");
-      }
-    };
-
-    // Delete Entry
-    window.deleteEntry = async (id) => {
-      if (!currentUser || !confirm("Are you sure you want to permanently delete this observation?")) return;
-      try {
-        await deleteDoc(doc(db, 'artifacts', appId, 'public', 'data', 'astronomy_items', id));
-        if (editingId === id) resetForm();
-        showToast("Observation deleted");
-      } catch (err) {
-        console.error(err);
-        showToast("Failed to delete", "error");
-      }
-    };
-
-    // Start App
     initAuth();
-    checkFormValidity();
   </script>
 </body>
 </html>
