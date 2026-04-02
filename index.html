@@ -172,13 +172,13 @@
       <div class="grid grid-cols-1 lg:grid-cols-12 gap-8">
         
         <!-- Sidebar Navigation -->
-        <div class="lg:col-span-3 space-y-2 sticky top-24 h-fit">
-          <button class="admin-tab-btn active w-full text-left px-4 py-3 rounded-xl text-sm font-medium bg-theme-600 text-white transition-all flex justify-between items-center" data-target="admin-tab-entry"><span><i class="fa-solid fa-plus w-5"></i> Data Entry</span></button>
-          <button class="admin-tab-btn w-full text-left px-4 py-3 rounded-xl text-sm font-medium bg-slate-900 text-slate-400 hover:text-white hover:bg-slate-800 transition-all flex justify-between items-center" data-target="admin-tab-directory"><span><i class="fa-solid fa-folder-tree w-5"></i> Directory</span></button>
-          <button class="admin-tab-btn w-full text-left px-4 py-3 rounded-xl text-sm font-medium bg-slate-900 text-slate-400 hover:text-white hover:bg-slate-800 transition-all flex justify-between items-center" data-target="admin-tab-mass"><span><i class="fa-solid fa-layer-group w-5"></i> Mass Upload</span> <span class="bg-theme-500/20 text-theme-400 text-[9px] px-2 py-0.5 rounded">BETA</span></button>
-          <button class="admin-tab-btn w-full text-left px-4 py-3 rounded-xl text-sm font-medium bg-slate-900 text-slate-400 hover:text-white hover:bg-slate-800 transition-all flex justify-between items-center" data-target="admin-tab-audit"><span><i class="fa-solid fa-clipboard-list w-5"></i> Audit Logs</span></button>
-          <div class="h-px bg-slate-800 my-4"></div>
-          <button class="admin-tab-btn w-full text-left px-4 py-3 rounded-xl text-sm font-medium bg-slate-900 text-slate-400 hover:text-white hover:bg-slate-800 transition-all flex justify-between items-center" data-target="admin-tab-settings"><span><i class="fa-solid fa-sliders w-5"></i> System Config</span></button>
+        <div class="lg:col-span-3 flex overflow-x-auto lg:flex-col gap-2 lg:gap-0 lg:space-y-2 lg:sticky top-24 h-fit z-20 no-scrollbar pb-2 lg:pb-0">
+          <button class="admin-tab-btn active flex-shrink-0 lg:w-full text-left px-4 py-3 rounded-xl text-sm font-medium bg-theme-600 text-white transition-all flex justify-between items-center gap-3" data-target="admin-tab-entry"><span class="whitespace-nowrap"><i class="fa-solid fa-plus w-5"></i> Data Entry</span></button>
+          <button class="admin-tab-btn flex-shrink-0 lg:w-full text-left px-4 py-3 rounded-xl text-sm font-medium bg-slate-900 text-slate-400 hover:text-white hover:bg-slate-800 transition-all flex justify-between items-center gap-3" data-target="admin-tab-directory"><span class="whitespace-nowrap"><i class="fa-solid fa-folder-tree w-5"></i> Directory</span></button>
+          <button class="admin-tab-btn flex-shrink-0 lg:w-full text-left px-4 py-3 rounded-xl text-sm font-medium bg-slate-900 text-slate-400 hover:text-white hover:bg-slate-800 transition-all flex justify-between items-center gap-3" data-target="admin-tab-mass"><span class="whitespace-nowrap"><i class="fa-solid fa-layer-group w-5"></i> Mass Upload</span> <span class="bg-theme-500/20 text-theme-400 text-[9px] px-2 py-0.5 rounded ml-2">BETA</span></button>
+          <button class="admin-tab-btn flex-shrink-0 lg:w-full text-left px-4 py-3 rounded-xl text-sm font-medium bg-slate-900 text-slate-400 hover:text-white hover:bg-slate-800 transition-all flex justify-between items-center gap-3" data-target="admin-tab-audit"><span class="whitespace-nowrap"><i class="fa-solid fa-clipboard-list w-5"></i> Audit Logs</span></button>
+          <div class="hidden lg:block h-px bg-slate-800 my-4"></div>
+          <button class="admin-tab-btn flex-shrink-0 lg:w-full text-left px-4 py-3 rounded-xl text-sm font-medium bg-slate-900 text-slate-400 hover:text-white hover:bg-slate-800 transition-all flex justify-between items-center gap-3" data-target="admin-tab-settings"><span class="whitespace-nowrap"><i class="fa-solid fa-sliders w-5"></i> System Config</span></button>
         </div>
 
         <!-- Main Content Area -->
@@ -260,16 +260,15 @@
           <!-- Tab 3: Mass Upload (Mock/UI Only) -->
           <div id="admin-tab-mass" class="admin-panel-section hidden animate-in fade-in bg-slate-900 border border-slate-800 p-8 rounded-3xl">
             <h3 class="text-xl font-bold mb-2">Mass Ingestion Queue</h3>
-            <p class="text-slate-400 text-sm mb-6">Upload multiple assets simultaneously. Metadata will be extracted from EXIF tags where available.</p>
-            <div class="border-2 border-dashed border-slate-700 bg-slate-950/50 rounded-2xl p-12 text-center hover:border-theme-500 transition-colors cursor-pointer mb-6">
-              <i class="fa-solid fa-images text-4xl text-slate-600 mb-4"></i>
+            <p class="text-slate-400 text-sm mb-6">Upload multiple assets simultaneously. Metadata will be extracted from filenames and optimized.</p>
+            <div class="border-2 border-dashed border-slate-700 bg-slate-950/50 rounded-2xl p-12 text-center hover:border-theme-500 transition-colors cursor-pointer mb-6 relative overflow-hidden group">
+              <i class="fa-solid fa-images text-4xl text-slate-600 mb-4 group-hover:text-theme-500 transition-colors"></i>
               <p class="font-medium text-slate-300">Drag & Drop Image Directory</p>
               <p class="text-xs text-slate-500 mt-2">or click to select files (Max 50 per batch)</p>
+              <input type="file" id="mass-upload-input" multiple accept="image/*" class="absolute inset-0 w-full h-full opacity-0 cursor-pointer">
             </div>
-            <div class="space-y-2 opacity-50 pointer-events-none">
-              <h4 class="text-xs font-bold uppercase tracking-widest text-slate-500 mb-4">Upload Queue (Example)</h4>
-              <div class="bg-slate-950 p-3 rounded-lg border border-slate-800 flex items-center justify-between"><div class="flex items-center gap-3"><i class="fa-solid fa-image text-theme-500"></i><span class="text-sm">andromeda_core_RAW.tif</span></div><span class="text-xs text-theme-400">Processing... 45%</span></div>
-              <div class="bg-slate-950 p-3 rounded-lg border border-slate-800 flex items-center justify-between"><div class="flex items-center gap-3"><i class="fa-solid fa-image text-slate-600"></i><span class="text-sm text-slate-500">crab_nebula_composite.png</span></div><span class="text-xs text-slate-600">Queued</span></div>
+            <div id="mass-upload-queue" class="space-y-2 max-h-60 overflow-y-auto custom-scrollbar pr-2">
+              <h4 class="text-xs font-bold uppercase tracking-widest text-slate-500 mb-4 sticky top-0 bg-slate-900 py-1">Upload Queue</h4>
             </div>
           </div>
 
@@ -442,9 +441,9 @@
   </footer>
 
   <script type="module">
-    import { initializeApp } from "https://www.gstatic.com/firebasejs/10.12.0/firebase-app.js";
-    import { getAuth, signInAnonymously, signInWithCustomToken, onAuthStateChanged } from "https://www.gstatic.com/firebasejs/10.12.0/firebase-auth.js";
-    import { getFirestore, collection, onSnapshot, doc, setDoc, deleteDoc, serverTimestamp } from "https://www.gstatic.com/firebasejs/10.12.0/firebase-firestore.js";
+    import { initializeApp } from "https://www.gstatic.com/firebasejs/11.6.1/firebase-app.js";
+    import { getAuth, signInAnonymously, signInWithCustomToken, onAuthStateChanged } from "https://www.gstatic.com/firebasejs/11.6.1/firebase-auth.js";
+    import { getFirestore, collection, onSnapshot, doc, setDoc, deleteDoc, serverTimestamp } from "https://www.gstatic.com/firebasejs/11.6.1/firebase-firestore.js";
 
     let firebaseConfig = {
       apiKey: "AIzaSyA2VwS1hQGroNlkXi2E-vVFz4t3k-JAd6I",
@@ -469,7 +468,7 @@
     let viewState = 'catalog', activeCategoryFilter = 'all';
     
     let globalSettings = { 
-      theme: 'blue', starsOn: true, fabricOn: false, liveMode: true, 
+      theme: 'blue', starsOn: true, fabricOn: false, liveMode: false, 
       lockdownActive: false, maintenanceActive: false, lockdownMsg: 'Classified.', 
       customCSS: '', customJS: '', backupCSS: '', backupJS: '' 
     };
@@ -619,7 +618,7 @@
           UI.statViews.innerText = totalViews;
           UI.statStorage.innerText = (storageBytes / (1024*1024)).toFixed(2) + " MB";
         }
-      });
+      }, (error) => { console.error("Catalog Sync Error:", error); showToast("Sync Error", "error"); });
     }
 
     function processPublicDisplay() {
@@ -654,7 +653,7 @@
       onSnapshot(doc(db, 'artifacts', appId, 'public', 'data', 'site_settings', 'global'), (docSnap) => {
         if (docSnap.exists()) globalSettings = { ...globalSettings, ...docSnap.data() };
         applySettingsToUI();
-      });
+      }, (error) => { console.error("Settings Sync Error:", error); });
     }
 
     async function updateSettings(updates) {
@@ -897,6 +896,50 @@
     window.editEntry = (id) => { const item = allCatalogItems.find(i => i.id === id); if (!item) return; editingId = id; UI.titleInput.value = item.title; UI.uploadCategory.value = item.category || 'Galaxy'; UI.uploadClassification.value = item.classification || ''; UI.uploadDistance.value = item.distance || ''; UI.uploadRadec.value = item.radec || ''; UI.uploadEquipment.value = item.equipment || ''; UI.uploadCredit.value = item.credit || ''; UI.descInput.value = item.description || ''; currentImageBase64 = item.image; UI.imgPreview.src = currentImageBase64; UI.imgUploadLabel.classList.add('hidden'); UI.imgPreviewContainer.classList.remove('hidden'); UI.formHeader.innerHTML = `<i class="fa-solid fa-pen text-theme-500"></i> Edit Entry`; UI.submitBtn.innerHTML = `Update Entry`; UI.cancelEditBtn.classList.remove('hidden'); checkFormValidity(); document.querySelector('[data-target="admin-tab-entry"]').click(); UI.uploadForm.scrollIntoView({ behavior: 'smooth', block: 'start' }); };
     window.toggleArchive = async (id, arc) => { if (!currentUser) return; try { await setDoc(doc(db, 'artifacts', appId, 'public', 'data', 'astronomy_items', id), { archived: !arc }, { merge: true }); showToast(arc ? "Restored" : "Archived"); } catch (err) { showToast("Failed", "error"); } };
     window.deleteEntry = async (id) => { if (!currentUser || !confirm("Delete permanently?")) return; try { await deleteDoc(doc(db, 'artifacts', appId, 'public', 'data', 'astronomy_items', id)); if (editingId === id) resetForm(); showToast("Deleted"); } catch (err) { showToast("Failed", "error"); } };
+
+    // Mass Upload Execution Logic
+    const massInput = document.getElementById('mass-upload-input');
+    const massQueue = document.getElementById('mass-upload-queue');
+    
+    if (massInput) {
+      massInput.addEventListener('change', async (e) => {
+        const files = e.target.files; if(!files || !currentUser) return;
+        Array.from(files).forEach((file, index) => {
+          if(!file.type.startsWith('image/')) return;
+          const qId = 'queue-' + Date.now() + '-' + index;
+          const qEl = document.createElement('div'); qEl.id = qId;
+          qEl.className = "bg-slate-950 p-3 rounded-lg border border-slate-800 flex items-center justify-between mt-2";
+          qEl.innerHTML = `<div class="flex items-center gap-3 min-w-0"><i class="fa-solid fa-spinner fa-spin text-theme-500"></i><span class="text-sm truncate">${file.name}</span></div><span class="text-xs text-theme-400 whitespace-nowrap ml-2">Processing...</span>`;
+          massQueue.appendChild(qEl);
+
+          const reader = new FileReader();
+          reader.onload = (ev) => {
+            const img = new Image();
+            img.onload = async () => {
+              const canvas = document.createElement('canvas'); const MAX = 1200; let w = img.width, h = img.height;
+              if (w > MAX) { h *= MAX / w; w = MAX; } canvas.width = w; canvas.height = h; 
+              canvas.getContext('2d').drawImage(img, 0, 0, w, h);
+              const b64 = canvas.toDataURL('image/jpeg', 0.8);
+              const title = file.name.replace(/\.[^/.]+$/, "").replace(/[_-]/g, " ");
+              
+              try {
+                await setDoc(doc(collection(db, 'artifacts', appId, 'public', 'data', 'astronomy_items')), {
+                  title: title, category: 'Galaxy', classification: 'Auto-Ingest', distance: 'Unknown', radec: 'TBD',
+                  equipment: 'Mass Ingestion Tool', credit: 'Catalog DB', description: 'Batch uploaded asset.',
+                  image: b64, author: currentUser.uid, views: 0, archived: false, createdAt: serverTimestamp()
+                });
+                document.getElementById(qId).innerHTML = `<div class="flex items-center gap-3 min-w-0"><i class="fa-solid fa-check text-green-500"></i><span class="text-sm text-slate-300 truncate">${title}</span></div><span class="text-xs text-green-500 whitespace-nowrap ml-2">Complete</span>`;
+              } catch(err) {
+                document.getElementById(qId).innerHTML = `<div class="flex items-center gap-3 min-w-0"><i class="fa-solid fa-xmark text-red-500"></i><span class="text-sm text-slate-500 truncate line-through">${title}</span></div><span class="text-xs text-red-500 whitespace-nowrap ml-2">Failed</span>`;
+              }
+            };
+            img.src = ev.target.result;
+          };
+          reader.readAsDataURL(file);
+        });
+        massInput.value = ''; // Reset
+      });
+    }
 
     initAuth();
   </script>
