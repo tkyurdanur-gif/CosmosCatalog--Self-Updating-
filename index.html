@@ -42,7 +42,7 @@
     .theme-transmission { animation: glitch 5s infinite; }
     .theme-gas-giant { background: linear-gradient(135deg, #78350f, #fef3c7, #d97706, #451a03); background-size: 400% 400%; animation: gradientFlow 20s ease infinite; }
     
-    /* Level 3: Unsettling & Mind-Bending */
+    /* Unsettling & Mind-Bending */
     .theme-time-collapse main { animation: collapseTime 45s forwards ease-in; }
     .theme-awareness .group:hover { filter: drop-shadow(0 0 25px var(--theme-500)); transform: scale(1.02); transition: all 0.5s ease; }
     .theme-living main { animation: livingBreath 12s infinite alternate ease-in-out; }
@@ -56,6 +56,7 @@
     .theme-absolute-zero * { transition: all 3s ease-out !important; cursor: crosshair; }
     .theme-pattern .group { animation: patternAlign 10s forwards ease-in-out; }
     .theme-chaos-order main { animation: chaosToOrder 20s forwards ease-out; }
+    .theme-unknown { transition: all 1.5s ease-in-out !important; }
 
     /* Core Keyframes */
     @keyframes dustFloat { 0% { background-position: 0% 0%; } 100% { background-position: 100% 100%; } }
@@ -126,7 +127,6 @@
     <i id="toast-icon" class="fa-solid fa-circle-info"></i><span id="toast-msg">Message</span>
   </div>
 
-  <!-- Note: All disruptive theme distortions target <main> to protect fixed Navs and Modals -->
   <main id="main-content" class="max-w-7xl mx-auto px-6 py-10 flex-grow w-full relative z-10 transition-all duration-700">
     
     <!-- CATALOG VIEW -->
@@ -337,7 +337,6 @@
                     <label class="flex items-center gap-3 p-3 bg-slate-950 border border-red-800 rounded-xl cursor-pointer hover:border-red-500 shadow-[0_0_15px_rgba(220,38,38,0.2)]"><input type="radio" name="theme" value="unknown-limit" class="text-red-500"><span class="flex-grow text-sm font-bold text-red-400 tracking-widest uppercase">Unknown Limit</span><i class="fa-solid fa-infinity text-red-500 animate-pulse"></i></label>
                     <label class="flex items-center gap-3 p-3 bg-slate-950 border border-slate-800 rounded-xl cursor-pointer hover:border-orange-500"><input type="radio" name="theme" value="runaway-energy" class="text-orange-500"><span class="flex-grow text-sm">Runaway Energy</span><i class="fa-solid fa-bolt text-orange-500"></i></label>
                     <label class="flex items-center gap-3 p-3 bg-slate-950 border border-slate-800 rounded-xl cursor-pointer hover:border-slate-600"><input type="radio" name="theme" value="light-devoured" class="text-slate-600"><span class="flex-grow text-sm">Light Devoured</span><i class="fa-solid fa-moon text-slate-600"></i></label>
-                    <label class="flex items-center gap-3 p-3 bg-slate-950 border border-slate-800 rounded-xl cursor-pointer hover:border-purple-500"><input type="radio" name="theme" value="point-of-no-return" class="text-purple-500"><span class="flex-grow text-sm">Point of No Return</span><i class="fa-solid fa-door-closed text-purple-500"></i></label>
                     <label class="flex items-center gap-3 p-3 bg-slate-950 border border-slate-800 rounded-xl cursor-pointer hover:border-indigo-400"><input type="radio" name="theme" value="chaos-order" class="text-indigo-400"><span class="flex-grow text-sm">Chaos to Order</span><i class="fa-solid fa-hurricane text-indigo-400"></i></label>
 
                     <p class="text-[10px] uppercase tracking-widest text-slate-500 font-bold mt-4 mb-2">Unsettling & Mind-Bending</p>
@@ -469,17 +468,19 @@
     </div>
   </main>
 
-  <!-- ADVANCED MODAL (Fixed Image Constraints) -->
+  <!-- ADVANCED MODAL (Bulletproof Image Constraints) -->
   <div id="post-modal" class="fixed inset-0 z-[110] bg-slate-950/95 backdrop-blur-md flex items-center justify-center p-4 sm:p-8 opacity-0 pointer-events-none transition-opacity duration-300">
     <button id="close-modal-btn" class="absolute top-6 right-6 text-slate-400 hover:text-white bg-slate-800/50 hover:bg-slate-700/80 rounded-full w-12 h-12 flex items-center justify-center text-xl z-20 transition-all"><i class="fa-solid fa-xmark"></i></button>
-    <div class="max-w-6xl w-full bg-slate-900 border border-slate-800 rounded-3xl overflow-hidden flex flex-col md:flex-row h-[85vh] scale-95 transform transition-transform shadow-2xl shadow-theme-900/20 relative" id="modal-content-scale">
-      <div class="w-full md:w-3/5 bg-black relative flex items-center justify-center border-b md:border-b-0 md:border-r border-slate-800 group h-[40vh] md:h-full p-4 overflow-hidden">
-        <img id="modal-img" src="" class="max-w-full max-h-full object-contain drop-shadow-2xl">
-        <div class="absolute bottom-4 right-4 flex gap-2 opacity-0 group-hover:opacity-100 transition-opacity">
+    <div class="max-w-6xl w-full bg-slate-900 border border-slate-800 rounded-3xl overflow-hidden flex flex-col md:flex-row h-full md:h-[85vh] max-h-[95vh] scale-95 transform transition-transform shadow-2xl shadow-theme-900/20 relative" id="modal-content-scale">
+      <div class="w-full md:w-3/5 bg-black relative flex border-b md:border-b-0 md:border-r border-slate-800 group h-1/2 md:h-full flex-shrink-0">
+        <div class="absolute inset-4 flex items-center justify-center">
+            <img id="modal-img" src="" class="max-w-full max-h-full object-contain drop-shadow-2xl">
+        </div>
+        <div class="absolute bottom-4 right-4 flex gap-2 opacity-0 group-hover:opacity-100 transition-opacity z-10">
           <button id="modal-download-btn" class="bg-black/60 hover:bg-theme-600 text-white p-3 rounded-xl backdrop-blur-md transition-colors shadow-lg border border-white/10" title="Download Asset"><i class="fa-solid fa-download"></i></button>
         </div>
       </div>
-      <div class="w-full md:w-2/5 p-6 md:p-8 flex flex-col overflow-y-auto bg-gradient-to-b from-slate-900 to-slate-950 custom-scrollbar max-h-[50vh] md:max-h-full">
+      <div class="w-full md:w-2/5 p-6 md:p-8 flex flex-col overflow-y-auto bg-gradient-to-b from-slate-900 to-slate-950 custom-scrollbar h-1/2 md:h-full">
         <div class="flex gap-2 flex-wrap mb-4" id="modal-badges"></div>
         <h2 id="modal-title" class="text-2xl md:text-3xl font-bold text-white mb-1">Title</h2>
         <div class="grid grid-cols-2 gap-4 mb-6 bg-slate-950/80 p-5 rounded-2xl border border-slate-800/50 shadow-inner mt-4">
@@ -501,10 +502,19 @@
     import { getAuth, signInAnonymously, signInWithCustomToken, onAuthStateChanged } from "https://www.gstatic.com/firebasejs/11.6.1/firebase-auth.js";
     import { getFirestore, collection, onSnapshot, doc, setDoc, deleteDoc, serverTimestamp } from "https://www.gstatic.com/firebasejs/11.6.1/firebase-firestore.js";
 
-    const apiKey = ""; 
+    // --- GLOBAL VARIABLES (FIXING REFERENCE ERRORS) ---
+    let globalMouseX = window.innerWidth / 2;
+    let globalMouseY = window.innerHeight / 2;
+    let isFrozen = true;
+    let themeIntervals = [];
+    let themeCleanups = [];
+    let originalNavText = null;
+    let devourTimer = null;
+    let energyTimer = 0;
     let animationId = null;
     let starsInitialized = false;
 
+    const apiKey = ""; 
     let firebaseConfig = { apiKey: "AIzaSyA2VwS1hQGroNlkXi2E-vVFz4t3k-JAd6I", authDomain: "cosmos-catalog-v1.firebaseapp.com", projectId: "cosmos-catalog-v1" };
     if (typeof __firebase_config !== 'undefined') { try { firebaseConfig = typeof __firebase_config === 'string' ? JSON.parse(__firebase_config) : __firebase_config; } catch (e) {} }
     const app = initializeApp(firebaseConfig); const auth = getAuth(app); const db = getFirestore(app);
@@ -552,7 +562,6 @@
       'cosmic-love': {name: 'Cosmic Love', '400':'#f472b6','500':'#ec4899','600':'#db2777', particle: 'binary', complexity: 2},
       'time-collapse': {name: 'Time Collapse', '400':'#ffffff','500':'#e2e8f0','600':'#94a3b8', particle: 'default', bg: '#000', cssClass: 'theme-time-collapse', complexity: 3},
       'cosmic-awareness': {name: 'Cosmic Awareness', '400':'#60a5fa','500':'#3b82f6','600':'#2563eb', particle: 'repel', bg: '#020617', cssClass: 'theme-awareness', complexity: 3},
-      'event-horizon': {name: 'Event Horizon', '400':'#a855f7','500':'#9333ea','600':'#7e22ce', particle: 'pulse', bg: '#000', cssClass: 'theme-event', complexity: 3},
       'living-universe': {name: 'Living Universe', '400':'#34d399','500':'#10b981','600':'#059669', particle: 'pulse', bg: '#020617', cssClass: 'theme-living', complexity: 3},
       'recursive-universe': {name: 'Recursive', '400':'#818cf8','500':'#6366f1','600':'#4f46e5', particle: 'default', bg: '#020617', cssClass: 'theme-recursive', complexity: 3},
       'null-space': {name: 'Null Space', '400':'#334155','500':'#1e293b','600':'#0f172a', particle: 'none', bg: '#000', cssClass: 'theme-null', complexity: 3},
@@ -569,7 +578,6 @@
       'unknown-limit': {name: 'Unknown Limit (Boss)', '400':'#ef4444','500':'#dc2626','600':'#b91c1c', particle: 'warp', bg: '#000', cssClass: 'theme-unknown', complexity: 3},
       'runaway-energy': {name: 'Runaway Energy', '400':'#f97316','500':'#ea580c','600':'#c2410c', particle: 'pulse', bg: '#1c0505', cssClass: 'theme-runaway', complexity: 3},
       'light-devoured': {name: 'Light Devoured', '400':'#475569','500':'#334155','600':'#1e293b', particle: 'default', bg: '#000', cssClass: 'theme-devour', complexity: 3},
-      'point-of-no-return': {name: 'Point of No Return', '400':'#7e22ce','500':'#6b21a8','600':'#581c87', particle: 'repel', bg: '#000', cssClass: 'theme-no-return', complexity: 3},
       'chaos-order': {name: 'Chaos to Order', '400':'#6366f1','500':'#4f46e5','600':'#4338ca', particle: 'default', bg: '#020617', cssClass: 'theme-chaos-order', complexity: 3}
     };
 
@@ -596,14 +604,6 @@
       previewThemeBtn: document.getElementById('preview-theme-btn'), saveCustomThemeBtn: document.getElementById('save-custom-theme-btn'), previewBanner: document.getElementById('preview-banner'), cancelPreviewBtn: document.getElementById('cancel-preview-btn')
     };
 
-    let globalMouseX = window.innerWidth / 2, globalMouseY = window.innerHeight / 2;
-    let isFrozen = true;
-    let themeIntervals = [];
-    let themeCleanups = [];
-    let originalNavText = null;
-    let devourTimer = null;
-    let energyTimer = 0;
-
     window.addEventListener('mousemove', (e) => {
       globalMouseX = e.clientX; globalMouseY = e.clientY;
       if (globalSettings.theme === 'light-devoured') devourTimer = 0;
@@ -619,7 +619,7 @@
     });
 
     window.addEventListener('scroll', () => {
-      if (globalSettings.theme === 'event-horizon' || globalSettings.theme === 'point-of-no-return') {
+      if (globalSettings.theme === 'event-horizon') {
         if(!UI.mainContent) return;
         const blurAmt = Math.min(window.scrollY / 100, 10);
         UI.mainContent.style.filter = `blur(${blurAmt}px) contrast(${1 + blurAmt/5})`;
@@ -750,24 +750,6 @@
           }, 500));
       }
 
-      if(theme === 'point-of-no-return') {
-          if(UI.mainContent) {
-              UI.mainContent.style.transition = 'transform 45s cubic-bezier(0.4, 0, 1, 1), filter 45s linear';
-              setTimeout(() => {
-                  UI.mainContent.style.transform = 'scale(0.8) perspective(500px) rotateX(10deg)';
-                  UI.mainContent.style.filter = 'blur(5px) brightness(0.15) saturate(0.2)';
-              }, 100);
-          }
-          
-          const radios = document.getElementsByName('theme');
-          if(radios) Array.from(radios).forEach(r => r.disabled = true);
-          if(UI.liveModeToggle) UI.liveModeToggle.disabled = true;
-          if(UI.randomizerToggle) UI.randomizerToggle.disabled = true;
-          if(UI.saveVisualsBtn) UI.saveVisualsBtn.disabled = true;
-          
-          themeIntervals.push(setInterval(() => { showToast("Irreversible Transition. You cannot go back.", "error"); }, 8000));
-      }
-      
       if(theme === 'unknown-limit') {
           const possibleParticles = ['default', 'pulse', 'snow', 'meteor', 'warp', 'orbit', 'binary', 'repel'];
           const possibleFilters = ['hue-rotate(90deg)', 'invert(0.8) hue-rotate(180deg)', 'contrast(2) saturate(3)', 'blur(3px) brightness(1.5)', 'sepia(1) contrast(1.5)', 'drop-shadow(0 0 30px red)', 'none'];
@@ -939,15 +921,17 @@
             const res = await fetch('https://api.open-meteo.com/v1/forecast?latitude=41.0082&longitude=28.9784&current_weather=true');
             const data = await res.json();
             if(data.current_weather) {
-                realEarthWeather.text = 'Clear'; realEarthWeather.icon = 'fa-sun';
+                let icon = 'fa-cloud'; let text = 'Syncing';
                 const code = data.current_weather.weathercode;
-                if(code <= 3) { realEarthWeather.icon = 'fa-cloud-sun'; realEarthWeather.text = 'Cloudy'; }
-                else if(code <= 48) { realEarthWeather.icon = 'fa-smog'; realEarthWeather.text = 'Fog'; }
-                else if(code <= 67) { realEarthWeather.icon = 'fa-cloud-rain'; realEarthWeather.text = 'Rain'; }
-                else if(code <= 79) { realEarthWeather.icon = 'fa-snowflake'; realEarthWeather.text = 'Snow'; }
-                else if(code >= 80) { realEarthWeather.icon = 'fa-cloud-bolt'; realEarthWeather.text = 'Storm'; }
+                if(code === 0) { icon = 'fa-sun'; text = 'Clear'; }
+                else if(code <= 3) { icon = 'fa-cloud-sun'; text = 'Cloudy'; }
+                else if(code <= 48) { icon = 'fa-smog'; text = 'Fog'; }
+                else if(code <= 67) { icon = 'fa-cloud-rain'; text = 'Rain'; }
+                else if(code <= 79) { icon = 'fa-snowflake'; text = 'Snow'; }
+                else { icon = 'fa-cloud-bolt'; text = 'Storm'; }
+                if(UI.weatherText) UI.weatherText.innerText = text;
+                if(UI.weatherIcon) UI.weatherIcon.className = `fa-solid ${icon} mr-1`;
             }
-            if(!globalSettings.randomizerOn) applySettingsToUI(); // Re-trigger UI to apply weather overlay
         } catch(e) { if(UI.weatherText) UI.weatherText.innerText = 'Offline'; }
     }
 
@@ -1039,7 +1023,6 @@
       const themeConfig = THEMES[activeThemeKey] || THEMES['blue'];
       if(UI.activeThemeName) UI.activeThemeName.innerText = themeConfig.name || activeThemeKey;
 
-      // Status Badges Engine (Restored!)
       if (globalSettings.lockdownActive) { 
           if(UI.statusBadge) { UI.statusBadge.className = "px-2 py-0.5 rounded-full text-[10px] uppercase tracking-widest font-bold border border-red-500/50 text-red-400 bg-red-500/10"; UI.statusBadge.innerText = "Lockdown"; }
           if(UI.statStatus) { UI.statStatus.className = "text-lg font-bold mt-1 text-red-500"; UI.statStatus.innerText = "Secured"; }
@@ -1051,15 +1034,6 @@
           if(UI.statStatus) { UI.statStatus.className = "text-lg font-bold mt-1 text-green-400"; UI.statStatus.innerText = "Optimal"; }
       }
 
-      // Cosmic Weather Sync! 
-      if(themeToWeather[activeThemeKey]) {
-          if(UI.weatherText) UI.weatherText.innerText = themeToWeather[activeThemeKey].text;
-          if(UI.weatherIcon) UI.weatherIcon.className = `fa-solid ${themeToWeather[activeThemeKey].icon} mr-1`;
-      } else {
-          if(UI.weatherText) UI.weatherText.innerText = realEarthWeather.text;
-          if(UI.weatherIcon) UI.weatherIcon.className = `fa-solid ${realEarthWeather.icon} mr-1`;
-      }
-
       document.documentElement.style.setProperty('--theme-400', themeConfig['400']); document.documentElement.style.setProperty('--theme-500', themeConfig['500']); document.documentElement.style.setProperty('--theme-600', themeConfig['600']);
       if(UI.mainBody) {
           UI.mainBody.style.backgroundColor = themeConfig.bg || '#020617';
@@ -1067,12 +1041,12 @@
       }
 
       if (globalSettings.starsOn) { UI.starsCanvas?.classList.remove('hidden'); initStars(themeConfig.particle); } 
-      else { UI.starsCanvas?.classList.add('hidden'); if(typeof animationId !== 'undefined' && animationId) cancelAnimationFrame(animationId); }
+      else { UI.starsCanvas?.classList.add('hidden'); if(animationId) cancelAnimationFrame(animationId); }
       
       initThemeBehaviors(activeThemeKey);
 
       const radios = document.getElementsByName('theme');
-      if(radios) Array.from(radios).forEach(r => { r.checked = (r.value === activeThemeKey); r.disabled = (globalSettings.liveMode || globalSettings.randomizerOn || activeThemeKey === 'point-of-no-return'); });
+      if(radios) Array.from(radios).forEach(r => { r.checked = (r.value === activeThemeKey); r.disabled = (globalSettings.liveMode || globalSettings.randomizerOn); });
       
       if(UI.starsToggle) UI.starsToggle.checked = globalSettings.starsOn; 
       if(UI.fabricToggle) UI.fabricToggle.checked = globalSettings.fabricOn; 
@@ -1124,13 +1098,8 @@
         };
 
         if(!previewOriginalTheme) previewOriginalTheme = globalSettings.theme;
-        
-        THEMES[id] = newTheme;
-        UI.customThemeStyles.innerHTML += `\n${cssContent}`;
-        
-        applySettingsToUI(id);
-        UI.previewBanner?.classList.remove('hidden');
-        switchView('catalog');
+        THEMES[id] = newTheme; UI.customThemeStyles.innerHTML += `\n${cssContent}`;
+        applySettingsToUI(id); UI.previewBanner?.classList.remove('hidden'); switchView('catalog');
     });
 
     UI.cancelPreviewBtn?.addEventListener('click', () => {
@@ -1138,7 +1107,7 @@
             applySettingsToUI(previewOriginalTheme);
             previewOriginalTheme = null;
             UI.previewBanner?.classList.add('hidden');
-            renderCustomThemes(); // Reset injected styles
+            renderCustomThemes();
             switchView('admin-panel');
         }
     });
@@ -1262,13 +1231,11 @@
     });
     UI.liveModeToggle?.addEventListener('change', () => { const radios = document.getElementsByName('theme'); if(radios) Array.from(radios).forEach(r => r.disabled = UI.liveModeToggle.checked); });
 
-    // Secure Admin Backdoor
     let escapeClicks = 0, escapeTimer;
     if (UI.secretAdminTrigger) {
         UI.secretAdminTrigger.addEventListener('click', () => { escapeClicks++; clearTimeout(escapeTimer); if (escapeClicks >= 3) { switchView('admin-login'); escapeClicks = 0; } else escapeTimer = setTimeout(() => { escapeClicks = 0; }, 1000); });
     }
     
-    // Security Protocols Listeners
     UI.toggleLockdownBtn?.addEventListener('click', () => { 
         if (UI.lockdownPinInput?.value === 'Apollyon') { 
             updateSettings({ lockdownActive: !globalSettings.lockdownActive, lockdownMsg: UI.lockdownMsgInput?.value || '' }); 
@@ -1320,7 +1287,6 @@
     window.toggleArchive = async (id, arc) => { if (!currentUser) return; try { await setDoc(doc(db, 'artifacts', appId, 'public', 'data', 'astronomy_items', id), { archived: !arc }, { merge: true }); logSystemAction(arc ? 'ENTRY_RESTORE' : 'ENTRY_ARCHIVE', id); showToast(arc ? "Restored" : "Archived"); } catch (err) { showToast("Failed", "error"); } };
     window.deleteEntry = async (id) => { if (!currentUser || !confirm("Delete permanently?")) return; try { await deleteDoc(doc(db, 'artifacts', appId, 'public', 'data', 'astronomy_items', id)); if (editingId === id) resetForm(); logSystemAction('ENTRY_DELETE', id); showToast("Deleted"); } catch (err) { showToast("Failed", "error"); } };
 
-    // Mass Upload Execution Logic
     let pendingMassUploads = [];
     const massInput = document.getElementById('mass-upload-input');
     const massQueue = document.getElementById('mass-upload-queue');
